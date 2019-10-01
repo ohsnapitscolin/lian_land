@@ -1,21 +1,114 @@
 import React from "react"
-import { Link } from "gatsby"
+import { graphql } from "gatsby";
 
 import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+import Work from "../components/work";
+import Hero from "../components/hero";
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+export default class IndexPage extends React.Component {
+  render() {
+    const work = this.props.data.allContentfulWorkPage.edges[0].node;
+    const hero = this.props.data.allContentfulHero.edges[0].node;
 
-export default IndexPage
+    return (
+      <Layout data={this.props.data}>
+        <Hero
+          mainText={hero.mainText}
+          subText={hero.subText}
+          image={hero.image}
+        />
+        <Work
+          title={work.title}
+          type={work.type}
+          year={work.year}
+          images={work.images}
+          description={work.description}
+          credits={work.credits}
+        />
+        <Work
+          title={work.title}
+          type={work.type}
+          year={work.year}
+          description={work.description}
+          images={work.images}
+          credits={work.credits}
+        />
+      </Layout>
+    );
+  }
+}
+// export default ({ data }) => (
+//   const work = data.allContentfulWorkPage.edges.node[0];
+//     <Work
+//       title={work.title}
+//       type={work.allContentfulWorkPage.type}
+//     />
+//   );
+
+export const query = graphql`
+  query PortfolioQuery {
+    allContentfulWorkPage {
+      edges {
+        node {
+          title
+          type
+          year
+          images {
+            fluid(maxWidth: 1840, quality: 100) {
+              ...GatsbyContentfulFluid_withWebp_noBase64
+            }
+          }
+          description {
+            json
+          }
+          credits {
+            json
+          }
+        }
+      }
+    }
+    allContentfulHero {
+      edges {
+        node {
+          mainText {
+            json
+          }
+          subText {
+            json
+          }
+          image {
+            fluid(maxWidth: 1840, quality: 100) {
+              ...GatsbyContentfulFluid_withWebp_noBase64
+            }
+          }
+        }
+      }
+    }
+    allContentfulFooter {
+      edges {
+        node {
+          contactText {
+            json
+          }
+          aboutText {
+            json
+          }
+        }
+      }
+    }
+    allContentfulCredits {
+      edges {
+        node {
+          text {
+            json
+          }
+          image {
+            fluid(maxWidth: 1840, quality: 100) {
+              ...GatsbyContentfulFluid_withWebp_noBase64
+            }
+          }
+        }
+      }
+    }
+  }
+`
