@@ -4,7 +4,7 @@ import { responsive, breakpoints } from "../utils/style";
 import Ticker from "react-ticker";
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
-import WorkCarousel from "./WorkCarousel";
+import WorkCarousel from "./workCarousel";
 
 const WorkHeadlineContainer = styled.div`
   height: 40px;
