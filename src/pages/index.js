@@ -7,7 +7,7 @@ import Hero from "../components/hero";
 
 export default class IndexPage extends React.Component {
   render() {
-    const work = this.props.data.allContentfulWorkPage.edges[0].node;
+    const workPages = this.props.data.allContentfulWorkPage.edges;
     const hero = this.props.data.allContentfulHero.edges[0].node;
 
     return (
@@ -17,22 +17,19 @@ export default class IndexPage extends React.Component {
           subText={hero.subText}
           image={hero.image}
         />
-        <Work
-          title={work.title}
-          type={work.type}
-          year={work.year}
-          images={work.images}
-          description={work.description}
-          credits={work.credits}
-        />
-        <Work
-          title={work.title}
-          type={work.type}
-          year={work.year}
-          description={work.description}
-          images={work.images}
-          credits={work.credits}
-        />
+        {workPages.map((workEdge) => {
+          const work = workEdge.node;
+          return(
+            <Work
+              key={work.title}
+              title={work.title}
+              type={work.type}
+              year={work.year}
+              images={work.images}
+              description={work.description}
+              credits={work.credits}
+            />
+          )})}
       </Layout>
     );
   }
