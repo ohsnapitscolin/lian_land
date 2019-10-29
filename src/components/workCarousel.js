@@ -13,11 +13,6 @@ const ImageWrapper = styled(Img)`
   box-sizing: border-box;
 `;
 
-const rootStyle = {
-  paddingLeft: "200px",
-  paddingRight: "200px"
-};
-
 export default class WorkCarousel extends React.Component {
   constructor() {
     super();
@@ -78,14 +73,15 @@ export default class WorkCarousel extends React.Component {
     }
   }
 
-  renderSlides(index, key, currentSlideIndex, images) {
+  renderSlides(index, key, currentSlideIndex, images, updateIndex) {
     const imageIndex = mod(index, images.length);
-    return this.renderSlide(images[imageIndex], key);
+    return this.renderSlide(images[imageIndex], key, updateIndex);
   }
 
-  renderSlide(image, key) {
+  renderSlide(image, key, updateIndex) {
     return (
       <ImageWrapper
+        onClick={() => this.handleImageClick(key, updateIndex)}
         key={key}
         fluid={image.fluid}
         alt=""
@@ -94,14 +90,24 @@ export default class WorkCarousel extends React.Component {
     );
   }
 
+  handleImageClick(key, updateIndex) {
+    console.log('handleImageClick');
+    if (key === -1) {
+      updateIndex(-1);
+    }
+    if (key === 1) {
+      updateIndex(1);
+    }
+  }
+
   render() {
     const rootStyle = this.getPadding(this.state.breakpoint);
     return (
       <Carousel
         rootStyle={rootStyle}
-        renderSlides={(index, key, currentSlideIndex) => {
+        renderSlides={(index, key, currentSlideIndex, updateIndex) => {
           return this.renderSlides(
-            index, key, currentSlideIndex, this.props.images);
+            index, key, currentSlideIndex, this.props.images, updateIndex);
         }}
         size={this.props.images.length}
       />
