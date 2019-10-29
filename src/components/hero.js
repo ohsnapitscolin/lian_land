@@ -12,13 +12,6 @@ const HeroTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  box-sizing: border-box;
-
   padding: 20px;
   ${responsive.sm`
     padding: 100px;
@@ -29,15 +22,26 @@ const HeroTextWrapper = styled.div`
   ${responsive.lg`
     padding: 300px;
   `}
+`;
 
+const HeroMainTextWrapper = styled(HeroTextWrapper)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const HeroText = styled.div`
   width: 100%;
 `;
 
-const HeroMainText = styled(HeroText)`
+const HeroMainText = styled(HeroText)``;
 
+const HeroSubTextWrapper = styled(HeroTextWrapper)`
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 `;
 
 const HeroSubText = styled(HeroText)`
@@ -101,14 +105,20 @@ export default class Hero extends React.Component {
           <Img
             fluid={image.fluid}
             alt=""
+            className={image.fluid.aspectRatio}
             loading="eager"
             style={{ height: "100%" }}/>
-          <HeroTextWrapper>
+          <HeroMainTextWrapper>
             <HeroMainText>
               {documentToReactComponents(mainText.json)}
             </HeroMainText>
-          </HeroTextWrapper>
+          </HeroMainTextWrapper>
         </HeroImageWrapper>
+        <HeroSubTextWrapper>
+          <HeroMainText>
+            {documentToReactComponents(subText.json)}
+          </HeroMainText>
+        </HeroSubTextWrapper>
 
       </HeroWrapper>
     );

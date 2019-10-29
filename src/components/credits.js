@@ -19,6 +19,7 @@ const CreditsWrapper = styled.div`
   }
 
   box-sizing: border-box;
+  border-top: solid 1px black;
 
   height: 200px;
 `
@@ -32,6 +33,7 @@ const CreditsImageWrapper = styled.div`
 
 const CreditsCTA = styled.div`
   z-index: 1;
+  cursor: pointer;
 `;
 
 const CreditsText = styled.div`

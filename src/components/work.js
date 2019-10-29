@@ -1,10 +1,14 @@
 import React from "react"
 import styled from 'styled-components';
 import { responsive, breakpoints } from "../utils/style";
+import Img from "gatsby-image";
 import Ticker from "react-ticker";
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import doodle from "../images/ic_doodle.png"
 
 import WorkCarousel from "./workCarousel";
+
+const SCROLL_SPEED = 5;
 
 const WorkHeadlineContainer = styled.div`
   height: 40px;
@@ -25,7 +29,8 @@ const WorkHeadline = styled.div`
   align-items: center;
 
   padding-left: 24px;
-  padding-right: 24px;
+  padding-right: 116px;
+
 `;
 
 const WorkWrapper = styled.div`
@@ -40,16 +45,13 @@ const WorkWrapper = styled.div`
 const WorkTitle = styled.div`
   display: inline-block;
   white-space: nowrap;
-  padding-right: 30px;
 `;
 
 const WorkType = styled.div`
   display: inline-block;
   white-space: nowrap;
+
   h1 {
-    font-family: adobe-garamond-pro, serif;
-    font-style: italic;
-    font-weight: 400;
     padding-top: 5px;
   }
 `;
@@ -98,6 +100,41 @@ const WorkCredits = styled.div`
   }
 `;
 
+const WorkDoodleImage = styled.div`
+  height: 40px;
+
+  ${responsive.sm`
+    height: 80px;
+  `}
+
+  .gatsby-image-wrapper {
+    width: 100% !important;
+  };
+`;
+
+const WorkDoodle = styled.div`
+  display: flex;
+  align-items: center;
+
+  padding-left: 10px;
+  padding-right: 8px;
+
+  ${responsive.sm`
+    padding-left: 15px;
+    padding-right: 10px;
+  `}
+
+  img {
+    height: 25px;
+
+    ${responsive.sm`
+      height: 40px;
+    `}
+
+  }
+`;
+
+
 export default class Work extends React.Component {
   render() {
     let {
@@ -113,7 +150,7 @@ export default class Work extends React.Component {
       <WorkWrapper>
         <WorkHeadlineContainer>
           <Ticker
-            speed={10}
+            speed={SCROLL_SPEED}
             mode={"chain"}
           >
             {({ index }) => (
@@ -121,29 +158,45 @@ export default class Work extends React.Component {
                 <WorkTitle>
                   <h1>{title}</h1>
                 </WorkTitle>
+                <WorkDoodle>
+                  <img src={doodle}/>
+                </WorkDoodle>
                 <WorkType>
-                  <h1>{type}, {year}</h1>
+                  <h1><i>{type}, {year}</i></h1>
                 </WorkType>
               </WorkHeadline>
             )}
           </Ticker>
         </WorkHeadlineContainer>
         <WorkCarousel images={images} />
-        <WorkDescription>
+        {description && <WorkDescription>
           <div className="description">
             {documentToReactComponents(description.json)}
           </div>
-        </WorkDescription>
-        <WorkCredits>
+        </WorkDescription>}
+        {credits && <WorkCredits>
           <div className="credits">
             {documentToReactComponents(credits.json)}
           </div>
-        </WorkCredits>
+        </WorkCredits>}
       </WorkWrapper>
     );
   }
 }
-//
-// <div
-//   dangerouslySetInnerHtml={this.props.description.childMarkdownRemark.html}
-// />
+
+// const WorkDoodle = styled(Img)`
+//   picture > img {
+//     height: 100% !important;
+//   };
+//   picture {
+//     height: 100% !important;
+//   };
+// `;
+// <WorkDoodleImage>
+//   {doodle && <Img
+//     className={doodle.fixed.aspectRatio}
+//     fixed={doodle.fixed}
+//     style={{height: "100%"}}
+//     imgStyle={{objectFit: "contain"}}/>}
+//   <img style={{height: "100%"}} src={est}/>
+// </WorkDoodleImage>

@@ -9,6 +9,8 @@ import Carousel from "./carousel";
 const ImageWrapper = styled(Img)`
   width: 100%;
   border: black solid 1px;
+  border-left: 0px;
+  box-sizing: border-box;
 `;
 
 const rootStyle = {

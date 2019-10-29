@@ -7,7 +7,8 @@ import Hero from "../components/hero";
 
 export default class IndexPage extends React.Component {
   render() {
-    const workPages = this.props.data.allContentfulWorkPage.edges;
+    const workPages =
+      this.props.data.allContentfulWorkPages.edges[0].node.pages;
     const hero = this.props.data.allContentfulHero.edges[0].node;
 
     return (
@@ -17,13 +18,13 @@ export default class IndexPage extends React.Component {
           subText={hero.subText}
           image={hero.image}
         />
-        {workPages.map((workEdge) => {
-          const work = workEdge.node;
+        {workPages.map((work) => {
           return(
             <Work
               key={work.title}
               title={work.title}
               type={work.type}
+              doodle={work.doodle}
               year={work.year}
               images={work.images}
               description={work.description}
@@ -34,32 +35,32 @@ export default class IndexPage extends React.Component {
     );
   }
 }
-// export default ({ data }) => (
-//   const work = data.allContentfulWorkPage.edges.node[0];
-//     <Work
-//       title={work.title}
-//       type={work.allContentfulWorkPage.type}
-//     />
-//   );
 
 export const query = graphql`
   query PortfolioQuery {
-    allContentfulWorkPage {
+    allContentfulWorkPages {
       edges {
         node {
-          title
-          type
-          year
-          images {
-            fluid(maxWidth: 1840, quality: 100) {
-              ...GatsbyContentfulFluid_withWebp_noBase64
+          pages {
+            title
+            type
+            doodle {
+              fixed {
+                ...GatsbyContentfulFixed_withWebp_noBase64
+              }
             }
-          }
-          description {
-            json
-          }
-          credits {
-            json
+            year
+            images {
+              fluid(maxWidth: 1840, quality: 100) {
+                ...GatsbyContentfulFluid_withWebp_noBase64
+              }
+            }
+            description {
+              json
+            }
+            credits {
+              json
+            }
           }
         }
       }

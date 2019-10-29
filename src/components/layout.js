@@ -1,7 +1,5 @@
 import React from "react"
-import { StaticQuery, graphql } from "gatsby"
 import styled from 'styled-components'
-import $ from "jquery";
 
 import './layout.scss';
 
@@ -14,10 +12,6 @@ const LayoutWrapper = styled.div`
   width: 100%;
   overflow: hidden;
 `;
-
-const LayoutPadding = styled.div`
-  /* padding-bottom: 80px; */
-`
 
 export default class Layout extends React.Component {
   render() {

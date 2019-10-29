@@ -1,6 +1,7 @@
 import React from "react"
 import styled from 'styled-components'
 import { responsive, breakpoints } from "../utils/style"
+import est from "../images/ic_est.png"
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -11,18 +12,19 @@ const HeaderWrapper = styled.div`
 `
 
 const HeaderContainer = styled.header`
+
   max-height: 100vh;
 
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 
   box-sizing: border-box;
   border-bottom: 1px solid black;
 
   background-color: ${p => p.scrolled ? "#f1f1f1" : ""};
 
-  transition: all 0.5s ease;
+  transition: background-color 0.5s ease;
 
   height: ${p => p.scrolled ? "64px" : "80px"};
   padding: 12px 20px 18px 20px;
@@ -31,6 +33,22 @@ const HeaderContainer = styled.header`
     height: ${p => p.scrolled ? "96px" : "108px"};
     padding: 20px 45px 24px 45px;
   `};
+`;
+
+const PopulationContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  img {
+    padding-right: 10px;
+    height: 36px;
+
+    display: none;
+
+    ${responsive.sm`
+      display: block;
+    `};
+  }
 `;
 
 export default class Header extends React.Component {
@@ -60,7 +78,10 @@ export default class Header extends React.Component {
       <HeaderWrapper>
         <HeaderContainer scrolled={this.state.scrolled}>
           <h1>Lian</h1>
-          <h2>2019 Pop. 1</h2>
+          <PopulationContainer>
+            <img src={est}/>
+            <h2>2019 Pop. 1</h2>
+          </PopulationContainer>
           <h1>Land</h1>
         </HeaderContainer>
       </HeaderWrapper>

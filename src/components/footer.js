@@ -4,6 +4,7 @@ import AnimateHeight from 'react-animate-height'
 import { responsive, breakpoints } from "../utils/style"
 import $ from 'jquery'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import arrow from "../images/ic_arrow.png";
 
 const FooterPadding = styled.div`
   height: 60px;
@@ -39,6 +40,8 @@ const FooterHeader = styled.div`
   padding-right: 20px;
   height: 50px;
 
+  cursor: pointer;
+
   ${responsive.sm`
     padding-left: 45px;
     height: 60px;
@@ -61,9 +64,8 @@ const FooterHeader = styled.div`
 `
 
 const FooterContact = styled.div`
-  ${responsive.sm`
-    flex: 0 0 400px;
-  `}
+
+  min-width: 450px;
 
   display: flex;
   flex-direction: column;
@@ -103,6 +105,23 @@ const FooterContantInfo = styled(FooterInfo)`
   display: flex;
   h2 {
     padding-right: 60px;
+  }
+
+  ul {
+    padding-left: 0;
+    list-style: none;
+  }
+
+  li {
+    padding-left: 40px;
+    background-image: url(${arrow});
+    background-repeat: no-repeat;
+    background-size: 25px;
+    background-position: left center;
+  }
+
+  a {
+    text-decoration: none;
   }
 
   ${responsive.sm`
