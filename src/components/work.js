@@ -4,7 +4,6 @@ import { responsive, breakpoints } from "../utils/style";
 import Img from "gatsby-image";
 import Ticker from "react-ticker";
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import doodle from "../images/ic_doodle.png"
 
 import WorkCarousel from "./workCarousel";
 
@@ -101,38 +100,47 @@ const WorkCredits = styled.div`
 `;
 
 const WorkDoodleImage = styled.div`
-  height: 40px;
+  width: 40px;
 
   ${responsive.sm`
     height: 80px;
+    width: 80px;
   `}
 
-  .gatsby-image-wrapper {
+  /* .gatsby-image-wrapper {
     width: 100% !important;
-  };
+  }; */
 `;
 
-const WorkDoodle = styled.div`
-  display: flex;
-  align-items: center;
-
-  padding-left: 10px;
-  padding-right: 8px;
-
-  ${responsive.sm`
-    padding-left: 15px;
-    padding-right: 10px;
-  `}
-
-  img {
-    height: 25px;
-
-    ${responsive.sm`
-      height: 40px;
-    `}
-
-  }
-`;
+// const WorkDoodle = styled.div`
+//   display: flex;
+//   align-items: center;
+//
+//   padding-left: 10px;
+//   padding-right: 8px;
+//
+//   width: 40px;
+//   height: 40px;
+//
+//   background-image: url(${});
+//   background-repeat: no-repeat;
+//   background-center:
+//   background-size: 40px;
+//
+//   ${responsive.sm`
+//     padding-left: 15px;
+//     padding-right: 10px;
+//   `}
+//
+//   img {
+//     height: 25px;
+//
+//     ${responsive.sm`
+//       height: 40px;
+//     `}
+//
+//   }
+// `;
 
 
 export default class Work extends React.Component {
@@ -142,6 +150,7 @@ export default class Work extends React.Component {
       type,
       year,
       images,
+      doodle,
       description,
       credits
     } = this.props;
@@ -158,9 +167,15 @@ export default class Work extends React.Component {
                 <WorkTitle>
                   <h1>{title}</h1>
                 </WorkTitle>
-                <WorkDoodle>
-                  <img src={doodle}/>
-                </WorkDoodle>
+                <WorkDoodleImage>
+                  {doodle && <Img
+                    fixed={doodle.fixed}
+                    style={{
+                      height: "100%",
+                      width: "100%"
+                    }}
+                    imgStyle={{objectFit: "contain"}}/>}
+                </WorkDoodleImage>
                 <WorkType>
                   <h1><i>{type}, {year}</i></h1>
                 </WorkType>
@@ -192,11 +207,3 @@ export default class Work extends React.Component {
 //     height: 100% !important;
 //   };
 // `;
-// <WorkDoodleImage>
-//   {doodle && <Img
-//     className={doodle.fixed.aspectRatio}
-//     fixed={doodle.fixed}
-//     style={{height: "100%"}}
-//     imgStyle={{objectFit: "contain"}}/>}
-//   <img style={{height: "100%"}} src={est}/>
-// </WorkDoodleImage>
