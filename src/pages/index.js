@@ -19,6 +19,7 @@ export default class IndexPage extends React.Component {
           image={hero.image}
         />
         {workPages.map((work) => {
+          console.log(work.doodle);
           return(
             <Work
               key={work.title}

@@ -17,21 +17,21 @@ const HeaderContainer = styled.header`
 
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 
   box-sizing: border-box;
   border-bottom: 1px solid black;
 
   background-color: ${p => p.scrolled ? "#f1f1f1" : ""};
 
-  transition: background-color 0.5s ease;
+  transition: all 0.5s ease;
 
   height: ${p => p.scrolled ? "64px" : "80px"};
-  padding: 12px 20px 18px 20px;
+  padding: 0 20px;
 
   ${responsive.sm`
-    height: ${p => p.scrolled ? "96px" : "108px"};
-    padding: 20px 45px 24px 45px;
+    height: ${p => p.scrolled ? "80px" : "108px"};
+    padding: 0 45px;
   `};
 `;
 
@@ -57,6 +57,15 @@ export default class Header extends React.Component {
     this.state = {
       scrolled: false
     };
+    this.scrollFn = this.handleScroll.bind(this);
+  }
+
+  handleClick() {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
 
   handleScroll() {
@@ -66,16 +75,16 @@ export default class Header extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll.bind(this));
+    window.addEventListener('scroll', this.scrollFn);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll.bind(this));
+    window.removeEventListener('scroll', this.scrollFn);
   }
 
   render() {
     return (
-      <HeaderWrapper>
+      <HeaderWrapper onClick={() => this.handleClick()}>
         <HeaderContainer scrolled={this.state.scrolled}>
           <h1>Lian</h1>
           <PopulationContainer>

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay, virtualize } from 'react-swipeable-views-utils';
 import { mod } from 'react-swipeable-views-core';
-import arrow from "../images/ic_arrow.png";
 import { responsive, breakpoints } from "../utils/style"
 
 const CarouselWrapper = styled.div`

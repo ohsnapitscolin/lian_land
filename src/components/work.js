@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { responsive, breakpoints } from "../utils/style";
 import Img from "gatsby-image";
 import Ticker from "react-ticker";
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import renderRichText from '../utils/rich-text';
 
 import WorkCarousel from "./workCarousel";
 
@@ -28,15 +28,22 @@ const WorkHeadline = styled.div`
   align-items: center;
 
   padding-left: 24px;
-  padding-right: 116px;
+  padding-right: 200px;
+
+  ${responsive.sm`
+    padding-right: 256px;
+  `}
 
 `;
 
 const WorkWrapper = styled.div`
   width: 100%;
-  padding-bottom: 90px;
+  padding-bottom: 100px;
   ${responsive.sm`
-    padding-bottom: 160px;
+    padding-bottom: 200px;
+  `};
+  ${responsive.md`
+    padding-bottom: 290px;
   `};
   border-bottom: black solid 1px;
 `;
@@ -89,9 +96,14 @@ const WorkCredits = styled.div`
   display: flex;
   justify-content: center;
 
-  padding-top: 18px;
+  padding-top: 8px;
+  padding-right: 20px;
+  padding-left: 20px;
+
+  box-sizing: border-box;
+
   ${responsive.sm`
-    padding-top: 32px;
+    padding-top: 12px;
   `}
 
   .credits {
@@ -101,6 +113,7 @@ const WorkCredits = styled.div`
 
 const WorkDoodleImage = styled.div`
   width: 40px;
+  height: 40px;
 
   ${responsive.sm`
     height: 80px;
@@ -186,12 +199,12 @@ export default class Work extends React.Component {
         <WorkCarousel images={images} />
         {description && <WorkDescription>
           <div className="description">
-            {documentToReactComponents(description.json)}
+            {renderRichText(description.json)}
           </div>
         </WorkDescription>}
         {credits && <WorkCredits>
           <div className="credits">
-            {documentToReactComponents(credits.json)}
+            {renderRichText(credits.json)}
           </div>
         </WorkCredits>}
       </WorkWrapper>

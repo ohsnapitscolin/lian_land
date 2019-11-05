@@ -2,8 +2,8 @@ import React from "react"
 import styled from 'styled-components'
 import { responsive, breakpoints } from "../utils/style";
 import Img from "gatsby-image";
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import $ from "jquery";
+import renderRichText from '../utils/rich-text';
+import arrow from "../images/ic_arrow.png";
 
 const CreditsWrapper = styled.div`
   position: relative;
@@ -14,22 +14,29 @@ const CreditsWrapper = styled.div`
   box-sizing: border-box;
   border-top: solid 1px black;
 
-  height: 200px;
+  height: 270px;
+  ${responsive.sm`
+    height: 200px;
+  `}
 `;
 
 const CreditsContentWrapper = styled.div`
   width: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
-
-  ${responsive.sm`
-    flex-direction: row;
-    justify-content: space-between;
-  `}
+  justify-content: space-between;
 
   padding-left: 20px;
   padding-right: 20px;
+
+  ${responsive.sm`
+    flex-direction: row;
+    align-items: center;
+    padding-left: 45px;
+    padding-right: 45px;
+  `}
 `
 
 const CreditsImageWrapper = styled.div`
@@ -37,6 +44,7 @@ const CreditsImageWrapper = styled.div`
   top: 0;
   left: 0;
   width: 100%;
+  height: 100%;
 `
 
 const CreditsCTA = styled.div`
@@ -45,6 +53,22 @@ const CreditsCTA = styled.div`
 
   z-index: 1;
   cursor: pointer;
+
+  padding-top: 34px;
+
+  ${responsive.sm`
+    padding-top: 0;
+  `}
+
+  img {
+    height: 15px;
+    padding-top: 5px;
+
+    ${responsive.sm`
+      height: 25px;
+    `}
+    transform: rotate(270deg);
+  }
 `;
 
 const CreditsText = styled.div`
@@ -62,7 +86,11 @@ const CreditsText = styled.div`
 
 export default class Credits extends React.Component {
   handleClick() {
-    $("html").animate({ scrollTop: "0px" });
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
 
   render() {
@@ -75,13 +103,17 @@ export default class Credits extends React.Component {
             fluid={image.fluid}
             alt=""
             loading="eager"
-            style={{ width: "100%" }}/>
+            style={{
+              width: "100%",
+              height: "100%"
+            }}/>
           </CreditsImageWrapper>
           <CreditsCTA onClick={this.handleClick.bind(this)}>
             <h1>Entrance</h1>
+            <img src={arrow}/>
           </CreditsCTA>
           <CreditsText>
-            {documentToReactComponents(text.json)}
+            {renderRichText(text.json)}
           </CreditsText>
         </CreditsContentWrapper>
       </CreditsWrapper>

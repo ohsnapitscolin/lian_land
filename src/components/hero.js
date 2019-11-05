@@ -2,35 +2,31 @@ import React from "react"
 import styled from 'styled-components'
 import { responsive, breakpoints } from "../utils/style";
 import Img from "gatsby-image";
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import renderRichText from '../utils/rich-text';
 
-const HeroWrapper = styled.div`
-  padding-bottom: 80px;
-`;
+const HeroWrapper = styled.div``;
 
 const HeroTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+
   ${responsive.sm`
-    padding: 100px;
-  `}
-  ${responsive.md`
-    padding: 200px;
-  `}
-  ${responsive.lg`
-    padding: 300px;
+    padding-left: 45px;
+    padding-right: 45px;
   `}
 `;
 
 const HeroMainTextWrapper = styled(HeroTextWrapper)`
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  left: 0;
+  transform: translate(0, -50%);
   width: 100%;
   box-sizing: border-box;
+  max-width: 1100px;
 `;
 
 const HeroText = styled.div`
@@ -110,20 +106,20 @@ export default class Hero extends React.Component {
             style={{ height: "100%" }}/>
           <HeroMainTextWrapper>
             <HeroMainText>
-              {documentToReactComponents(mainText.json)}
+              {renderRichText(mainText.json)}
             </HeroMainText>
           </HeroMainTextWrapper>
         </HeroImageWrapper>
-        <HeroSubTextWrapper>
-          <HeroMainText>
-            {documentToReactComponents(subText.json)}
-          </HeroMainText>
-        </HeroSubTextWrapper>
-
       </HeroWrapper>
     );
   }
 }
+
+// <HeroSubTextWrapper>
+//   <HeroMainText>
+//     {renderRichText(subText.json)}
+//   </HeroMainText>
+// </HeroSubTextWrapper>
 
 
 // <Carousel

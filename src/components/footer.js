@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import AnimateHeight from 'react-animate-height'
 import { responsive, breakpoints } from "../utils/style"
 import $ from 'jquery'
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import renderRichText from '../utils/rich-text';
 import arrow from "../images/ic_arrow.png";
 
 const FooterPadding = styled.div`
@@ -113,11 +113,22 @@ const FooterContantInfo = styled(FooterInfo)`
   }
 
   li {
-    padding-left: 40px;
     background-image: url(${arrow});
     background-repeat: no-repeat;
-    background-size: 25px;
     background-position: left center;
+
+    padding-bottom: 8px;
+    ${responsive.sm`
+      padding-bottom: 0
+    `};
+
+    padding-left: 45px;
+    background-size: 30px;
+
+    ${responsive.sm`
+      background-size: 40px;
+      padding-left: 55px;
+    `}
   }
 
   a {
@@ -138,6 +149,7 @@ export default class Footer extends React.Component {
       scrolled: false,
       fixed: true,
     }
+    this.scrollFn = this.handleScroll.bind(this);
   }
 
   handleScroll() {
@@ -151,11 +163,11 @@ export default class Footer extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll.bind(this));
+    window.addEventListener('scroll', this.scrollFn);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll.bind(this));
+    window.removeEventListener('scroll', this.scrollFn);
   }
 
   toggle(trigger) {
@@ -208,7 +220,7 @@ export default class Footer extends React.Component {
               duration={300}
             >
               <FooterContantInfo>
-                {documentToReactComponents(contactText.json)}
+                {renderRichText(contactText.json)}
               </FooterContantInfo>
             </AnimateHeight>
           </FooterContact>
@@ -222,7 +234,7 @@ export default class Footer extends React.Component {
               duration={300}
             >
               <FooterInfo>
-                {documentToReactComponents(aboutText.json)}
+                {renderRichText(aboutText.json)}
               </FooterInfo>
             </AnimateHeight>
           </FooterAbout>
