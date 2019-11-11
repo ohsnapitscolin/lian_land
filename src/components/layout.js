@@ -6,6 +6,7 @@ import './layout.scss';
 import Header from "./header"
 import Footer from "./footer"
 import Credits from "./credits";
+import SEO from "./seo";
 
 const LayoutWrapper = styled.div`
   min-height: 100vh;
@@ -20,6 +21,7 @@ export default class Layout extends React.Component {
 
     return (
       <LayoutWrapper>
+        <SEO />
         <Header/>
           {this.props.children}
         <Footer

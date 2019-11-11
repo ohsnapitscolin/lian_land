@@ -52,7 +52,7 @@ export const query = graphql`
             }
             year
             images {
-              fluid(maxWidth: 1840, quality: 100) {
+              fluid(maxWidth: 1200, quality: 100) {
                 ...GatsbyContentfulFluid_withWebp_noBase64
               }
             }

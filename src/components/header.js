@@ -24,6 +24,8 @@ const HeaderContainer = styled.header`
 
   background-color: ${p => p.scrolled ? "#f1f1f1" : ""};
 
+  ${p => p.scrolled ? "cursor: pointer" : ""};
+
   transition: all 0.5s ease;
 
   height: ${p => p.scrolled ? "64px" : "80px"};
@@ -40,13 +42,15 @@ const PopulationContainer = styled.div`
   align-items: center;
 
   img {
-    padding-right: 10px;
-    height: 36px;
+    padding-right: 6px;
+    height: 25px;
 
-    display: none;
+    display: block;
 
     ${responsive.sm`
+      padding-right: 10px;
       display: block;
+      height: 36px;
     `};
   }
 `;

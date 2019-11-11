@@ -18,6 +18,8 @@ const WorkHeadlineContainer = styled.div`
     height: 80px;
     padding-top: 16px;
   `}
+
+  border-bottom: black solid 1px;
 `;
 
 const WorkHeadline = styled.div`
@@ -33,7 +35,6 @@ const WorkHeadline = styled.div`
   ${responsive.sm`
     padding-right: 256px;
   `}
-
 `;
 
 const WorkWrapper = styled.div`

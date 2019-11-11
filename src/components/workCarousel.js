@@ -6,10 +6,11 @@ import Img from "gatsby-image"
 
 import Carousel from "./carousel";
 
-const ImageWrapper = styled(Img)`
+const ImageWrapper = styled.div`
   width: 100%;
   border: black solid 1px;
-  border-left: 0px;
+  border-top: 0px;
+  border-left: solid ${p => p.size > 1 ? "0px" : "1px"};
   box-sizing: border-box;
 `;
 
@@ -74,19 +75,24 @@ export default class WorkCarousel extends React.Component {
   }
 
   renderSlides(index, key, currentSlideIndex, images, updateIndex) {
-    const imageIndex = mod(index, images.length);
-    return this.renderSlide(images[imageIndex], key, updateIndex);
+    const size = images.length;
+    const imageIndex = mod(index, size);
+    return this.renderSlide(images[imageIndex], key, updateIndex, size);
   }
 
-  renderSlide(image, key, updateIndex) {
+  renderSlide(image, key, updateIndex, size) {
+    console.log(size);
     return (
       <ImageWrapper
         onClick={() => this.handleImageClick(key, updateIndex)}
         key={key}
-        fluid={image.fluid}
-        alt=""
-        loading="eager"
-      />
+        size={size}>
+        <Img
+          fluid={image.fluid}
+          alt=""
+          loading="eager"
+        />
+      </ImageWrapper>
     );
   }
 

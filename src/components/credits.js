@@ -61,11 +61,11 @@ const CreditsCTA = styled.div`
   `}
 
   img {
-    height: 15px;
-    padding-top: 5px;
+    height: 20px;
+    padding-top: 15px;
 
     ${responsive.sm`
-      height: 25px;
+      height: 30px;
     `}
     transform: rotate(270deg);
   }

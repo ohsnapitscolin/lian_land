@@ -5,6 +5,8 @@ import { responsive, breakpoints } from "../utils/style"
 import $ from 'jquery'
 import renderRichText from '../utils/rich-text';
 import arrow from "../images/ic_arrow.png";
+import minus from "../images/ic_minus.png";
+import plus from "../images/ic_plus.png";
 
 const FooterPadding = styled.div`
   height: 60px;
@@ -65,7 +67,7 @@ const FooterHeader = styled.div`
 
 const FooterContact = styled.div`
 
-  min-width: 450px;
+  min-width: 350px;
 
   display: flex;
   flex-direction: column;
@@ -99,10 +101,12 @@ const FooterIcon = styled.h1`
   ${responsive.sm`
     display: none
   `}
+  img {
+    width: 15px;
+  }
 `;
 
 const FooterContantInfo = styled(FooterInfo)`
-  display: flex;
   h2 {
     padding-right: 60px;
   }
@@ -117,22 +121,25 @@ const FooterContantInfo = styled(FooterInfo)`
     background-repeat: no-repeat;
     background-position: left center;
 
-    padding-bottom: 8px;
+    margin-bottom: 8px;
     ${responsive.sm`
-      padding-bottom: 0
+      margin-bottom: 0
     `};
 
-    padding-left: 45px;
-    background-size: 30px;
+    padding-left: 30px;
+    background-size: 20px;
 
     ${responsive.sm`
-      background-size: 40px;
-      padding-left: 55px;
+      background-size: 30px;
+      padding-left: 45px;
     `}
   }
 
   a {
     text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   ${responsive.sm`
@@ -213,7 +220,12 @@ export default class Footer extends React.Component {
           <FooterContact>
             <FooterHeader onClick={() => this.toggle("contact")}>
               <h2>Contact</h2>
-              <FooterIcon>{this.state.contactActive ? "-" : "+"}</FooterIcon>
+              <FooterIcon>{
+                this.state.contactActive ?
+                  <img src={minus}/> :
+                  <img src={plus}/>
+                }
+              </FooterIcon>
             </FooterHeader>
             <AnimateHeight
               height={this.state.contactActive ? "auto" : 0}
@@ -227,7 +239,12 @@ export default class Footer extends React.Component {
           <FooterAbout>
             <FooterHeader onClick={() => this.toggle("about")}>
               <h2>About</h2>
-              <FooterIcon>{this.state.aboutActive ? "-" : "+"}</FooterIcon>
+              <FooterIcon>{
+                this.state.aboutActive ?
+                  <img src={minus}/> :
+                  <img src={plus}/>
+                }
+              </FooterIcon>
             </FooterHeader>
             <AnimateHeight
               height={this.state.aboutActive ? "auto" : 0}

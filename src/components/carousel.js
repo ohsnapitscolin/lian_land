@@ -66,8 +66,17 @@ export default class Carousel extends React.Component {
       style,
       rootStyle,
       slideStyle,
-      renderSlides
+      renderSlides,
+      size
     } = this.props;
+
+    let beforeCount = 0;
+    let afterCount = 0;
+
+    if (size > 1) {
+      beforeCount = Math.max(Math.floor(size / 2), 2)
+      afterCount = Math.max(Math.ceil(size / 2), 2);
+    }
 
     return (
       <CarouselWrapper>
@@ -76,15 +85,19 @@ export default class Carousel extends React.Component {
           onChangeIndex={this.onChangeIndex.bind(this)}
           style={rootStyle}
           slideStyle={slideStyle}
-          overscanSlideAfter={2}
-          overscanSlideBefore={2}
+          overscanSlideBefore={beforeCount}
+          overscanSlideAfter={afterCount}
           enableMouseEvents={true}
           slideRenderer={(params) => {
             return renderSlides(params.index, params.key, this.state.index)
           }}
         />
-        <LeftButton onClick={() => this.updateIndex(-1, this.props.size)}/>
-        <RightButton onClick={() => this.updateIndex(1, this.props.size)}/>
+        {!!beforeCount &&
+          <LeftButton onClick={() => this.updateIndex(-1, this.props.size)}/>
+        }
+        {!!afterCount &&
+          <RightButton onClick={() => this.updateIndex(1, this.props.size)}/>
+        }
       </CarouselWrapper>
     );
     return <div/>
