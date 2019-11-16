@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components'
 import SwipeableViews from 'react-swipeable-views';
-import { autoPlay, virtualize } from 'react-swipeable-views-utils';
-import { mod } from 'react-swipeable-views-core';
-import { responsive, breakpoints } from "../utils/style"
+import { virtualize } from 'react-swipeable-views-utils';
+import { responsive } from "../utils/style"
 
 const CarouselWrapper = styled.div`
   position: relative;
@@ -62,8 +61,6 @@ export default class Carousel extends React.Component {
 
   render() {
     let {
-      elements,
-      style,
       rootStyle,
       slideStyle,
       renderSlides,
@@ -100,6 +97,5 @@ export default class Carousel extends React.Component {
         }
       </CarouselWrapper>
     );
-    return <div/>
   }
 }

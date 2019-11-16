@@ -1,6 +1,6 @@
 import React from "react"
 import styled from 'styled-components'
-import { responsive, breakpoints } from "../utils/style";
+import { responsive } from "../utils/style";
 import Img from "gatsby-image";
 import renderRichText from '../utils/rich-text';
 
@@ -35,20 +35,6 @@ const HeroText = styled.div`
 
 const HeroMainText = styled(HeroText)``;
 
-const HeroSubTextWrapper = styled(HeroTextWrapper)`
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-`;
-
-const HeroSubText = styled(HeroText)`
-  display: ${p => p.showText ? "block" : "none"};
-`;
-
-// const HeroScroll = styled.div`
-//   /* width: 500px; */
-//   height: 50px;
-//   position: relative;
-// }`
 
 const HeroImageWrapper = styled.div`
   position: relative;
@@ -56,52 +42,15 @@ const HeroImageWrapper = styled.div`
   border-bottom: black 1px solid;
 `;
 
-// const LeftSlide = styled.div`
-//   padding-left: 100px;
-//   padding-right: 100px;
-//   text-align: left;
-// `;
-//
-// const CurrentSlide = styled.div`
-//   padding-left: 50px;
-//   padding-right: 50px;
-//   text-align: left;
-//   transition: all 2s ease;
-// `
-//
-// const RightSlide = styled.div`
-//   padding-right: 100px;
-//   padding-left: 100px;
-//   text-align: left;
-// `;
-
 export default class Hero extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      subTextDisplayed: false
-    }
-  }
-
-  toggleSubText() {
-    console.log("toggleSubText");
-    this.setState({
-      subTextDisplayed: !this.state.subTextDisplayed
-    });
-  }
-
-  renderText() {
-    return <div/>
-  }
   render() {
-    let { mainText, subText, image } = this.props;
+    let { mainText, image } = this.props;
     return (
       <HeroWrapper>
         <HeroImageWrapper>
           <Img
             fluid={image.fluid}
-            alt=""
-            className={image.fluid.aspectRatio}
+            alt={image.description}
             loading="eager"
             style={{ height: "100%" }}/>
           <HeroMainTextWrapper>

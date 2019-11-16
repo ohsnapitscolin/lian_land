@@ -1,8 +1,7 @@
 import React from "react"
 import styled from 'styled-components'
-import { responsive, breakpoints } from "../utils/style";
+import { responsive } from "../utils/style";
 import Img from "gatsby-image";
-import renderRichText from '../utils/rich-text';
 import arrow from "../images/ic_arrow.png";
 
 const CreditsWrapper = styled.div`
@@ -101,7 +100,7 @@ export default class Credits extends React.Component {
           <CreditsImageWrapper>
           <Img
             fluid={image.fluid}
-            alt=""
+            alt={image.description}
             loading="eager"
             style={{
               width: "100%",
@@ -110,11 +109,11 @@ export default class Credits extends React.Component {
           </CreditsImageWrapper>
           <CreditsCTA onClick={this.handleClick.bind(this)}>
             <h1>Entrance</h1>
-            <img src={arrow}/>
+            <img src={arrow} alt="^"/>
           </CreditsCTA>
-          <CreditsText>
-            {renderRichText(text.json)}
-          </CreditsText>
+          <CreditsText dangerouslySetInnerHTML={{
+            __html: text.childMarkdownRemark.html
+          }}/>
         </CreditsContentWrapper>
       </CreditsWrapper>
     );

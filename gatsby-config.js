@@ -40,11 +40,14 @@ module.exports = {
      },
      {
        resolve: `gatsby-plugin-styled-components`,
+        options: {
+          displayName: false
+        },
+      },
+     {
+       resolve: `gatsby-transformer-remark`,
          options: {
-          // Change plugin default options here, e.g.:
-          // ssr: false
-          // displayName: false,
-          // minify: false
+          plugins: [],
         },
       },
       {

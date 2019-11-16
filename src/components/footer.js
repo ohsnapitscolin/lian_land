@@ -8,10 +8,6 @@ import arrow from "../images/ic_arrow.png";
 import minus from "../images/ic_minus.png";
 import plus from "../images/ic_plus.png";
 
-const FooterPadding = styled.div`
-  height: 60px;
-`;
-
 const FooterDrawers = styled.div`
   position: ${p => p.fixed  ? "fixed" : "relative"};
   bottom: 0;
@@ -222,8 +218,8 @@ export default class Footer extends React.Component {
               <h2>Contact</h2>
               <FooterIcon>{
                 this.state.contactActive ?
-                  <img src={minus}/> :
-                  <img src={plus}/>
+                  <img src={minus} alt="-"/> :
+                  <img src={plus} alt="+"/>
                 }
               </FooterIcon>
             </FooterHeader>
@@ -241,8 +237,8 @@ export default class Footer extends React.Component {
               <h2>About</h2>
               <FooterIcon>{
                 this.state.aboutActive ?
-                  <img src={minus}/> :
-                  <img src={plus}/>
+                  <img src={minus} alt="-"/> :
+                  <img src={plus} alt="+"/>
                 }
               </FooterIcon>
             </FooterHeader>

@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import { responsive, breakpoints } from "../utils/style";
+import { breakpoints } from "../utils/style";
 import { mod } from 'react-swipeable-views-core'
 import Img from "gatsby-image"
 
@@ -81,7 +81,6 @@ export default class WorkCarousel extends React.Component {
   }
 
   renderSlide(image, key, updateIndex, size) {
-    console.log(size);
     return (
       <ImageWrapper
         onClick={() => this.handleImageClick(key, updateIndex)}
@@ -89,7 +88,7 @@ export default class WorkCarousel extends React.Component {
         size={size}>
         <Img
           fluid={image.fluid}
-          alt=""
+          alt={image.description}
           loading="eager"
         />
       </ImageWrapper>
@@ -97,7 +96,6 @@ export default class WorkCarousel extends React.Component {
   }
 
   handleImageClick(key, updateIndex) {
-    console.log('handleImageClick');
     if (key === -1) {
       updateIndex(-1);
     }

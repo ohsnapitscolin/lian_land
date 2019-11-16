@@ -19,7 +19,6 @@ export default class IndexPage extends React.Component {
           image={hero.image}
         />
         {workPages.map((work) => {
-          console.log(work.doodle);
           return(
             <Work
               key={work.title}
@@ -52,6 +51,7 @@ export const query = graphql`
             }
             year
             images {
+              description
               fluid(maxWidth: 1200, quality: 100) {
                 ...GatsbyContentfulFluid_withWebp_noBase64
               }
@@ -76,6 +76,7 @@ export const query = graphql`
             json
           }
           image {
+            description
             fluid(maxWidth: 1840, quality: 100) {
               ...GatsbyContentfulFluid_withWebp_noBase64
             }
@@ -99,9 +100,12 @@ export const query = graphql`
       edges {
         node {
           text {
-            json
+            childMarkdownRemark {
+              html
+            }
           }
           image {
+            description
             fluid(maxWidth: 1840, quality: 100) {
               ...GatsbyContentfulFluid_withWebp_noBase64
             }

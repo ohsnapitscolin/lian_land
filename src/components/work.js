@@ -1,6 +1,6 @@
 import React from "react"
 import styled from 'styled-components';
-import { responsive, breakpoints } from "../utils/style";
+import { responsive } from "../utils/style";
 import Img from "gatsby-image";
 import Ticker from "react-ticker";
 import renderRichText from '../utils/rich-text';
@@ -41,10 +41,10 @@ const WorkWrapper = styled.div`
   width: 100%;
   padding-bottom: 100px;
   ${responsive.sm`
-    padding-bottom: 200px;
+    padding-bottom: 150px;
   `};
   ${responsive.md`
-    padding-bottom: 290px;
+    padding-bottom: 160px;
   `};
   border-bottom: black solid 1px;
 `;
@@ -120,42 +120,7 @@ const WorkDoodleImage = styled.div`
     height: 80px;
     width: 80px;
   `}
-
-  /* .gatsby-image-wrapper {
-    width: 100% !important;
-  }; */
 `;
-
-// const WorkDoodle = styled.div`
-//   display: flex;
-//   align-items: center;
-//
-//   padding-left: 10px;
-//   padding-right: 8px;
-//
-//   width: 40px;
-//   height: 40px;
-//
-//   background-image: url(${});
-//   background-repeat: no-repeat;
-//   background-center:
-//   background-size: 40px;
-//
-//   ${responsive.sm`
-//     padding-left: 15px;
-//     padding-right: 10px;
-//   `}
-//
-//   img {
-//     height: 25px;
-//
-//     ${responsive.sm`
-//       height: 40px;
-//     `}
-//
-//   }
-// `;
-
 
 export default class Work extends React.Component {
   render() {
@@ -212,12 +177,3 @@ export default class Work extends React.Component {
     );
   }
 }
-
-// const WorkDoodle = styled(Img)`
-//   picture > img {
-//     height: 100% !important;
-//   };
-//   picture {
-//     height: 100% !important;
-//   };
-// `;

@@ -1,6 +1,6 @@
 import React from "react"
 import styled from 'styled-components'
-import { responsive, breakpoints } from "../utils/style"
+import { responsive } from "../utils/style"
 import est from "../images/ic_est.png"
 
 const HeaderWrapper = styled.div`
@@ -41,6 +41,9 @@ const PopulationContainer = styled.div`
   display: flex;
   align-items: center;
 
+  h2 {
+    white-space: nowrap;
+  }
   img {
     padding-right: 6px;
     height: 25px;
@@ -92,8 +95,8 @@ export default class Header extends React.Component {
         <HeaderContainer scrolled={this.state.scrolled}>
           <h1>Lian</h1>
           <PopulationContainer>
-            <img src={est}/>
-            <h2>2019 Pop. 1</h2>
+            <img src={est} alt="EST"/>
+            <h2>1992 Pop. 1</h2>
           </PopulationContainer>
           <h1>Land</h1>
         </HeaderContainer>
