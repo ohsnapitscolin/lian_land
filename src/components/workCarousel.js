@@ -89,7 +89,7 @@ export default class WorkCarousel extends React.Component {
         <Img
           fluid={image.fluid}
           alt={image.description}
-          loading="eager"
+          loading="lazy"
         />
       </ImageWrapper>
     );
