@@ -7,7 +7,8 @@ import Hero from "../components/hero";
 
 export default class IndexPage extends React.Component {
   render() {
-    const work = this.props.data.allContentfulWorkPage.edges[0].node;
+    const workPages =
+      this.props.data.allContentfulWorkPages.edges[0].node.pages;
     const hero = this.props.data.allContentfulHero.edges[0].node;
 
     return (
@@ -17,52 +18,50 @@ export default class IndexPage extends React.Component {
           subText={hero.subText}
           image={hero.image}
         />
-        <Work
-          title={work.title}
-          type={work.type}
-          year={work.year}
-          images={work.images}
-          description={work.description}
-          credits={work.credits}
-        />
-        <Work
-          title={work.title}
-          type={work.type}
-          year={work.year}
-          description={work.description}
-          images={work.images}
-          credits={work.credits}
-        />
+        {workPages.map((work) => {
+          return(
+            <Work
+              key={work.title}
+              title={work.title}
+              type={work.type}
+              doodle={work.doodle}
+              year={work.year}
+              images={work.images}
+              description={work.description}
+              credits={work.credits}
+            />
+          )})}
       </Layout>
     );
   }
 }
-// export default ({ data }) => (
-//   const work = data.allContentfulWorkPage.edges.node[0];
-//     <Work
-//       title={work.title}
-//       type={work.allContentfulWorkPage.type}
-//     />
-//   );
 
 export const query = graphql`
   query PortfolioQuery {
-    allContentfulWorkPage {
+    allContentfulWorkPages {
       edges {
         node {
-          title
-          type
-          year
-          images {
-            fluid(maxWidth: 1840, quality: 100) {
-              ...GatsbyContentfulFluid_withWebp_noBase64
+          pages {
+            title
+            type
+            doodle {
+              fixed {
+                ...GatsbyContentfulFixed_withWebp_noBase64
+              }
             }
-          }
-          description {
-            json
-          }
-          credits {
-            json
+            year
+            images {
+              description
+              fluid(maxWidth: 1200, quality: 100) {
+                ...GatsbyContentfulFluid_withWebp_noBase64
+              }
+            }
+            description {
+              json
+            }
+            credits {
+              json
+            }
           }
         }
       }
@@ -77,6 +76,7 @@ export const query = graphql`
             json
           }
           image {
+            description
             fluid(maxWidth: 1840, quality: 100) {
               ...GatsbyContentfulFluid_withWebp_noBase64
             }
@@ -100,9 +100,12 @@ export const query = graphql`
       edges {
         node {
           text {
-            json
+            childMarkdownRemark {
+              html
+            }
           }
           image {
+            description
             fluid(maxWidth: 1840, quality: 100) {
               ...GatsbyContentfulFluid_withWebp_noBase64
             }

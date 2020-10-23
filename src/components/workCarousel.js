@@ -1,20 +1,18 @@
 import React from "react"
 import styled from "styled-components"
-import { responsive, breakpoints } from "../utils/style";
+import { breakpoints } from "../utils/style";
 import { mod } from 'react-swipeable-views-core'
 import Img from "gatsby-image"
 
 import Carousel from "./carousel";
 
-const ImageWrapper = styled(Img)`
+const ImageWrapper = styled.div`
   width: 100%;
   border: black solid 1px;
+  border-top: 0px;
+  border-left: solid ${p => p.size > 1 ? "0px" : "1px"};
+  box-sizing: border-box;
 `;
-
-const rootStyle = {
-  paddingLeft: "200px",
-  paddingRight: "200px"
-};
 
 export default class WorkCarousel extends React.Component {
   constructor() {
@@ -76,20 +74,34 @@ export default class WorkCarousel extends React.Component {
     }
   }
 
-  renderSlides(index, key, currentSlideIndex, images) {
-    const imageIndex = mod(index, images.length);
-    return this.renderSlide(images[imageIndex], key);
+  renderSlides(index, key, currentSlideIndex, images, updateIndex) {
+    const size = images.length;
+    const imageIndex = mod(index, size);
+    return this.renderSlide(images[imageIndex], key, updateIndex, size);
   }
 
-  renderSlide(image, key) {
+  renderSlide(image, key, updateIndex, size) {
     return (
       <ImageWrapper
+        onClick={() => this.handleImageClick(key, updateIndex)}
         key={key}
-        fluid={image.fluid}
-        alt=""
-        loading="eager"
-      />
+        size={size}>
+        <Img
+          fluid={image.fluid}
+          alt={image.description}
+          loading="lazy"
+        />
+      </ImageWrapper>
     );
+  }
+
+  handleImageClick(key, updateIndex) {
+    if (key === -1) {
+      updateIndex(-1);
+    }
+    if (key === 1) {
+      updateIndex(1);
+    }
   }
 
   render() {
@@ -97,9 +109,9 @@ export default class WorkCarousel extends React.Component {
     return (
       <Carousel
         rootStyle={rootStyle}
-        renderSlides={(index, key, currentSlideIndex) => {
+        renderSlides={(index, key, currentSlideIndex, updateIndex) => {
           return this.renderSlides(
-            index, key, currentSlideIndex, this.props.images);
+            index, key, currentSlideIndex, this.props.images, updateIndex);
         }}
         size={this.props.images.length}
       />

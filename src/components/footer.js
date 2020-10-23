@@ -3,11 +3,10 @@ import styled from 'styled-components'
 import AnimateHeight from 'react-animate-height'
 import { responsive, breakpoints } from "../utils/style"
 import $ from 'jquery'
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-
-const FooterPadding = styled.div`
-  height: 60px;
-`;
+import renderRichText from '../utils/rich-text';
+import arrow from "../images/ic_arrow.png";
+import minus from "../images/ic_minus.png";
+import plus from "../images/ic_plus.png";
 
 const FooterDrawers = styled.div`
   position: ${p => p.fixed  ? "fixed" : "relative"};
@@ -39,6 +38,8 @@ const FooterHeader = styled.div`
   padding-right: 20px;
   height: 50px;
 
+  cursor: pointer;
+
   ${responsive.sm`
     padding-left: 45px;
     height: 60px;
@@ -61,9 +62,8 @@ const FooterHeader = styled.div`
 `
 
 const FooterContact = styled.div`
-  ${responsive.sm`
-    flex: 0 0 400px;
-  `}
+
+  min-width: 350px;
 
   display: flex;
   flex-direction: column;
@@ -97,12 +97,45 @@ const FooterIcon = styled.h1`
   ${responsive.sm`
     display: none
   `}
+  img {
+    width: 15px;
+  }
 `;
 
 const FooterContantInfo = styled(FooterInfo)`
-  display: flex;
   h2 {
     padding-right: 60px;
+  }
+
+  ul {
+    padding-left: 0;
+    list-style: none;
+  }
+
+  li {
+    background-image: url(${arrow});
+    background-repeat: no-repeat;
+    background-position: left center;
+
+    margin-bottom: 8px;
+    ${responsive.sm`
+      margin-bottom: 0
+    `};
+
+    padding-left: 30px;
+    background-size: 20px;
+
+    ${responsive.sm`
+      background-size: 30px;
+      padding-left: 45px;
+    `}
+  }
+
+  a {
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   ${responsive.sm`
@@ -119,6 +152,7 @@ export default class Footer extends React.Component {
       scrolled: false,
       fixed: true,
     }
+    this.scrollFn = this.handleScroll.bind(this);
   }
 
   handleScroll() {
@@ -132,11 +166,11 @@ export default class Footer extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll.bind(this));
+    window.addEventListener('scroll', this.scrollFn);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll.bind(this));
+    window.removeEventListener('scroll', this.scrollFn);
   }
 
   toggle(trigger) {
@@ -182,28 +216,38 @@ export default class Footer extends React.Component {
           <FooterContact>
             <FooterHeader onClick={() => this.toggle("contact")}>
               <h2>Contact</h2>
-              <FooterIcon>{this.state.contactActive ? "-" : "+"}</FooterIcon>
+              <FooterIcon>{
+                this.state.contactActive ?
+                  <img src={minus} alt="-"/> :
+                  <img src={plus} alt="+"/>
+                }
+              </FooterIcon>
             </FooterHeader>
             <AnimateHeight
               height={this.state.contactActive ? "auto" : 0}
               duration={300}
             >
               <FooterContantInfo>
-                {documentToReactComponents(contactText.json)}
+                {renderRichText(contactText.json)}
               </FooterContantInfo>
             </AnimateHeight>
           </FooterContact>
           <FooterAbout>
             <FooterHeader onClick={() => this.toggle("about")}>
               <h2>About</h2>
-              <FooterIcon>{this.state.aboutActive ? "-" : "+"}</FooterIcon>
+              <FooterIcon>{
+                this.state.aboutActive ?
+                  <img src={minus} alt="-"/> :
+                  <img src={plus} alt="+"/>
+                }
+              </FooterIcon>
             </FooterHeader>
             <AnimateHeight
               height={this.state.aboutActive ? "auto" : 0}
               duration={300}
             >
               <FooterInfo>
-                {documentToReactComponents(aboutText.json)}
+                {renderRichText(aboutText.json)}
               </FooterInfo>
             </AnimateHeight>
           </FooterAbout>

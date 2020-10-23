@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components'
 import SwipeableViews from 'react-swipeable-views';
-import { autoPlay, virtualize } from 'react-swipeable-views-utils';
-import { mod } from 'react-swipeable-views-core';
+import { virtualize } from 'react-swipeable-views-utils';
+import { responsive } from "../utils/style"
 
 const CarouselWrapper = styled.div`
   position: relative;
@@ -11,16 +11,31 @@ const CarouselWrapper = styled.div`
 
 const EnhancedSwipeableViews = virtualize(SwipeableViews);
 
-const LeftButton = styled.div`
+const UpdateButton = styled.div`
   position: absolute;
-  top: 50%;
-  left: 10px;
+  height: 100%;
+  cursor: pointer;
+
+  display: none;
+
+  ${responsive.sm`
+    display: block;
+    width: 100px;
+  `} ${responsive.md`
+    width: 150px;
+  `} ${responsive.lg`
+    width: 200px;
+  `};
 `;
 
-const RightButton = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 10px;
+const LeftButton = styled(UpdateButton)`
+  top: 0;
+  left: 0;
+`;
+
+const RightButton = styled(UpdateButton)`
+  top: 0;
+  right: 0;
 `;
 
 export default class Carousel extends React.Component {
@@ -43,36 +58,22 @@ export default class Carousel extends React.Component {
       index: index
     });
   };
-  //
-  // renderSlides(index, key, elements, currentSlideStyle, leftSlideStyle, rightSlideStyle) {
-  //   let style = {};
-  //   const moddedIndex = mod(index, elements.length);
-  //   if (index === this.state.index) {
-  //     style = currentSlideStyle
-  //   } else if (index < this.state.index) {
-  //     style = leftSlideStyle
-  //   } else if (index > this.state.index) {
-  //     style = rightSlideStyle
-  //   }
-  //   // debugger;
-  //   console.log(style);
-  //   return React.cloneElement(elements[moddedIndex], {
-  //     key: key,
-  //     style: style
-  //   });
-  // }
 
   render() {
     let {
-      elements,
-      style,
       rootStyle,
       slideStyle,
-      // currentSlideStyle,
-      // leftSlideStyle,
-      // rightSlideStyle,
-      renderSlides
+      renderSlides,
+      size
     } = this.props;
+
+    let beforeCount = 0;
+    let afterCount = 0;
+
+    if (size > 1) {
+      beforeCount = Math.max(Math.floor(size / 2), 2)
+      afterCount = Math.max(Math.ceil(size / 2), 2);
+    }
 
     return (
       <CarouselWrapper>
@@ -81,25 +82,20 @@ export default class Carousel extends React.Component {
           onChangeIndex={this.onChangeIndex.bind(this)}
           style={rootStyle}
           slideStyle={slideStyle}
-          overscanSlideAfter={2}
-          overscanSlideBefore={2}
+          overscanSlideBefore={beforeCount}
+          overscanSlideAfter={afterCount}
           enableMouseEvents={true}
           slideRenderer={(params) => {
             return renderSlides(params.index, params.key, this.state.index)
           }}
         />
-        <LeftButton>
-          <button onClick={() => this.updateIndex(-1, this.props.size)}>
-            Left
-          </button>
-        </LeftButton>
-        <RightButton>
-          <button onClick={() => this.updateIndex(1, this.props.size)}>
-            Right
-          </button>
-        </RightButton>
+        {!!beforeCount &&
+          <LeftButton onClick={() => this.updateIndex(-1, this.props.size)}/>
+        }
+        {!!afterCount &&
+          <RightButton onClick={() => this.updateIndex(1, this.props.size)}/>
+        }
       </CarouselWrapper>
     );
-    return <div/>
   }
 }

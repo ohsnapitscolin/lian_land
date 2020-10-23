@@ -1,10 +1,13 @@
 import React from "react"
 import styled from 'styled-components';
-import { responsive, breakpoints } from "../utils/style";
+import { responsive } from "../utils/style";
+import Img from "gatsby-image";
 import Ticker from "react-ticker";
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import renderRichText from '../utils/rich-text';
 
 import WorkCarousel from "./workCarousel";
+
+const SCROLL_SPEED = 5;
 
 const WorkHeadlineContainer = styled.div`
   height: 40px;
@@ -15,6 +18,8 @@ const WorkHeadlineContainer = styled.div`
     height: 80px;
     padding-top: 16px;
   `}
+
+  border-bottom: black solid 1px;
 `;
 
 const WorkHeadline = styled.div`
@@ -25,13 +30,20 @@ const WorkHeadline = styled.div`
   align-items: center;
 
   padding-left: 24px;
-  padding-right: 24px;
+  padding-right: 200px;
+
+  ${responsive.sm`
+    padding-right: 256px;
+  `}
 `;
 
 const WorkWrapper = styled.div`
   width: 100%;
-  padding-bottom: 90px;
+  padding-bottom: 100px;
   ${responsive.sm`
+    padding-bottom: 150px;
+  `};
+  ${responsive.md`
     padding-bottom: 160px;
   `};
   border-bottom: black solid 1px;
@@ -40,16 +52,13 @@ const WorkWrapper = styled.div`
 const WorkTitle = styled.div`
   display: inline-block;
   white-space: nowrap;
-  padding-right: 30px;
 `;
 
 const WorkType = styled.div`
   display: inline-block;
   white-space: nowrap;
+
   h1 {
-    font-family: adobe-garamond-pro, serif;
-    font-style: italic;
-    font-weight: 400;
     padding-top: 5px;
   }
 `;
@@ -88,14 +97,29 @@ const WorkCredits = styled.div`
   display: flex;
   justify-content: center;
 
-  padding-top: 18px;
+  padding-top: 8px;
+  padding-right: 20px;
+  padding-left: 20px;
+
+  box-sizing: border-box;
+
   ${responsive.sm`
-    padding-top: 32px;
+    padding-top: 12px;
   `}
 
   .credits {
     text-align: center;
   }
+`;
+
+const WorkDoodleImage = styled.div`
+  width: 40px;
+  height: 40px;
+
+  ${responsive.sm`
+    height: 80px;
+    width: 80px;
+  `}
 `;
 
 export default class Work extends React.Component {
@@ -105,6 +129,7 @@ export default class Work extends React.Component {
       type,
       year,
       images,
+      doodle,
       description,
       credits
     } = this.props;
@@ -113,7 +138,7 @@ export default class Work extends React.Component {
       <WorkWrapper>
         <WorkHeadlineContainer>
           <Ticker
-            speed={10}
+            speed={SCROLL_SPEED}
             mode={"chain"}
           >
             {({ index }) => (
@@ -121,29 +146,34 @@ export default class Work extends React.Component {
                 <WorkTitle>
                   <h1>{title}</h1>
                 </WorkTitle>
+                <WorkDoodleImage>
+                  {doodle && <Img
+                    fixed={doodle.fixed}
+                    style={{
+                      height: "100%",
+                      width: "100%"
+                    }}
+                    imgStyle={{objectFit: "contain"}}/>}
+                </WorkDoodleImage>
                 <WorkType>
-                  <h1>{type}, {year}</h1>
+                  <h1><i>{type}, {year}</i></h1>
                 </WorkType>
               </WorkHeadline>
             )}
           </Ticker>
         </WorkHeadlineContainer>
         <WorkCarousel images={images} />
-        <WorkDescription>
+        {description && <WorkDescription>
           <div className="description">
-            {documentToReactComponents(description.json)}
+            {renderRichText(description.json)}
           </div>
-        </WorkDescription>
-        <WorkCredits>
+        </WorkDescription>}
+        {credits && <WorkCredits>
           <div className="credits">
-            {documentToReactComponents(credits.json)}
+            {renderRichText(credits.json)}
           </div>
-        </WorkCredits>
+        </WorkCredits>}
       </WorkWrapper>
     );
   }
 }
-//
-// <div
-//   dangerouslySetInnerHtml={this.props.description.childMarkdownRemark.html}
-// />

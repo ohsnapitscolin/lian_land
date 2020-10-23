@@ -1,54 +1,40 @@
 import React from "react"
 import styled from 'styled-components'
-import { responsive, breakpoints } from "../utils/style";
+import { responsive } from "../utils/style";
 import Img from "gatsby-image";
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import renderRichText from '../utils/rich-text';
 
-const HeroWrapper = styled.div`
-  padding-bottom: 80px;
-`;
+const HeroWrapper = styled.div``;
 
 const HeroTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
+  padding-left: 20px;
+  padding-right: 20px;
+
+  ${responsive.sm`
+    padding-left: 45px;
+    padding-right: 45px;
+  `}
+`;
+
+const HeroMainTextWrapper = styled(HeroTextWrapper)`
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  left: 0;
+  transform: translate(0, -50%);
   width: 100%;
   box-sizing: border-box;
-
-  padding: 20px;
-  ${responsive.sm`
-    padding: 100px;
-  `}
-  ${responsive.md`
-    padding: 200px;
-  `}
-  ${responsive.lg`
-    padding: 300px;
-  `}
-
+  max-width: 1100px;
 `;
 
 const HeroText = styled.div`
   width: 100%;
 `;
 
-const HeroMainText = styled(HeroText)`
+const HeroMainText = styled(HeroText)``;
 
-`;
-
-const HeroSubText = styled(HeroText)`
-  display: ${p => p.showText ? "block" : "none"};
-`;
-
-// const HeroScroll = styled.div`
-//   /* width: 500px; */
-//   height: 50px;
-//   position: relative;
-// }`
 
 const HeroImageWrapper = styled.div`
   position: relative;
@@ -56,64 +42,33 @@ const HeroImageWrapper = styled.div`
   border-bottom: black 1px solid;
 `;
 
-// const LeftSlide = styled.div`
-//   padding-left: 100px;
-//   padding-right: 100px;
-//   text-align: left;
-// `;
-//
-// const CurrentSlide = styled.div`
-//   padding-left: 50px;
-//   padding-right: 50px;
-//   text-align: left;
-//   transition: all 2s ease;
-// `
-//
-// const RightSlide = styled.div`
-//   padding-right: 100px;
-//   padding-left: 100px;
-//   text-align: left;
-// `;
-
 export default class Hero extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      subTextDisplayed: false
-    }
-  }
-
-  toggleSubText() {
-    console.log("toggleSubText");
-    this.setState({
-      subTextDisplayed: !this.state.subTextDisplayed
-    });
-  }
-
-  renderText() {
-    return <div/>
-  }
   render() {
-    let { mainText, subText, image } = this.props;
+    let { mainText, image } = this.props;
     return (
       <HeroWrapper>
         <HeroImageWrapper>
           <Img
             fluid={image.fluid}
-            alt=""
+            alt={image.description}
             loading="eager"
             style={{ height: "100%" }}/>
-          <HeroTextWrapper>
+          <HeroMainTextWrapper>
             <HeroMainText>
-              {documentToReactComponents(mainText.json)}
+              {renderRichText(mainText.json)}
             </HeroMainText>
-          </HeroTextWrapper>
+          </HeroMainTextWrapper>
         </HeroImageWrapper>
-
       </HeroWrapper>
     );
   }
 }
+
+// <HeroSubTextWrapper>
+//   <HeroMainText>
+//     {renderRichText(subText.json)}
+//   </HeroMainText>
+// </HeroSubTextWrapper>
 
 
 // <Carousel
