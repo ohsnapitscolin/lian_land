@@ -1,9 +1,9 @@
-import React from "react"
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 import { responsive } from "../utils/style";
 import Img from "gatsby-image";
 import Ticker from "react-ticker";
-import renderRichText from '../utils/rich-text';
+import renderRichText from "../utils/rich-text";
 
 import WorkCarousel from "./workCarousel";
 
@@ -128,7 +128,7 @@ export default class Work extends React.Component {
       title,
       type,
       year,
-      images,
+      entries,
       doodle,
       description,
       credits
@@ -137,42 +137,48 @@ export default class Work extends React.Component {
     return (
       <WorkWrapper>
         <WorkHeadlineContainer>
-          <Ticker
-            speed={SCROLL_SPEED}
-            mode={"chain"}
-          >
+          <Ticker speed={SCROLL_SPEED} mode={"chain"}>
             {({ index }) => (
               <WorkHeadline>
                 <WorkTitle>
                   <h1>{title}</h1>
                 </WorkTitle>
                 <WorkDoodleImage>
-                  {doodle && <Img
-                    fixed={doodle.fixed}
-                    style={{
-                      height: "100%",
-                      width: "100%"
-                    }}
-                    imgStyle={{objectFit: "contain"}}/>}
+                  {doodle && (
+                    <Img
+                      fixed={doodle.fixed}
+                      style={{
+                        height: "100%",
+                        width: "100%"
+                      }}
+                      imgStyle={{ objectFit: "contain" }}
+                    />
+                  )}
                 </WorkDoodleImage>
                 <WorkType>
-                  <h1><i>{type}, {year}</i></h1>
+                  <h1>
+                    <i>
+                      {type}, {year}
+                    </i>
+                  </h1>
                 </WorkType>
               </WorkHeadline>
             )}
           </Ticker>
         </WorkHeadlineContainer>
-        <WorkCarousel images={images} />
-        {description && <WorkDescription>
-          <div className="description">
-            {renderRichText(description.json)}
-          </div>
-        </WorkDescription>}
-        {credits && <WorkCredits>
-          <div className="credits">
-            {renderRichText(credits.json)}
-          </div>
-        </WorkCredits>}
+        <WorkCarousel entries={entries} />
+        {description && (
+          <WorkDescription>
+            <div className="description">
+              {renderRichText(description.json)}
+            </div>
+          </WorkDescription>
+        )}
+        {credits && (
+          <WorkCredits>
+            <div className="credits">{renderRichText(credits.json)}</div>
+          </WorkCredits>
+        )}
       </WorkWrapper>
     );
   }
