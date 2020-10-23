@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from 'styled-components'
-import SwipeableViews from 'react-swipeable-views';
-import { virtualize } from 'react-swipeable-views-utils';
-import { responsive } from "../utils/style"
+import React from "react";
+import styled from "styled-components";
+import SwipeableViews from "react-swipeable-views";
+import { virtualize } from "react-swipeable-views-utils";
+import { responsive } from "../utils/style";
 
 const CarouselWrapper = styled.div`
   position: relative;
@@ -21,9 +21,13 @@ const UpdateButton = styled.div`
   ${responsive.sm`
     display: block;
     width: 100px;
-  `} ${responsive.md`
+  `}
+  
+  ${responsive.md`
     width: 150px;
-  `} ${responsive.lg`
+  `}
+  
+  ${responsive.lg`
     width: 200px;
   `};
 `;
@@ -42,11 +46,11 @@ export default class Carousel extends React.Component {
   constructor() {
     super();
     this.state = {
-       index: 0,
+      index: 0
     };
   }
 
-  updateIndex(change, size) {
+  updateIndex(change) {
     let index = this.state.index + change;
     this.setState({
       index: index
@@ -57,21 +61,16 @@ export default class Carousel extends React.Component {
     this.setState({
       index: index
     });
-  };
+  }
 
   render() {
-    let {
-      rootStyle,
-      slideStyle,
-      renderSlides,
-      size
-    } = this.props;
+    let { rootStyle, renderSlides, size } = this.props;
 
     let beforeCount = 0;
     let afterCount = 0;
 
     if (size > 1) {
-      beforeCount = Math.max(Math.floor(size / 2), 2)
+      beforeCount = Math.max(Math.floor(size / 2), 2);
       afterCount = Math.max(Math.ceil(size / 2), 2);
     }
 
@@ -81,20 +80,15 @@ export default class Carousel extends React.Component {
           index={this.state.index}
           onChangeIndex={this.onChangeIndex.bind(this)}
           style={rootStyle}
-          slideStyle={slideStyle}
           overscanSlideBefore={beforeCount}
           overscanSlideAfter={afterCount}
           enableMouseEvents={true}
-          slideRenderer={(params) => {
-            return renderSlides(params.index, params.key, this.state.index)
+          slideRenderer={params => {
+            return renderSlides(params.index, params.key);
           }}
         />
-        {!!beforeCount &&
-          <LeftButton onClick={() => this.updateIndex(-1, this.props.size)}/>
-        }
-        {!!afterCount &&
-          <RightButton onClick={() => this.updateIndex(1, this.props.size)}/>
-        }
+        {!!beforeCount && <LeftButton onClick={() => this.updateIndex(-1)} />}
+        {!!afterCount && <RightButton onClick={() => this.updateIndex(1)} />}
       </CarouselWrapper>
     );
   }

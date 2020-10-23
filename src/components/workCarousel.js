@@ -8,6 +8,8 @@ import Carousel from "./carousel";
 
 const SlideWrapper = styled.div`
   width: 100%;
+  height: 100%;
+
   border: black solid 1px;
   border-top: 0px;
   border-left: solid ${p => (p.size > 1 ? "0px" : "1px")};
@@ -27,18 +29,21 @@ const VideoWrapper = styled.div`
 export default class WorkCarousel extends React.Component {
   constructor() {
     super();
+
     this.state = {
       breakpoint: null
     };
+
+    this.handleWindowResize = this.handleWindowResize.bind(this);
   }
 
   componentDidMount() {
     this.updateBreakpoint();
-    window.addEventListener("resize", this.handleWindowResize.bind(this));
+    window.addEventListener("resize", this.handleWindowResize);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.handleWindowResize.bind(this));
+    window.removeEventListener("resize", this.handleWindowResize);
   }
 
   handleWindowResize() {
@@ -84,27 +89,24 @@ export default class WorkCarousel extends React.Component {
     }
   }
 
-  renderSlides(index, key, currentSlideIndex, entries, updateIndex) {
+  renderSlides(index, key, entries) {
     const size = entries.length;
     const entryIndex = mod(index, size);
     return (
-      <SlideWrapper
-        onClick={() => this.handleImageClick(key, updateIndex)}
-        key={key}
-        size={size}
-      >
+      <SlideWrapper key={key} size={size}>
         {this.renderSlide(entries[entryIndex])}
       </SlideWrapper>
     );
   }
 
   renderSlide(entry) {
+    // Render Image Entry
     if (entry.image) {
       const image = entry.image;
-      return (
-        <Img fluid={image.fluid} alt={image.description} loading="eager" />
-      );
-    } else if (entry.video) {
+      return <Img fluid={image.fluid} alt={image.description} loading="lazy" />;
+    }
+    // Render Video Entry
+    else if (entry.video) {
       const file = entry.video.source.file;
       return (
         <VideoWrapper>
@@ -116,28 +118,13 @@ export default class WorkCarousel extends React.Component {
     }
   }
 
-  handleImageClick(key, updateIndex) {
-    if (key === -1) {
-      updateIndex(-1);
-    }
-    if (key === 1) {
-      updateIndex(1);
-    }
-  }
-
   render() {
     const rootStyle = this.getPadding(this.state.breakpoint);
     return (
       <Carousel
         rootStyle={rootStyle}
-        renderSlides={(index, key, currentSlideIndex, updateIndex) => {
-          return this.renderSlides(
-            index,
-            key,
-            currentSlideIndex,
-            this.props.entries,
-            updateIndex
-          );
+        renderSlides={(index, key) => {
+          return this.renderSlides(index, key, this.props.entries);
         }}
         size={this.props.entries.length}
       />

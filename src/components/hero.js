@@ -1,8 +1,8 @@
-import React from "react"
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 import { responsive } from "../utils/style";
 import Img from "gatsby-image";
-import renderRichText from '../utils/rich-text';
+import renderRichText from "../utils/rich-text";
 
 const HeroWrapper = styled.div``;
 
@@ -35,7 +35,6 @@ const HeroText = styled.div`
 
 const HeroMainText = styled(HeroText)``;
 
-
 const HeroImageWrapper = styled.div`
   position: relative;
   height: 100vh;
@@ -52,39 +51,13 @@ export default class Hero extends React.Component {
             fluid={image.fluid}
             alt={image.description}
             loading="eager"
-            style={{ height: "100%" }}/>
+            style={{ height: "100%" }}
+          />
           <HeroMainTextWrapper>
-            <HeroMainText>
-              {renderRichText(mainText.json)}
-            </HeroMainText>
+            <HeroMainText>{renderRichText(mainText.json)}</HeroMainText>
           </HeroMainTextWrapper>
         </HeroImageWrapper>
       </HeroWrapper>
     );
   }
 }
-
-// <HeroSubTextWrapper>
-//   <HeroMainText>
-//     {renderRichText(subText.json)}
-//   </HeroMainText>
-// </HeroSubTextWrapper>
-
-
-// <Carousel
-//   elements={textArray.map(value => this.renderText(value))}
-//   currentSlideStyle={{textAlign: "left"}}
-//   leftSlideStyle={{
-//     textAlign: "right",
-//     paddingRight: "0px",
-//     // marginRight: "-200px"
-//   }}
-//   rightSlideStyle={{
-//     textAlign: "left",
-//     paddingLeft: "0px",
-//     // marginLeft: "-200px"
-//   }}
-//   renderSlides={(index, key, stateIndex) => {
-//     return this.renderSlides(index, key, stateIndex, textArray);
-//   }}
-// />
