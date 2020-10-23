@@ -1,18 +1,10 @@
-import React from "react"
-import styled from "styled-components"
+import React from "react";
+import styled from "styled-components";
 import { breakpoints } from "../utils/style";
-import { mod } from 'react-swipeable-views-core'
-import Img from "gatsby-image"
+import { mod } from "react-swipeable-views-core";
+import Img from "gatsby-image";
 
 import Carousel from "./carousel";
-
-const ImageWrapper = styled.div`
-  width: 100%;
-  border: black solid 1px;
-  border-top: 0px;
-  border-left: solid ${p => p.size > 1 ? "0px" : "1px"};
-  box-sizing: border-box;
-`;
 
 const SlideWrapper = styled.div`
   width: 100%;
@@ -109,12 +101,14 @@ export default class WorkCarousel extends React.Component {
   renderSlide(entry) {
     if (entry.image) {
       const image = entry.image;
-      return <Img fluid={image.fluid} alt={image.description} loading="lazy" />;
+      return (
+        <Img fluid={image.fluid} alt={image.description} loading="eager" />
+      );
     } else if (entry.video) {
       const file = entry.video.source.file;
       return (
         <VideoWrapper>
-          <video autoPlay={true} loop={true}>
+          <video autoPlay={true} loop={true} muted>
             <source src={file.url} type={file.contentType} />
           </video>
         </VideoWrapper>
