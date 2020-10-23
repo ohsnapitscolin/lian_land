@@ -128,7 +128,7 @@ export default class Work extends React.Component {
       title,
       type,
       year,
-      images,
+      entries,
       doodle,
       description,
       credits
@@ -162,7 +162,7 @@ export default class Work extends React.Component {
             )}
           </Ticker>
         </WorkHeadlineContainer>
-        <WorkCarousel images={images} />
+        <WorkCarousel entries={entries} />
         {description && <WorkDescription>
           <div className="description">
             {renderRichText(description.json)}

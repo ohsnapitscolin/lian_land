@@ -14,6 +14,24 @@ const ImageWrapper = styled.div`
   box-sizing: border-box;
 `;
 
+const SlideWrapper = styled.div`
+  width: 100%;
+  border: black solid 1px;
+  border-top: 0px;
+  border-left: solid ${p => (p.size > 1 ? "0px" : "1px")};
+  box-sizing: border-box;
+`;
+
+const VideoWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+
+  video {
+    max-width: 100%;
+    max-height: 100%;
+  }
+`;
+
 export default class WorkCarousel extends React.Component {
   constructor() {
     super();
@@ -50,7 +68,7 @@ export default class WorkCarousel extends React.Component {
   }
 
   getPadding(breakpoint) {
-    switch(breakpoint) {
+    switch (breakpoint) {
       case breakpoints.sm:
         return {
           paddingLeft: "100px",
@@ -74,25 +92,34 @@ export default class WorkCarousel extends React.Component {
     }
   }
 
-  renderSlides(index, key, currentSlideIndex, images, updateIndex) {
-    const size = images.length;
-    const imageIndex = mod(index, size);
-    return this.renderSlide(images[imageIndex], key, updateIndex, size);
-  }
-
-  renderSlide(image, key, updateIndex, size) {
+  renderSlides(index, key, currentSlideIndex, entries, updateIndex) {
+    const size = entries.length;
+    const entryIndex = mod(index, size);
     return (
-      <ImageWrapper
+      <SlideWrapper
         onClick={() => this.handleImageClick(key, updateIndex)}
         key={key}
-        size={size}>
-        <Img
-          fluid={image.fluid}
-          alt={image.description}
-          loading="lazy"
-        />
-      </ImageWrapper>
+        size={size}
+      >
+        {this.renderSlide(entries[entryIndex])}
+      </SlideWrapper>
     );
+  }
+
+  renderSlide(entry) {
+    if (entry.image) {
+      const image = entry.image;
+      return <Img fluid={image.fluid} alt={image.description} loading="lazy" />;
+    } else if (entry.video) {
+      const file = entry.video.source.file;
+      return (
+        <VideoWrapper>
+          <video autoPlay={true} loop={true}>
+            <source src={file.url} type={file.contentType} />
+          </video>
+        </VideoWrapper>
+      );
+    }
   }
 
   handleImageClick(key, updateIndex) {
@@ -111,9 +138,14 @@ export default class WorkCarousel extends React.Component {
         rootStyle={rootStyle}
         renderSlides={(index, key, currentSlideIndex, updateIndex) => {
           return this.renderSlides(
-            index, key, currentSlideIndex, this.props.images, updateIndex);
+            index,
+            key,
+            currentSlideIndex,
+            this.props.entries,
+            updateIndex
+          );
         }}
-        size={this.props.images.length}
+        size={this.props.entries.length}
       />
     );
   }
