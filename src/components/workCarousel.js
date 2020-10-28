@@ -17,13 +17,14 @@ const SlideWrapper = styled.div`
 `;
 
 const VideoWrapper = styled.div`
+  display: flex;
   width: 100%;
   height: 100%;
+`;
 
-  video {
-    max-width: 100%;
-    max-height: 100%;
-  }
+const Video = styled.video`
+  max-width: 100%;
+  max-height: 100%;
 `;
 
 export default class WorkCarousel extends React.Component {
@@ -110,9 +111,9 @@ export default class WorkCarousel extends React.Component {
       const file = entry.video.source.file;
       return (
         <VideoWrapper>
-          <video autoPlay={true} loop={true} muted>
+          <Video autoPlay={true} loop={true} muted>
             <source src={file.url} type={file.contentType} />
-          </video>
+          </Video>
         </VideoWrapper>
       );
     }
