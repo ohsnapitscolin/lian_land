@@ -21,7 +21,7 @@ class SEO extends React.Component {
           { name: `description`, content: description },
           { name: "image", content: imageUrl },
           { name: "author", content: "Lian Fumerton-Liu" },
-          { name: "keywords", content: "Lian Fumteron-Liu" },
+          { name: "keywords", content: "Lian Fumerton-Liu" },
 
           { property: "og:title", content: title },
           { property: "og:description", content: description },
