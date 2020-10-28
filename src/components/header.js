@@ -1,5 +1,5 @@
 import React from "react"
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { responsive } from "../utils/style"
 import est from "../images/ic_est.png"
 
@@ -44,19 +44,31 @@ const PopulationContainer = styled.div`
   h2 {
     white-space: nowrap;
   }
-  img {
-    padding-right: 6px;
-    height: 25px;
-
-    display: block;
-
-    ${responsive.sm`
-      padding-right: 10px;
-      display: block;
-      height: 36px;
-    `};
-  }
 `;
+
+const spin = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`
+
+const Established = styled.img`
+  margin-right: 6px;
+  height: 25px;
+
+  display: block;
+
+  ${responsive.sm`
+    margin-right: 10px;
+    display: block;
+    height: 36px;
+  `};
+
+  animation: ${spin} 6s linear infinite;
+`
 
 export default class Header extends React.Component {
   constructor() {
@@ -95,7 +107,7 @@ export default class Header extends React.Component {
         <HeaderContainer scrolled={this.state.scrolled}>
           <h1>Lian</h1>
           <PopulationContainer>
-            <img src={est} alt="EST"/>
+            <Established src={est} alt="EST"/>
             <h2>1992 Pop. 1</h2>
           </PopulationContainer>
           <h1>Land</h1>

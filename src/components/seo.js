@@ -20,6 +20,8 @@ class SEO extends React.Component {
         meta={[
           { name: `description`, content: description },
           { name: "image", content: imageUrl },
+          { name: "author", content: "Lian Fumerton-Liu" },
+          { name: "keywords", content: "Lian Fumteron-Liu" },
 
           { property: "og:title", content: title },
           { property: "og:description", content: description },
