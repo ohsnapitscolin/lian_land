@@ -35,8 +35,8 @@ const HeaderContainer = styled.header`
     padding: 0 45px;
 
     h1 {
-      transform: scale(${p => (p.scrolled ? "0.67" : "1.0")});
-      transition: all 0.5 ease;
+      font-size: ${p => (p.scrolled ? "30px" : "45px")};
+      transition: all 1s ease;
     }
   `};
 `;
@@ -46,7 +46,7 @@ const PopulationContainer = styled.div`
   align-items: center;
 
   opacity: ${p => (p.scrolled ? "0.0" : "1.0")};
-  transition: opacity 1s ease;
+  transition: opacity 0.75s ease;
 
   h2 {
     white-space: nowrap;
