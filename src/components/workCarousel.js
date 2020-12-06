@@ -8,12 +8,14 @@ import Carousel from "./carousel";
 
 const SlideWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: ${p => (p.slideWidth ? p.slideWidth * 0.625 : 300)}px;
 
   border: black solid 1px;
   border-top: 0px;
   border-left: solid ${p => (p.size > 1 ? "0px" : "1px")};
   box-sizing: border-box;
+
+  overflow: hidden;
 `;
 
 const VideoWrapper = styled.div`
@@ -23,8 +25,8 @@ const VideoWrapper = styled.div`
 `;
 
 const Video = styled.video`
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  object-fit: cover;
 `;
 
 export default class WorkCarousel extends React.Component {
@@ -32,15 +34,21 @@ export default class WorkCarousel extends React.Component {
     super();
 
     this.state = {
-      breakpoint: null
+      breakpoint: null,
+      slideWidth: 0
     };
 
+    this.slideWrapper = React.createRef();
     this.handleWindowResize = this.handleWindowResize.bind(this);
   }
 
   componentDidMount() {
-    this.updateBreakpoint();
     window.addEventListener("resize", this.handleWindowResize);
+    this.updateBreakpoint().then(() => {
+      this.setState({
+        slideWidth: this.slideWrapper.current.clientWidth
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -60,8 +68,13 @@ export default class WorkCarousel extends React.Component {
     } else if (window.innerWidth < breakpoints.lg) {
       breakpoint = breakpoints.md;
     }
-    this.setState({
-      breakpoint: breakpoint
+    return new Promise(resolve => {
+      this.setState(
+        {
+          breakpoint: breakpoint
+        },
+        resolve
+      );
     });
   }
 
@@ -91,10 +104,17 @@ export default class WorkCarousel extends React.Component {
   }
 
   renderSlides(index, key, entries) {
+    const { slideWidth } = this.state;
     const size = entries.length;
     const entryIndex = mod(index, size);
+    console.log(slideWidth);
     return (
-      <SlideWrapper key={key} size={size}>
+      <SlideWrapper
+        key={key}
+        ref={this.slideWrapper}
+        slideWidth={slideWidth}
+        size={size}
+      >
         {this.renderSlide(entries[entryIndex])}
       </SlideWrapper>
     );
@@ -104,7 +124,14 @@ export default class WorkCarousel extends React.Component {
     // Render Image Entry
     if (entry.image) {
       const image = entry.image;
-      return <Img fluid={image.fluid} alt={image.description} loading="lazy" />;
+      return (
+        <Img
+          fluid={image.fluid}
+          alt={image.description}
+          loading="lazy"
+          aspectRatio={1.0}
+        />
+      );
     }
     // Render Video Entry
     else if (entry.video) {
