@@ -142,7 +142,7 @@ export default class WorkCarousel extends React.Component {
       const file = entry.video.source.file;
       return (
         <VideoWrapper>
-          <Video autoPlay={true} loop={true} muted>
+          <Video loop={true} muted autoPlay playsInline>
             <source src={file.url} type={file.contentType} />
           </Video>
         </VideoWrapper>
