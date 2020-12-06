@@ -56,7 +56,11 @@ export default class WorkCarousel extends React.Component {
   }
 
   handleWindowResize() {
-    this.updateBreakpoint();
+    this.updateBreakpoint().then(() => {
+      this.setState({
+        slideWidth: this.slideWrapper.current.clientWidth
+      });
+    });
   }
 
   updateBreakpoint() {
@@ -107,7 +111,7 @@ export default class WorkCarousel extends React.Component {
     const { slideWidth } = this.state;
     const size = entries.length;
     const entryIndex = mod(index, size);
-    console.log(slideWidth);
+
     return (
       <SlideWrapper
         key={key}
