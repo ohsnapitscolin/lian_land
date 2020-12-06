@@ -25,7 +25,8 @@ const VideoWrapper = styled.div`
 `;
 
 const Video = styled.video`
-  width: 100%;
+  width: calc(100% + 2px);
+  margin-left: -1px;
   object-fit: cover;
 `;
 
