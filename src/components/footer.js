@@ -1,15 +1,15 @@
-import React from "react"
-import styled from 'styled-components'
-import AnimateHeight from 'react-animate-height'
-import { responsive, breakpoints } from "../utils/style"
-import $ from 'jquery'
-import renderRichText from '../utils/rich-text';
+import React from "react";
+import styled from "styled-components";
+import AnimateHeight from "react-animate-height";
+import { responsive, breakpoints } from "../utils/style";
+import $ from "jquery";
+import renderRichText from "../utils/rich-text";
 import arrow from "../images/ic_arrow.png";
 import minus from "../images/ic_minus.png";
 import plus from "../images/ic_plus.png";
 
 const FooterDrawers = styled.div`
-  position: ${p => p.fixed  ? "fixed" : "relative"};
+  position: ${p => (p.fixed ? "fixed" : "relative")};
   bottom: 0;
   left: 0;
   width: 100%;
@@ -24,14 +24,14 @@ const FooterWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: ${p => p.scrolled || p.active ? "#f1f1f1" : ""};
+  background-color: ${p => (p.scrolled || p.active ? "#f1f1f1" : "")};
 
   transition: background-color 0.5s ease;
 
   ${responsive.sm`
     flex-direction: row;
   `}
-`
+`;
 
 const FooterHeader = styled.div`
   padding-left: 20px;
@@ -44,7 +44,6 @@ const FooterHeader = styled.div`
     padding-left: 45px;
     height: 60px;
   `}
-
 
   margin-bottom: -1px;
   margin-right: -1px;
@@ -59,10 +58,9 @@ const FooterHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`
+`;
 
 const FooterContact = styled.div`
-
   min-width: 350px;
 
   display: flex;
@@ -110,6 +108,14 @@ const FooterContantInfo = styled(FooterInfo)`
   ul {
     padding-left: 0;
     list-style: none;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
 
   li {
@@ -150,8 +156,8 @@ export default class Footer extends React.Component {
       contactActive: false,
       aboutActive: false,
       scrolled: false,
-      fixed: true,
-    }
+      fixed: true
+    };
     this.scrollFn = this.handleScroll.bind(this);
   }
 
@@ -166,11 +172,11 @@ export default class Footer extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.scrollFn);
+    window.addEventListener("scroll", this.scrollFn);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.scrollFn);
+    window.removeEventListener("scroll", this.scrollFn);
   }
 
   toggle(trigger) {
@@ -178,7 +184,7 @@ export default class Footer extends React.Component {
       if (this.state.contactActive !== this.state.aboutActive) {
         this.setState({
           contactActive: true,
-          aboutActive:true
+          aboutActive: true
         });
         return;
       }
@@ -191,13 +197,13 @@ export default class Footer extends React.Component {
 
     if (trigger === "contact") {
       this.setState({
-        contactActive: !this.state.contactActive,
+        contactActive: !this.state.contactActive
       });
     }
 
     if (trigger === "about") {
       this.setState({
-        aboutActive: !this.state.aboutActive,
+        aboutActive: !this.state.aboutActive
       });
     }
   }
@@ -206,21 +212,17 @@ export default class Footer extends React.Component {
     let { contactText, aboutText } = this.props;
     const active = this.state.aboutActive || this.state.contactActive;
     return (
-      <FooterDrawers
-        fixed={this.state.fixed}
-      >
-        <FooterWrapper
-          active={active}
-          scrolled={this.state.scrolled}
-        >
+      <FooterDrawers fixed={this.state.fixed}>
+        <FooterWrapper active={active} scrolled={this.state.scrolled}>
           <FooterContact>
             <FooterHeader onClick={() => this.toggle("contact")}>
               <h2>Contact</h2>
-              <FooterIcon>{
-                this.state.contactActive ?
-                  <img src={minus} alt="-"/> :
-                  <img src={plus} alt="+"/>
-                }
+              <FooterIcon>
+                {this.state.contactActive ? (
+                  <img src={minus} alt="-" />
+                ) : (
+                  <img src={plus} alt="+" />
+                )}
               </FooterIcon>
             </FooterHeader>
             <AnimateHeight
@@ -235,20 +237,19 @@ export default class Footer extends React.Component {
           <FooterAbout>
             <FooterHeader onClick={() => this.toggle("about")}>
               <h2>About</h2>
-              <FooterIcon>{
-                this.state.aboutActive ?
-                  <img src={minus} alt="-"/> :
-                  <img src={plus} alt="+"/>
-                }
+              <FooterIcon>
+                {this.state.aboutActive ? (
+                  <img src={minus} alt="-" />
+                ) : (
+                  <img src={plus} alt="+" />
+                )}
               </FooterIcon>
             </FooterHeader>
             <AnimateHeight
               height={this.state.aboutActive ? "auto" : 0}
               duration={300}
             >
-              <FooterInfo>
-                {renderRichText(aboutText.json)}
-              </FooterInfo>
+              <FooterInfo>{renderRichText(aboutText.json)}</FooterInfo>
             </AnimateHeight>
           </FooterAbout>
         </FooterWrapper>

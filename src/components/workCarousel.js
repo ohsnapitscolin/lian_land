@@ -40,6 +40,7 @@ export default class WorkCarousel extends React.Component {
     };
 
     this.slideWrapper = React.createRef();
+    this.videoRefs = [];
     this.handleWindowResize = this.handleWindowResize.bind(this);
   }
 
@@ -58,9 +59,11 @@ export default class WorkCarousel extends React.Component {
 
   handleWindowResize() {
     this.updateBreakpoint().then(() => {
-      this.setState({
-        slideWidth: this.slideWrapper.current.clientWidth
-      });
+      if (this.slideWrapper.current) {
+        this.setState({
+          slideWidth: this.slideWrapper.current.clientWidth
+        });
+      }
     });
   }
 
@@ -120,12 +123,12 @@ export default class WorkCarousel extends React.Component {
         slideWidth={slideWidth}
         size={size}
       >
-        {this.renderSlide(entries[entryIndex])}
+        {this.renderSlide(entries[entryIndex], index)}
       </SlideWrapper>
     );
   }
 
-  renderSlide(entry) {
+  renderSlide(entry, index) {
     // Render Image Entry
     if (entry.image) {
       const image = entry.image;
@@ -140,14 +143,7 @@ export default class WorkCarousel extends React.Component {
     }
     // Render Video Entry
     else if (entry.video) {
-      const file = entry.video.source.file;
-      return (
-        <VideoWrapper>
-          <Video loop={true} muted autoPlay playsInline>
-            <source src={file.url} type={file.contentType} />
-          </Video>
-        </VideoWrapper>
-      );
+      return <VideoComponent file={entry.video.source.file} />;
     }
   }
 
@@ -161,6 +157,33 @@ export default class WorkCarousel extends React.Component {
         }}
         size={this.props.entries.length}
       />
+    );
+  }
+}
+
+class VideoComponent extends React.Component {
+  constructor() {
+    super();
+    this.ref = React.createRef();
+  }
+
+  componentDidMount() {
+    this.observer = new IntersectionObserver(entries => {
+      const entry = entries[0];
+      entry.intersectionRatio <= 0 ? entry.target.pause() : entry.target.play();
+    });
+    this.observer.observe(this.ref.current);
+  }
+
+  render() {
+    const { file } = this.props;
+
+    return (
+      <VideoWrapper>
+        <Video loop={true} muted ref={this.ref}>
+          <source src={file.url} type={file.contentType} />
+        </Video>
+      </VideoWrapper>
     );
   }
 }
