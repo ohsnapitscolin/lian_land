@@ -26,7 +26,7 @@ const HeroMainTextWrapper = styled(HeroTextWrapper)`
   transform: translate(0, -50%);
   width: 100%;
   box-sizing: border-box;
-  max-width: 1100px;
+  max-width: 900px;
 `;
 
 const HeroText = styled.div`
