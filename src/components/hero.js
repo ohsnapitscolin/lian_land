@@ -49,7 +49,7 @@ export default class Hero extends React.Component {
         <HeroImageWrapper>
           <GatsbyImage
             image={getImage(image)}
-            alt={image.description}
+            alt={image.description || ""}
             loading="eager"
             style={{ height: "100%" }}
           />

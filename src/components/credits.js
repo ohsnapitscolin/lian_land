@@ -99,7 +99,7 @@ export default class Credits extends React.Component {
           <CreditsImageWrapper>
             <GatsbyImage
               image={getImage(image)}
-              alt={image.description}
+              alt={image.description || ""}
               loading="eager"
               style={{
                 width: "100%",

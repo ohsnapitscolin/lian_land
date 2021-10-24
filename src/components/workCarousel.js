@@ -131,10 +131,9 @@ export default class WorkCarousel extends React.Component {
       const image = entry.image;
       return (
         <GatsbyImage
-          image={getImage(image)}
+          image={getImage(image) || ""}
           alt={image.description}
           loading="lazy"
-          aspectRatio={1.0}
         />
       );
     }

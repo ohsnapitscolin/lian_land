@@ -147,6 +147,7 @@ export default class Work extends React.Component {
                   {doodle && (
                     <GatsbyImage
                       image={getImage(doodle)}
+                      alt=""
                       style={{
                         height: "100%",
                         width: "100%"
