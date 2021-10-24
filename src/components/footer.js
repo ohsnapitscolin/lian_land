@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { StaticImage } from "gatsby-plugin-image";
 import AnimateHeight from "react-animate-height";
+
+// Context
+import LayoutContext, { Breakpoints } from "../context/layout";
 
 // Utils
 import { responsive, breakpoints } from "../utils/style";
@@ -153,8 +156,9 @@ const FooterContantInfo = styled(FooterInfo)`
 export default function Footer(props) {
   const [contactActive, setContactActive] = useState(false);
   const [aboutActive, setAboutActive] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [fixed, setFixed] = useState(true);
+
+  const { scrolled, breakpoint } = useContext(LayoutContext);
 
   const { contactText, aboutText } = props;
 
@@ -170,13 +174,11 @@ export default function Footer(props) {
     // const distanceToBottom =
     //   $(document).height() - ($(window).scrollTop() + $(window).height());
     const distanceToBottom = 0;
-
-    setScrolled(window.scrollY >= 56);
     setFixed(distanceToBottom > 250);
   }
 
   function toggle(trigger) {
-    if (window.innerWidth > breakpoints.sm) {
+    if (breakpoint !== Breakpoints.XS) {
       if (contactActive !== aboutActive) {
         setContactActive(true);
         setAboutActive(true);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import { mod } from "react-swipeable-views-core";
@@ -6,8 +6,8 @@ import { mod } from "react-swipeable-views-core";
 // Components
 import Carousel from "./carousel";
 
-// Utils
-import { breakpoints } from "../utils/style";
+// Context
+import LayoutContext, { Breakpoints } from "../context/layout";
 
 const SlideWrapper = styled.div`
   width: 100%;
@@ -33,20 +33,21 @@ const Video = styled.video`
 
 export default function WorkCarousel(props) {
   const { entries, identifier } = props;
+  const { breakpoint } = useContext(LayoutContext);
 
-  function getPadding(breakpoint) {
+  function getPadding() {
     switch (breakpoint) {
-      case breakpoints.sm:
+      case Breakpoints.Small:
         return {
           paddingLeft: "100px",
           paddingRight: "100px"
         };
-      case breakpoints.md:
+      case Breakpoints.Medium:
         return {
           paddingLeft: "150px",
           paddingRight: "150px"
         };
-      case breakpoints.lg:
+      case Breakpoints.Large:
         return {
           paddingLeft: "200px",
           paddingRight: "200px"

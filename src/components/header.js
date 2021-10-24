@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import styled, { keyframes } from "styled-components";
+
+// Context
+import LayoutContext from "../context/layout";
 
 // Utils
 import { responsive } from "../utils/style";
@@ -80,14 +83,7 @@ const Established = styled.img`
 `;
 
 export default function Header() {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const { scrolled } = useContext(LayoutContext);
 
   function handleClick() {
     window.scroll({
@@ -95,10 +91,6 @@ export default function Header() {
       left: 0,
       behavior: "smooth"
     });
-  }
-
-  function handleScroll() {
-    setScrolled(window.scrollY >= 56);
   }
 
   return (

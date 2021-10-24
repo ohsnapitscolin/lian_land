@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 // Styles
@@ -10,6 +10,12 @@ import Footer from "./footer";
 import Credits from "./credits";
 import Seo from "./seo";
 
+// Context
+import LayoutContext, { Breakpoints } from "../context/layout";
+
+// Utils
+import { breakpoints } from "../utils/style";
+
 const LayoutWrapper = styled.div`
   min-height: 100vh;
   width: 100%;
@@ -17,48 +23,50 @@ const LayoutWrapper = styled.div`
 `;
 
 export default function Layout(props) {
-  // componentDidMount() {
-  //   window.addEventListener("resize", this.handleWindowResize);
-  //   this.updateBreakpoint();
-  // }
+  const [scrolled, setScrolled] = useState(false);
+  const [breakpoint, setBreakpoint] = useState(Breakpoints.XS);
 
-  // componentWillUnmount() {
-  //   window.removeEventListener("resize", this.handleWindowResize);
-  // }
+  useEffect(() => {
+    handleResize();
+    handleScroll();
 
-  // handleWindowResize() {
-  //   this.updateBreakpoint();
-  // }
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", handleScroll);
 
-  // updateBreakpoint() {
-  //   let breakpoint = breakpoints.lg;
-  //   if (window.innerWidth < breakpoints.sm) {
-  //     breakpoint = 0;
-  //   } else if (window.innerWidth < breakpoints.md) {
-  //     breakpoint = breakpoints.sm;
-  //   } else if (window.innerWidth < breakpoints.lg) {
-  //     breakpoint = breakpoints.md;
-  //   }
-  //   return new Promise(resolve => {
-  //     this.setState(
-  //       {
-  //         breakpoint: breakpoint
-  //       },
-  //       resolve
-  //     );
-  //   });
-  // }
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
+
+  function handleResize() {
+    if (window.innerWidth < breakpoints.sm) {
+      setBreakpoint(Breakpoints.XS);
+    } else if (window.innerWidth < breakpoints.md) {
+      setBreakpoint(Breakpoints.Small);
+    } else if (window.innerWidth < breakpoints.lg) {
+      setBreakpoint(Breakpoints.Medium);
+    } else {
+      setBreakpoint(Breakpoints.Large);
+    }
+  }
+
+  function handleScroll() {
+    setScrolled(window.scrollY >= 56);
+  }
 
   const footer = props.data.allContentfulFooter.edges[0].node;
   const credits = props.data.allContentfulCredits.edges[0].node;
 
   return (
-    <LayoutWrapper>
-      <Seo />
-      <Header />
-      {props.children}
-      <Footer contactText={footer.contactText} aboutText={footer.aboutText} />
-      <Credits image={credits.image} text={credits.text} />
-    </LayoutWrapper>
+    <LayoutContext.Provider value={{ scrolled, breakpoint }}>
+      <LayoutWrapper>
+        <Seo />
+        <Header />
+        {props.children}
+        <Footer contactText={footer.contactText} aboutText={footer.aboutText} />
+        <Credits image={credits.image} text={credits.text} />
+      </LayoutWrapper>
+    </LayoutContext.Provider>
   );
 }

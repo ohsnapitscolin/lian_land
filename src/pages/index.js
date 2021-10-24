@@ -1,29 +1,27 @@
 import React from "react";
 import { graphql } from "gatsby";
 
+// Components
 import Layout from "../components/layout";
 import Work from "../components/work";
 import Hero from "../components/hero";
 
-export default class IndexPage extends React.Component {
-  render() {
-    const workPages = this.props.data.allContentfulWorkPages.edges[0].node
-      .pages;
-    const hero = this.props.data.allContentfulHero.edges[0].node;
+export default function Index(props) {
+  const workPages = props.data.allContentfulWorkPages.edges[0].node.pages;
+  const hero = props.data.allContentfulHero.edges[0].node;
 
-    return (
-      <Layout data={this.props.data}>
-        <Hero
-          mainText={hero.mainText}
-          subText={hero.subText}
-          image={hero.image}
-        />
-        {workPages.map(work => {
-          return <Work key={work.contentful_id} work={work} />;
-        })}
-      </Layout>
-    );
-  }
+  return (
+    <Layout data={props.data}>
+      <Hero
+        mainText={hero.mainText}
+        subText={hero.subText}
+        image={hero.image}
+      />
+      {workPages.map(work => {
+        return <Work key={work.contentful_id} work={work} />;
+      })}
+    </Layout>
+  );
 }
 
 export const query = graphql`
