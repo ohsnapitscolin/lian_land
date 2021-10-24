@@ -1,21 +1,32 @@
-import React from "react";
+import React, { useContext, useRef } from "react";
 import styled from "styled-components";
-import { breakpoints } from "../utils/style";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import { mod } from "react-swipeable-views-core";
-import Img from "gatsby-image";
 
+// Components
 import Carousel from "./carousel";
 
-const SlideWrapper = styled.div`
-  width: 100%;
-  height: ${p => (p.slideWidth ? p.slideWidth * 0.625 : 300)}px;
+// Context
+import LayoutContext, { Breakpoints } from "../context/layout";
+
+const AspectRatioBox = styled.div`
+  height: 0;
+  overflow: hidden;
+  padding-top: calc(0.62 * 100%);
+  position: relative;
 
   border: black solid 1px;
   border-top: 0px;
   border-left: solid ${p => (p.size > 1 ? "0px" : "1px")};
   box-sizing: border-box;
+`;
 
-  overflow: hidden;
+const SlideWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 `;
 
 const VideoWrapper = styled.div`
@@ -30,137 +41,95 @@ const Video = styled.video`
   object-fit: cover;
 `;
 
-export default class WorkCarousel extends React.Component {
-  constructor() {
-    super();
+export default function WorkCarousel(props) {
+  const { entries, identifier } = props;
+  const { breakpoint } = useContext(LayoutContext);
 
-    this.state = {
-      breakpoint: null,
-      slideWidth: 0
+  function getFormattedPadding() {
+    const { left, right } = getPadding();
+    return {
+      paddingLeft: `${left}px`,
+      paddingRight: `${right}px`
     };
-
-    this.slideWrapper = React.createRef();
-    this.handleWindowResize = this.handleWindowResize.bind(this);
   }
 
-  componentDidMount() {
-    window.addEventListener("resize", this.handleWindowResize);
-    this.updateBreakpoint().then(() => {
-      this.setState({
-        slideWidth: this.slideWrapper.current.clientWidth
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.handleWindowResize);
-  }
-
-  handleWindowResize() {
-    this.updateBreakpoint().then(() => {
-      this.setState({
-        slideWidth: this.slideWrapper.current.clientWidth
-      });
-    });
-  }
-
-  updateBreakpoint() {
-    let breakpoint = breakpoints.lg;
-    if (window.innerWidth < breakpoints.sm) {
-      breakpoint = 0;
-    } else if (window.innerWidth < breakpoints.md) {
-      breakpoint = breakpoints.sm;
-    } else if (window.innerWidth < breakpoints.lg) {
-      breakpoint = breakpoints.md;
-    }
-    return new Promise(resolve => {
-      this.setState(
-        {
-          breakpoint: breakpoint
-        },
-        resolve
-      );
-    });
-  }
-
-  getPadding(breakpoint) {
+  function getPadding() {
     switch (breakpoint) {
-      case breakpoints.sm:
-        return {
-          paddingLeft: "100px",
-          paddingRight: "100px"
-        };
-      case breakpoints.md:
-        return {
-          paddingLeft: "150px",
-          paddingRight: "150px"
-        };
-      case breakpoints.lg:
-        return {
-          paddingLeft: "200px",
-          paddingRight: "200px"
-        };
+      case Breakpoints.Small:
+        return { left: 100, right: 100 };
+      case Breakpoints.Medium:
+        return { left: 150, right: 150 };
+      case Breakpoints.Large:
+        return { left: 200, right: 200 };
       default:
-        return {
-          paddingLeft: 0,
-          paddingRight: "20px"
-        };
+        return { left: 0, right: 20 };
     }
   }
 
-  renderSlides(index, key, entries) {
-    const { slideWidth } = this.state;
+  function renderSlides(params, activeIndex) {
     const size = entries.length;
-    const entryIndex = mod(index, size);
+    const entryIndex = mod(params.index, size);
+
+    const entry = entries[entryIndex];
+    const active = params.index === activeIndex;
+    const key = `${identifier}_${params.key}`;
 
     return (
-      <SlideWrapper
-        key={key}
-        ref={this.slideWrapper}
-        slideWidth={slideWidth}
-        size={size}
+      <AspectRatioBox key={key} size={size}>
+        <SlideWrapper>
+          {entry.image && <ImageSlide image={entry.image} active={active} />}
+          {entry.video && <VideoSlide video={entry.video} active={active} />}
+        </SlideWrapper>
+      </AspectRatioBox>
+    );
+  }
+
+  const rootStyle = getFormattedPadding();
+
+  return (
+    <Carousel
+      rootStyle={rootStyle}
+      renderSlides={renderSlides}
+      size={entries.length}
+    />
+  );
+}
+
+function ImageSlide({ image }) {
+  return (
+    <GatsbyImage
+      image={getImage(image) || ""}
+      alt={image.description}
+      loading="lazy"
+    />
+  );
+}
+
+function VideoSlide({ video, active }) {
+  const videoRef = useRef(null);
+
+  // if (videoRef.current) {
+  //   if (active) {
+  //     videoRef.current.play();
+  //   } else {
+  //     videoRef.current.pause();
+  //   }
+  // }
+
+  active = true;
+  const file = video.source.file;
+
+  return (
+    <VideoWrapper>
+      <Video
+        loop={true}
+        muted
+        autoPlay={active}
+        playsInline={active}
+        ref={videoRef}
       >
-        {this.renderSlide(entries[entryIndex])}
-      </SlideWrapper>
-    );
-  }
-
-  renderSlide(entry) {
-    // Render Image Entry
-    if (entry.image) {
-      const image = entry.image;
-      return (
-        <Img
-          fluid={image.fluid}
-          alt={image.description}
-          loading="lazy"
-          aspectRatio={1.0}
-        />
-      );
-    }
-    // Render Video Entry
-    else if (entry.video) {
-      const file = entry.video.source.file;
-      return (
-        <VideoWrapper>
-          <Video loop={true} muted autoPlay playsInline>
-            <source src={file.url} type={file.contentType} />
-          </Video>
-        </VideoWrapper>
-      );
-    }
-  }
-
-  render() {
-    const rootStyle = this.getPadding(this.state.breakpoint);
-    return (
-      <Carousel
-        rootStyle={rootStyle}
-        renderSlides={(index, key) => {
-          return this.renderSlides(index, key, this.props.entries);
-        }}
-        size={this.props.entries.length}
-      />
-    );
-  }
+        <source src={file.url} type={file.contentType} />
+      </Video>
+    </VideoWrapper>
+  );
 }

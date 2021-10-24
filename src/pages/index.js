@@ -1,40 +1,27 @@
 import React from "react";
 import { graphql } from "gatsby";
 
+// Components
 import Layout from "../components/layout";
 import Work from "../components/work";
 import Hero from "../components/hero";
 
-export default class IndexPage extends React.Component {
-  render() {
-    const workPages = this.props.data.allContentfulWorkPages.edges[0].node
-      .pages;
-    const hero = this.props.data.allContentfulHero.edges[0].node;
+export default function Index(props) {
+  const workPages = props.data.allContentfulWorkPages.edges[0].node.pages;
+  const hero = props.data.allContentfulHero.edges[0].node;
 
-    return (
-      <Layout data={this.props.data}>
-        <Hero
-          mainText={hero.mainText}
-          subText={hero.subText}
-          image={hero.image}
-        />
-        {workPages.map(work => {
-          return (
-            <Work
-              key={work.title}
-              title={work.title}
-              type={work.type}
-              doodle={work.doodle}
-              year={work.year}
-              entries={work.entries}
-              description={work.description}
-              credits={work.credits}
-            />
-          );
-        })}
-      </Layout>
-    );
-  }
+  return (
+    <Layout data={props.data}>
+      <Hero
+        mainText={hero.mainText}
+        subText={hero.subText}
+        image={hero.image}
+      />
+      {workPages.map(work => {
+        return <Work key={work.contentful_id} work={work} />;
+      })}
+    </Layout>
+  );
 }
 
 export const query = graphql`
@@ -43,20 +30,17 @@ export const query = graphql`
       edges {
         node {
           pages {
+            contentful_id
             title
             type
             doodle {
-              fixed {
-                ...GatsbyContentfulFixed_withWebp_noBase64
-              }
+              gatsbyImageData(width: 80, placeholder: NONE)
             }
             year
             entries {
               image {
                 description
-                fluid(maxWidth: 1200, quality: 100) {
-                  ...GatsbyContentfulFluid_withWebp_noBase64
-                }
+                gatsbyImageData(layout: FULL_WIDTH)
               }
               video {
                 source {
@@ -67,10 +51,10 @@ export const query = graphql`
               }
             }
             description {
-              json
+              raw
             }
             credits {
-              json
+              raw
             }
           }
         }
@@ -80,16 +64,14 @@ export const query = graphql`
       edges {
         node {
           mainText {
-            json
+            raw
           }
           subText {
-            json
+            raw
           }
           image {
             description
-            fluid(maxWidth: 1840, quality: 100) {
-              ...GatsbyContentfulFluid_withWebp_noBase64
-            }
+            gatsbyImageData(layout: FULL_WIDTH)
           }
         }
       }
@@ -98,10 +80,10 @@ export const query = graphql`
       edges {
         node {
           contactText {
-            json
+            raw
           }
           aboutText {
-            json
+            raw
           }
         }
       }
@@ -116,9 +98,7 @@ export const query = graphql`
           }
           image {
             description
-            fluid(maxWidth: 1840, quality: 100) {
-              ...GatsbyContentfulFluid_withWebp_noBase64
-            }
+            gatsbyImageData(layout: FULL_WIDTH)
           }
         }
       }

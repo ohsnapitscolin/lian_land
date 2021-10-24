@@ -1,5 +1,5 @@
 require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV}`,
+  path: `.env.${process.env.NODE_ENV}`
 });
 
 module.exports = {
@@ -9,11 +9,15 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,
-        path: `${__dirname}/src/images`,
-      },
+        path: `${__dirname}/src/images`
+      }
     },
-    `gatsby-transformer-sharp`,
+    {
+      resolve: `gatsby-plugin-image`,
+      options: {}
+    },
     `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -21,36 +25,28 @@ module.exports = {
         short_name: `starter`,
         start_url: `/`,
         display: `minimal-ui`,
-        icon: 'src/images/ic_cursor.png'
-      },
+        icon: "src/images/ic_cursor.png"
+      }
     },
     {
       resolve: `gatsby-source-contentful`,
-       options: {
-         spaceId: process.env.CONTENTFUL_SPACE_ID,
-         accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-       },
-     },
-     {
-       resolve: `gatsby-plugin-styled-components`,
-        options: {
-          displayName: false
-        },
-      },
-     {
-       resolve: `gatsby-transformer-remark`,
-         options: {
-          plugins: [],
-        },
-      },
-      {
-        resolve: "gatsby-plugin-sass",
-        options: {
-          includePaths: [],
-        },
-      },
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
-  ],
-}
+      options: {
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN
+      }
+    },
+    {
+      resolve: `gatsby-plugin-styled-components`,
+      options: {
+        displayName: false
+      }
+    },
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: []
+      }
+    },
+    `gatsby-plugin-sass`
+  ]
+};

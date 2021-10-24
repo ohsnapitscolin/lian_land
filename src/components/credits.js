@@ -1,8 +1,7 @@
-import React from "react"
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 import { responsive } from "../utils/style";
-import Img from "gatsby-image";
-import arrow from "../images/ic_arrow.png";
+import { StaticImage, GatsbyImage, getImage } from "gatsby-plugin-image";
 
 const CreditsWrapper = styled.div`
   position: relative;
@@ -17,6 +16,8 @@ const CreditsWrapper = styled.div`
   ${responsive.sm`
     height: 200px;
   `}
+
+  padding-bottom: env(safe-area-inset-bottom);
 `;
 
 const CreditsContentWrapper = styled.div`
@@ -36,7 +37,7 @@ const CreditsContentWrapper = styled.div`
     padding-left: 45px;
     padding-right: 45px;
   `}
-`
+`;
 
 const CreditsImageWrapper = styled.div`
   position: absolute;
@@ -44,29 +45,39 @@ const CreditsImageWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-`
+`;
 
-const CreditsCTA = styled.div`
+const CreditsCTA = styled.button`
+  background: none;
+  appearance: none;
+  border: 0;
+  padding: 0;
+
   display: flex;
   align-items: center;
+  color: black;
 
   z-index: 1;
   cursor: pointer;
 
   padding-top: 34px;
 
+  h1 {
+    margin-right: 15px;
+  }
+
   ${responsive.sm`
     padding-top: 0;
   `}
 
   img {
+    width: 20px;
     height: 20px;
-    padding-top: 15px;
 
     ${responsive.sm`
+      width: 30px;
       height: 30px;
     `}
-    transform: rotate(270deg);
   }
 `;
 
@@ -83,39 +94,48 @@ const CreditsText = styled.div`
   `}
 `;
 
-export default class Credits extends React.Component {
-  handleClick() {
+export default function Credits(props) {
+  const { image, text } = props;
+
+  function handleClick() {
     window.scroll({
       top: 0,
       left: 0,
-      behavior: 'smooth'
+      behavior: "smooth"
     });
   }
 
-  render() {
-    let { image, text } = this.props;
-    return (
-      <CreditsWrapper>
-        <CreditsContentWrapper>
-          <CreditsImageWrapper>
-          <Img
-            fluid={image.fluid}
-            alt={image.description}
+  return (
+    <CreditsWrapper>
+      <CreditsContentWrapper>
+        <CreditsImageWrapper>
+          <GatsbyImage
+            image={getImage(image)}
+            alt={image.description || ""}
             loading="eager"
             style={{
               width: "100%",
               height: "100%"
-            }}/>
-          </CreditsImageWrapper>
-          <CreditsCTA onClick={this.handleClick.bind(this)}>
-            <h1>Entrance</h1>
-            <img src={arrow} alt="^"/>
-          </CreditsCTA>
-          <CreditsText dangerouslySetInnerHTML={{
+            }}
+          />
+        </CreditsImageWrapper>
+        <CreditsCTA onClick={handleClick}>
+          <h1>Entrance</h1>
+          <StaticImage
+            src="../images/ic_arrow.png"
+            placeholder="none"
+            alt="Return to entrance"
+            imgStyle={{
+              transform: "rotate(270deg)"
+            }}
+          />
+        </CreditsCTA>
+        <CreditsText
+          dangerouslySetInnerHTML={{
             __html: text.childMarkdownRemark.html
-          }}/>
-        </CreditsContentWrapper>
-      </CreditsWrapper>
-    );
-  }
+          }}
+        />
+      </CreditsContentWrapper>
+    </CreditsWrapper>
+  );
 }

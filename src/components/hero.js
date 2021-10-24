@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
+
+// Utils
 import { responsive } from "../utils/style";
-import Img from "gatsby-image";
 import renderRichText from "../utils/rich-text";
 
 const HeroWrapper = styled.div``;
@@ -41,23 +43,21 @@ const HeroImageWrapper = styled.div`
   border-bottom: black 1px solid;
 `;
 
-export default class Hero extends React.Component {
-  render() {
-    let { mainText, image } = this.props;
-    return (
-      <HeroWrapper>
-        <HeroImageWrapper>
-          <Img
-            fluid={image.fluid}
-            alt={image.description}
-            loading="eager"
-            style={{ height: "100%" }}
-          />
-          <HeroMainTextWrapper>
-            <HeroMainText>{renderRichText(mainText.json)}</HeroMainText>
-          </HeroMainTextWrapper>
-        </HeroImageWrapper>
-      </HeroWrapper>
-    );
-  }
+export default function Hero(props) {
+  const { mainText, image } = props;
+  return (
+    <HeroWrapper>
+      <HeroImageWrapper>
+        <GatsbyImage
+          image={getImage(image)}
+          alt={image.description || ""}
+          loading="eager"
+          style={{ height: "100%" }}
+        />
+        <HeroMainTextWrapper>
+          <HeroMainText>{renderRichText(mainText.raw)}</HeroMainText>
+        </HeroMainTextWrapper>
+      </HeroImageWrapper>
+    </HeroWrapper>
+  );
 }

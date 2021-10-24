@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import SwipeableViews from "react-swipeable-views";
 import { virtualize } from "react-swipeable-views-utils";
@@ -42,54 +42,42 @@ const RightButton = styled(UpdateButton)`
   right: 0;
 `;
 
-export default class Carousel extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      index: 0
-    };
+export default function Carousel(props) {
+  const [index, setIndex] = useState(0);
+  const { rootStyle, size } = props;
+
+  function renderSlides(params) {
+    return props.renderSlides(params, index);
   }
 
-  updateIndex(change) {
-    let index = this.state.index + change;
-    this.setState({
-      index: index
-    });
+  function incrementIndex() {
+    setIndex(index + 1);
   }
 
-  onChangeIndex(index) {
-    this.setState({
-      index: index
-    });
+  function decrementIndex() {
+    setIndex(index - 1);
   }
 
-  render() {
-    let { rootStyle, renderSlides, size } = this.props;
-
-    let beforeCount = 0;
-    let afterCount = 0;
-
-    if (size > 1) {
-      beforeCount = Math.max(Math.floor(size / 2), 2);
-      afterCount = Math.max(Math.ceil(size / 2), 2);
-    }
-
-    return (
-      <CarouselWrapper>
-        <EnhancedSwipeableViews
-          index={this.state.index}
-          onChangeIndex={this.onChangeIndex.bind(this)}
-          style={rootStyle}
-          overscanSlideBefore={beforeCount}
-          overscanSlideAfter={afterCount}
-          enableMouseEvents={true}
-          slideRenderer={params => {
-            return renderSlides(params.index, params.key);
-          }}
-        />
-        {!!beforeCount && <LeftButton onClick={() => this.updateIndex(-1)} />}
-        {!!afterCount && <RightButton onClick={() => this.updateIndex(1)} />}
-      </CarouselWrapper>
-    );
+  function onChangeIndex(i) {
+    setIndex(i);
   }
+
+  const beforeCount = size > 1 ? 2 : 0;
+  const afterCount = size > 1 ? 2 : 0;
+
+  return (
+    <CarouselWrapper>
+      <EnhancedSwipeableViews
+        index={index}
+        onChangeIndex={onChangeIndex}
+        style={rootStyle}
+        overscanSlideBefore={beforeCount}
+        overscanSlideAfter={afterCount}
+        enableMouseEvents={true}
+        slideRenderer={renderSlides}
+      />
+      {!!beforeCount && <LeftButton onClick={decrementIndex} />}
+      {!!afterCount && <RightButton onClick={incrementIndex} />}
+    </CarouselWrapper>
+  );
 }

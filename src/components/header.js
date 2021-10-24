@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled, { keyframes } from "styled-components";
+import { StaticImage } from "gatsby-plugin-image";
+
+// Context
+import LayoutContext from "../context/layout";
+
+// Utils
 import { responsive } from "../utils/style";
-import est from "../images/ic_est.png";
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -62,30 +67,27 @@ const spin = keyframes`
   }
 `;
 
-const Established = styled.img`
-  margin-right: 6px;
-  height: 25px;
-
+const Established = styled.div`
   display: block;
-
-  ${responsive.sm`
-    margin-right: 10px;
-    height: 36px;
-  `};
-
+  margin-right: 6px;
+  margin-right: 10px;
   animation: ${spin} 6s linear infinite;
+
+  img {
+    width: 25px;
+    height: 25px;
+
+    ${responsive.sm`
+      width: 36px;
+      height: 36px;
+    `};
+  }
 `;
 
-export default class Header extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      scrolled: false
-    };
-    this.scrollFn = this.handleScroll.bind(this);
-  }
+export default function Header() {
+  const { scrolled } = useContext(LayoutContext);
 
-  handleClick() {
+  function handleClick() {
     window.scroll({
       top: 0,
       left: 0,
@@ -93,32 +95,22 @@ export default class Header extends React.Component {
     });
   }
 
-  handleScroll() {
-    this.setState({
-      scrolled: window.scrollY >= 56
-    });
-  }
-
-  componentDidMount() {
-    window.addEventListener("scroll", this.scrollFn);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.scrollFn);
-  }
-
-  render() {
-    return (
-      <HeaderWrapper onClick={() => this.handleClick()}>
-        <HeaderContainer scrolled={this.state.scrolled}>
-          <h1>Lian</h1>
-          <PopulationContainer scrolled={this.state.scrolled}>
-            <Established src={est} alt="EST" />
-            <h2>1992 Pop. 1</h2>
-          </PopulationContainer>
-          <h1>Land</h1>
-        </HeaderContainer>
-      </HeaderWrapper>
-    );
-  }
+  return (
+    <HeaderWrapper onClick={handleClick}>
+      <HeaderContainer scrolled={scrolled}>
+        <h1>Lian</h1>
+        <PopulationContainer scrolled={scrolled}>
+          <Established>
+            <StaticImage
+              src="../images/ic_est.png"
+              placeholder="blurry"
+              alt="Established"
+            />
+          </Established>
+          <h2>1992 Pop. 1</h2>
+        </PopulationContainer>
+        <h1>Land</h1>
+      </HeaderContainer>
+    </HeaderWrapper>
+  );
 }
