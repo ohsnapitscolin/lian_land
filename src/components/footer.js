@@ -21,6 +21,8 @@ const FooterDrawers = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
+
+  padding-bottom: ${p => (p.fixed ? "env(safe-area-inset-bottom)" : "0")};
 `;
 
 const FooterWrapper = styled.div`

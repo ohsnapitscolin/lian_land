@@ -17,7 +17,7 @@ const CreditsWrapper = styled.div`
     height: 200px;
   `}
 
-  padding: env(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 `;
 
 const CreditsContentWrapper = styled.div`
