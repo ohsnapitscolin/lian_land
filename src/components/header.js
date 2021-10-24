@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+
+// Utils
 import { responsive } from "../utils/style";
+
 import est from "../images/ic_est.png";
 
 const HeaderWrapper = styled.div`
@@ -76,16 +79,17 @@ const Established = styled.img`
   animation: ${spin} 6s linear infinite;
 `;
 
-export default class Header extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      scrolled: false
-    };
-    this.scrollFn = this.handleScroll.bind(this);
-  }
+export default function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
 
-  handleClick() {
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  function handleClick() {
     window.scroll({
       top: 0,
       left: 0,
@@ -93,32 +97,20 @@ export default class Header extends React.Component {
     });
   }
 
-  handleScroll() {
-    this.setState({
-      scrolled: window.scrollY >= 56
-    });
+  function handleScroll() {
+    setScrolled(window.scrollY >= 56);
   }
 
-  componentDidMount() {
-    window.addEventListener("scroll", this.scrollFn);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.scrollFn);
-  }
-
-  render() {
-    return (
-      <HeaderWrapper onClick={() => this.handleClick()}>
-        <HeaderContainer scrolled={this.state.scrolled}>
-          <h1>Lian</h1>
-          <PopulationContainer scrolled={this.state.scrolled}>
-            <Established src={est} alt="EST" />
-            <h2>1992 Pop. 1</h2>
-          </PopulationContainer>
-          <h1>Land</h1>
-        </HeaderContainer>
-      </HeaderWrapper>
-    );
-  }
+  return (
+    <HeaderWrapper onClick={handleClick}>
+      <HeaderContainer scrolled={scrolled}>
+        <h1>Lian</h1>
+        <PopulationContainer scrolled={scrolled}>
+          <Established src={est} alt="Established" />
+          <h2>1992 Pop. 1</h2>
+        </PopulationContainer>
+        <h1>Land</h1>
+      </HeaderContainer>
+    </HeaderWrapper>
+  );
 }

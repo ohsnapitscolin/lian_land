@@ -82,8 +82,10 @@ const CreditsText = styled.div`
   `}
 `;
 
-export default class Credits extends React.Component {
-  handleClick() {
+export default function Credits(props) {
+  const { image, text } = props;
+
+  function handleClick() {
     window.scroll({
       top: 0,
       left: 0,
@@ -91,33 +93,30 @@ export default class Credits extends React.Component {
     });
   }
 
-  render() {
-    let { image, text } = this.props;
-    return (
-      <CreditsWrapper>
-        <CreditsContentWrapper>
-          <CreditsImageWrapper>
-            <GatsbyImage
-              image={getImage(image)}
-              alt={image.description || ""}
-              loading="eager"
-              style={{
-                width: "100%",
-                height: "100%"
-              }}
-            />
-          </CreditsImageWrapper>
-          <CreditsCTA onClick={this.handleClick.bind(this)}>
-            <h1>Entrance</h1>
-            <StaticImage src="../images/ic_arrow.png" alt="^" />
-          </CreditsCTA>
-          <CreditsText
-            dangerouslySetInnerHTML={{
-              __html: text.childMarkdownRemark.html
+  return (
+    <CreditsWrapper>
+      <CreditsContentWrapper>
+        <CreditsImageWrapper>
+          <GatsbyImage
+            image={getImage(image)}
+            alt={image.description || ""}
+            loading="eager"
+            style={{
+              width: "100%",
+              height: "100%"
             }}
           />
-        </CreditsContentWrapper>
-      </CreditsWrapper>
-    );
-  }
+        </CreditsImageWrapper>
+        <CreditsCTA onClick={handleClick}>
+          <h1>Entrance</h1>
+          <StaticImage src="../images/ic_arrow.png" alt="^" />
+        </CreditsCTA>
+        <CreditsText
+          dangerouslySetInnerHTML={{
+            __html: text.childMarkdownRemark.html
+          }}
+        />
+      </CreditsContentWrapper>
+    </CreditsWrapper>
+  );
 }

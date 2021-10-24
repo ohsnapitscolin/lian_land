@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-import "./layout.scss";
+// Styles
+import "../style/layout.scss";
 
+// Components
 import Header from "./header";
 import Footer from "./footer";
 import Credits from "./credits";
@@ -14,19 +16,49 @@ const LayoutWrapper = styled.div`
   overflow: hidden;
 `;
 
-export default class Layout extends React.Component {
-  render() {
-    const footer = this.props.data.allContentfulFooter.edges[0].node;
-    const credits = this.props.data.allContentfulCredits.edges[0].node;
+export default function Layout(props) {
+  // componentDidMount() {
+  //   window.addEventListener("resize", this.handleWindowResize);
+  //   this.updateBreakpoint();
+  // }
 
-    return (
-      <LayoutWrapper>
-        <Seo />
-        <Header />
-        {this.props.children}
-        <Footer contactText={footer.contactText} aboutText={footer.aboutText} />
-        <Credits image={credits.image} text={credits.text} />
-      </LayoutWrapper>
-    );
-  }
+  // componentWillUnmount() {
+  //   window.removeEventListener("resize", this.handleWindowResize);
+  // }
+
+  // handleWindowResize() {
+  //   this.updateBreakpoint();
+  // }
+
+  // updateBreakpoint() {
+  //   let breakpoint = breakpoints.lg;
+  //   if (window.innerWidth < breakpoints.sm) {
+  //     breakpoint = 0;
+  //   } else if (window.innerWidth < breakpoints.md) {
+  //     breakpoint = breakpoints.sm;
+  //   } else if (window.innerWidth < breakpoints.lg) {
+  //     breakpoint = breakpoints.md;
+  //   }
+  //   return new Promise(resolve => {
+  //     this.setState(
+  //       {
+  //         breakpoint: breakpoint
+  //       },
+  //       resolve
+  //     );
+  //   });
+  // }
+
+  const footer = props.data.allContentfulFooter.edges[0].node;
+  const credits = props.data.allContentfulCredits.edges[0].node;
+
+  return (
+    <LayoutWrapper>
+      <Seo />
+      <Header />
+      {props.children}
+      <Footer contactText={footer.contactText} aboutText={footer.aboutText} />
+      <Credits image={credits.image} text={credits.text} />
+    </LayoutWrapper>
+  );
 }

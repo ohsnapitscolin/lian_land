@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { StaticImage } from "gatsby-plugin-image";
 import AnimateHeight from "react-animate-height";
+
+// Utils
 import { responsive, breakpoints } from "../utils/style";
 import renderRichText from "../utils/rich-text";
+
 import arrow from "../images/ic_arrow.png";
 
 const FooterDrawers = styled.div`
@@ -147,112 +150,91 @@ const FooterContantInfo = styled(FooterInfo)`
   `}
 `;
 
-export default class Footer extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      contactActive: false,
-      aboutActive: false,
-      scrolled: false,
-      fixed: true
-    };
-    this.scrollFn = this.handleScroll.bind(this);
-  }
+export default function Footer(props) {
+  const [contactActive, setContactActive] = useState(false);
+  const [aboutActive, setAboutActive] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [fixed, setFixed] = useState(true);
 
-  handleScroll() {
+  const { contactText, aboutText } = props;
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  function handleScroll() {
     // const distanceToBottom =
     //   $(document).height() - ($(window).scrollTop() + $(window).height());
     const distanceToBottom = 0;
 
-    this.setState({
-      scrolled: window.scrollY >= 56,
-      fixed: distanceToBottom > 250
-    });
+    setScrolled(window.scrollY >= 56);
+    setFixed(distanceToBottom > 250);
   }
 
-  componentDidMount() {
-    window.addEventListener("scroll", this.scrollFn);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.scrollFn);
-  }
-
-  toggle(trigger) {
+  function toggle(trigger) {
     if (window.innerWidth > breakpoints.sm) {
-      if (this.state.contactActive !== this.state.aboutActive) {
-        this.setState({
-          contactActive: true,
-          aboutActive: true
-        });
+      if (contactActive !== aboutActive) {
+        setContactActive(true);
+        setAboutActive(true);
         return;
       }
-      this.setState({
-        contactActive: !this.state.contactActive,
-        aboutActive: !this.state.aboutActive
-      });
+
+      setContactActive(!contactActive);
+      setAboutActive(!aboutActive);
       return;
     }
 
     if (trigger === "contact") {
-      this.setState({
-        contactActive: !this.state.contactActive
-      });
+      setContactActive(!contactActive);
     }
 
     if (trigger === "about") {
-      this.setState({
-        aboutActive: !this.state.aboutActive
-      });
+      setAboutActive(!aboutActive);
     }
   }
 
-  render() {
-    let { contactText, aboutText } = this.props;
-    const active = this.state.aboutActive || this.state.contactActive;
-    return (
-      <FooterDrawers fixed={this.state.fixed}>
-        <FooterWrapper active={active} scrolled={this.state.scrolled}>
-          <FooterContact>
-            <FooterHeader onClick={() => this.toggle("contact")}>
-              <h2>Contact</h2>
-              <FooterIcon>
-                {this.state.contactActive ? (
-                  <StaticImage src="../images/ic_minus.png" alt="-" />
-                ) : (
-                  <StaticImage src="../images/ic_plus.png" alt="+" />
-                )}
-              </FooterIcon>
-            </FooterHeader>
-            <AnimateHeight
-              height={this.state.contactActive ? "auto" : 0}
-              duration={300}
-            >
-              <FooterContantInfo>
-                {renderRichText(contactText.raw)}
-              </FooterContantInfo>
-            </AnimateHeight>
-          </FooterContact>
-          <FooterAbout>
-            <FooterHeader onClick={() => this.toggle("about")}>
-              <h2>About</h2>
-              <FooterIcon>
-                {this.state.aboutActive ? (
-                  <StaticImage src="../images/ic_minus.png" alt="-" />
-                ) : (
-                  <StaticImage src="../images/ic_plus.png" alt="+" />
-                )}
-              </FooterIcon>
-            </FooterHeader>
-            <AnimateHeight
-              height={this.state.aboutActive ? "auto" : 0}
-              duration={300}
-            >
-              <FooterInfo>{renderRichText(aboutText.raw)}</FooterInfo>
-            </AnimateHeight>
-          </FooterAbout>
-        </FooterWrapper>
-      </FooterDrawers>
-    );
-  }
+  const active = aboutActive || contactActive;
+
+  return (
+    <FooterDrawers fixed={fixed}>
+      <FooterWrapper active={active} scrolled={scrolled}>
+        <FooterContact>
+          <FooterHeader onClick={() => toggle("contact")}>
+            <h2>Contact</h2>
+            <FooterIcon>
+              {contactActive ? (
+                <StaticImage src="../images/ic_minus.png" alt="-" />
+              ) : (
+                <StaticImage src="../images/ic_plus.png" alt="+" />
+              )}
+            </FooterIcon>
+          </FooterHeader>
+          <AnimateHeight height={contactActive ? "auto" : 0} duration={300}>
+            <FooterContantInfo>
+              {renderRichText(contactText.raw)}
+            </FooterContantInfo>
+          </AnimateHeight>
+        </FooterContact>
+        <FooterAbout>
+          <FooterHeader onClick={() => toggle("about")}>
+            <h2>About</h2>
+            <FooterIcon>
+              {aboutActive ? (
+                <StaticImage src="../images/ic_minus.png" alt="-" />
+              ) : (
+                <StaticImage src="../images/ic_plus.png" alt="+" />
+              )}
+            </FooterIcon>
+          </FooterHeader>
+          <AnimateHeight height={aboutActive ? "auto" : 0} duration={300}>
+            <FooterInfo>{renderRichText(aboutText.raw)}</FooterInfo>
+          </AnimateHeight>
+        </FooterAbout>
+      </FooterWrapper>
+    </FooterDrawers>
+  );
 }

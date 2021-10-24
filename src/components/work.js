@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { responsive } from "../utils/style";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import Ticker from "react-ticker";
+
+// Utils
+import { responsive } from "../utils/style";
 import renderRichText from "../utils/rich-text";
 
 import WorkCarousel from "./workCarousel";
@@ -122,56 +124,53 @@ const WorkDoodleImage = styled.div`
   `}
 `;
 
-export default class Work extends React.Component {
-  render() {
-    const { work } = this.props;
-    let { title, type, year, entries, doodle, description, credits } = work;
+export default function Work({ work }) {
+  const { title, type, year, entries, doodle, description, credits } = work;
 
-    return (
-      <WorkWrapper>
-        <WorkHeadlineContainer>
-          <Ticker speed={SCROLL_SPEED} mode={"chain"}>
-            {() => (
-              <WorkHeadline>
-                <WorkTitle>
-                  <h1>{title}</h1>
-                </WorkTitle>
-                <WorkDoodleImage>
-                  {doodle && (
-                    <GatsbyImage
-                      image={getImage(doodle)}
-                      alt=""
-                      style={{
-                        height: "100%",
-                        width: "100%"
-                      }}
-                      imgStyle={{ objectFit: "contain" }}
-                    />
-                  )}
-                </WorkDoodleImage>
-                <WorkType>
-                  <h1>
-                    <i>
-                      {type}, {year}
-                    </i>
-                  </h1>
-                </WorkType>
-              </WorkHeadline>
-            )}
-          </Ticker>
-        </WorkHeadlineContainer>
-        <WorkCarousel identifier={work.contentful_id} entries={entries} />
-        {description && (
-          <WorkDescription>
-            <div className="description">{renderRichText(description.raw)}</div>
-          </WorkDescription>
-        )}
-        {credits && (
-          <WorkCredits>
-            <div className="credits">{renderRichText(credits.raw)}</div>
-          </WorkCredits>
-        )}
-      </WorkWrapper>
-    );
-  }
+  return (
+    <WorkWrapper>
+      <WorkHeadlineContainer>
+        <Ticker speed={SCROLL_SPEED} mode={"chain"}>
+          {() => (
+            <WorkHeadline>
+              <WorkTitle>
+                <h1>{title}</h1>
+              </WorkTitle>
+              <WorkDoodleImage>
+                {doodle && (
+                  <GatsbyImage
+                    image={getImage(doodle)}
+                    alt=""
+                    style={{
+                      height: "100%",
+                      width: "100%"
+                    }}
+                    imgStyle={{ objectFit: "contain" }}
+                  />
+                )}
+              </WorkDoodleImage>
+              <WorkType>
+                <h1>
+                  <i>
+                    {type}, {year}
+                  </i>
+                </h1>
+              </WorkType>
+            </WorkHeadline>
+          )}
+        </Ticker>
+      </WorkHeadlineContainer>
+      <WorkCarousel identifier={work.contentful_id} entries={entries} />
+      {description && (
+        <WorkDescription>
+          <div className="description">{renderRichText(description.raw)}</div>
+        </WorkDescription>
+      )}
+      {credits && (
+        <WorkCredits>
+          <div className="credits">{renderRichText(credits.raw)}</div>
+        </WorkCredits>
+      )}
+    </WorkWrapper>
+  );
 }
