@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import styled from "styled-components";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import { mod } from "react-swipeable-views-core";
@@ -9,14 +9,24 @@ import Carousel from "./carousel";
 // Context
 import LayoutContext, { Breakpoints } from "../context/layout";
 
-const SlideWrapper = styled.div`
-  width: 100%;
-  height: 100%;
+const AspectRatioBox = styled.div`
+  height: 0;
+  overflow: hidden;
+  padding-top: calc(0.62 * 100%);
+  position: relative;
 
   border: black solid 1px;
   border-top: 0px;
   border-left: solid ${p => (p.size > 1 ? "0px" : "1px")};
   box-sizing: border-box;
+`;
+
+const SlideWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 `;
 
 const VideoWrapper = styled.div`
@@ -35,46 +45,46 @@ export default function WorkCarousel(props) {
   const { entries, identifier } = props;
   const { breakpoint } = useContext(LayoutContext);
 
+  function getFormattedPadding() {
+    const { left, right } = getPadding();
+    return {
+      paddingLeft: `${left}px`,
+      paddingRight: `${right}px`
+    };
+  }
+
   function getPadding() {
     switch (breakpoint) {
       case Breakpoints.Small:
-        return {
-          paddingLeft: "100px",
-          paddingRight: "100px"
-        };
+        return { left: 100, right: 100 };
       case Breakpoints.Medium:
-        return {
-          paddingLeft: "150px",
-          paddingRight: "150px"
-        };
+        return { left: 150, right: 150 };
       case Breakpoints.Large:
-        return {
-          paddingLeft: "200px",
-          paddingRight: "200px"
-        };
+        return { left: 200, right: 200 };
       default:
-        return {
-          paddingLeft: 0,
-          paddingRight: "20px"
-        };
+        return { left: 0, right: 20 };
     }
   }
 
-  function renderSlides(params) {
+  function renderSlides(params, activeIndex) {
     const size = entries.length;
     const entryIndex = mod(params.index, size);
 
     const entry = entries[entryIndex];
+    const active = params.index === activeIndex;
     const key = `${identifier}_${params.key}`;
 
-    if (entry.image) {
-      return <ImageSlide key={key} image={entry.image} />;
-    } else if (entry.video) {
-      return <VideoSlide key={key} video={entry.video} />;
-    }
+    return (
+      <AspectRatioBox key={key} size={size}>
+        <SlideWrapper>
+          {entry.image && <ImageSlide image={entry.image} active={active} />}
+          {entry.video && <VideoSlide video={entry.video} active={active} />}
+        </SlideWrapper>
+      </AspectRatioBox>
+    );
   }
 
-  const rootStyle = getPadding();
+  const rootStyle = getFormattedPadding();
 
   return (
     <Carousel
@@ -87,25 +97,39 @@ export default function WorkCarousel(props) {
 
 function ImageSlide({ image }) {
   return (
-    <SlideWrapper>
-      <GatsbyImage
-        image={getImage(image) || ""}
-        alt={image.description}
-        loading="lazy"
-      />
-    </SlideWrapper>
+    <GatsbyImage
+      image={getImage(image) || ""}
+      alt={image.description}
+      loading="lazy"
+    />
   );
 }
 
-function VideoSlide({ video }) {
+function VideoSlide({ video, active }) {
+  const videoRef = useRef(null);
+
+  // if (videoRef.current) {
+  //   if (active) {
+  //     videoRef.current.play();
+  //   } else {
+  //     videoRef.current.pause();
+  //   }
+  // }
+
+  active = true;
   const file = video.source.file;
+
   return (
-    <SlideWrapper>
-      <VideoWrapper>
-        <Video loop={true} muted autoPlay playsInline>
-          <source src={file.url} type={file.contentType} />
-        </Video>
-      </VideoWrapper>
-    </SlideWrapper>
+    <VideoWrapper>
+      <Video
+        loop={true}
+        muted
+        autoPlay={active}
+        playsInline={active}
+        ref={videoRef}
+      >
+        <source src={file.url} type={file.contentType} />
+      </Video>
+    </VideoWrapper>
   );
 }

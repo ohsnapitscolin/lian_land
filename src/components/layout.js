@@ -13,6 +13,10 @@ import Seo from "./seo";
 // Context
 import LayoutContext, { Breakpoints } from "../context/layout";
 
+// Hooks
+import useResize from "../hooks/resize";
+import useScroll from "../hooks/scroll";
+
 // Utils
 import { breakpoints } from "../utils/style";
 
@@ -26,18 +30,8 @@ export default function Layout(props) {
   const [scrolled, setScrolled] = useState(false);
   const [breakpoint, setBreakpoint] = useState(Breakpoints.XS);
 
-  useEffect(() => {
-    handleResize();
-    handleScroll();
-
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  });
+  useScroll(handleScroll);
+  useResize(handleResize);
 
   function handleResize() {
     if (window.innerWidth < breakpoints.sm) {

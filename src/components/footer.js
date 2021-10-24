@@ -6,6 +6,9 @@ import AnimateHeight from "react-animate-height";
 // Context
 import LayoutContext, { Breakpoints } from "../context/layout";
 
+// Hooks
+import useScroll from "../hooks/scroll";
+
 // Utils
 import { responsive } from "../utils/style";
 import renderRichText from "../utils/rich-text";
@@ -173,13 +176,7 @@ export default function Footer(props) {
 
   const { contactText, aboutText } = props;
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  useScroll(handleScroll);
 
   function handleScroll() {
     const distanceToBottom =

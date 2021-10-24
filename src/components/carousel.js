@@ -44,7 +44,11 @@ const RightButton = styled(UpdateButton)`
 
 export default function Carousel(props) {
   const [index, setIndex] = useState(0);
-  const { rootStyle, renderSlides, size } = props;
+  const { rootStyle, size } = props;
+
+  function renderSlides(params) {
+    return props.renderSlides(params, index);
+  }
 
   function incrementIndex() {
     setIndex(index + 1);

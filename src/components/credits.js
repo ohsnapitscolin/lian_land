@@ -68,9 +68,11 @@ const CreditsCTA = styled.button`
   `}
 
   img {
+    width: 20px;
     height: 20px;
 
     ${responsive.sm`
+      width: 30px;
       height: 30px;
     `}
   }

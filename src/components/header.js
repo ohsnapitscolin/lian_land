@@ -74,9 +74,11 @@ const Established = styled.div`
   animation: ${spin} 6s linear infinite;
 
   img {
+    width: 25px;
     height: 25px;
 
     ${responsive.sm`
+      width: 36px;
       height: 36px;
     `};
   }
