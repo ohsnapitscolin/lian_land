@@ -46,17 +46,13 @@ export const query = graphql`
             title
             type
             doodle {
-              fixed {
-                ...GatsbyContentfulFixed_withWebp_noBase64
-              }
+              gatsbyImageData(width: 80, placeholder: NONE)
             }
             year
             entries {
               image {
                 description
-                fluid(maxWidth: 1200, quality: 100) {
-                  ...GatsbyContentfulFluid_withWebp_noBase64
-                }
+                gatsbyImageData(layout: FULL_WIDTH)
               }
               video {
                 source {
@@ -67,10 +63,10 @@ export const query = graphql`
               }
             }
             description {
-              json
+              raw
             }
             credits {
-              json
+              raw
             }
           }
         }
@@ -80,16 +76,14 @@ export const query = graphql`
       edges {
         node {
           mainText {
-            json
+            raw
           }
           subText {
-            json
+            raw
           }
           image {
             description
-            fluid(maxWidth: 1840, quality: 100) {
-              ...GatsbyContentfulFluid_withWebp_noBase64
-            }
+            gatsbyImageData(layout: FULL_WIDTH)
           }
         }
       }
@@ -98,10 +92,10 @@ export const query = graphql`
       edges {
         node {
           contactText {
-            json
+            raw
           }
           aboutText {
-            json
+            raw
           }
         }
       }
@@ -116,9 +110,7 @@ export const query = graphql`
           }
           image {
             description
-            fluid(maxWidth: 1840, quality: 100) {
-              ...GatsbyContentfulFluid_withWebp_noBase64
-            }
+            gatsbyImageData(layout: FULL_WIDTH)
           }
         }
       }

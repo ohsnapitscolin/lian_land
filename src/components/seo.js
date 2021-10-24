@@ -1,8 +1,8 @@
-import React from "react"
-import Helmet from "react-helmet"
-import { StaticQuery, graphql } from "gatsby"
+import React from "react";
+import Helmet from "react-helmet";
+import { StaticQuery, graphql } from "gatsby";
 
-class SEO extends React.Component {
+class Seo extends React.Component {
   render() {
     const data = this.props.data.allContentfulSeo.edges[0].node;
 
@@ -36,18 +36,15 @@ class SEO extends React.Component {
           { name: "twitter:title", content: title },
           { name: "twitter:description", content: description },
           { name: "twitter:image", content: imageUrl },
-          { name: "twitter:card", content: "summary_large_image" },
+          { name: "twitter:card", content: "summary_large_image" }
         ]}
       />
-    )
+    );
   }
 }
 
 export default props => (
-  <StaticQuery
-    query={query}
-    render={data => <SEO {...props} data={data} />}
-  />
+  <StaticQuery query={query} render={data => <Seo {...props} data={data} />} />
 );
 
 const query = graphql`
@@ -60,10 +57,10 @@ const query = graphql`
           image {
             file {
               details {
-               image {
-                 width
-                 height
-               }
+                image {
+                  width
+                  height
+                }
               }
               url
             }
@@ -72,4 +69,4 @@ const query = graphql`
       }
     }
   }
-`
+`;

@@ -1,12 +1,12 @@
-import React from "react"
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 
-import './layout.scss';
+import "./layout.scss";
 
-import Header from "./header"
-import Footer from "./footer"
+import Header from "./header";
+import Footer from "./footer";
 import Credits from "./credits";
-import SEO from "./seo";
+import Seo from "./seo";
 
 const LayoutWrapper = styled.div`
   min-height: 100vh;
@@ -21,18 +21,12 @@ export default class Layout extends React.Component {
 
     return (
       <LayoutWrapper>
-        <SEO />
-        <Header/>
-          {this.props.children}
-        <Footer
-          contactText={footer.contactText}
-          aboutText={footer.aboutText}
-        />
-        <Credits
-          image={credits.image}
-          text={credits.text}
-        />
+        <Seo />
+        <Header />
+        {this.props.children}
+        <Footer contactText={footer.contactText} aboutText={footer.aboutText} />
+        <Credits image={credits.image} text={credits.text} />
       </LayoutWrapper>
-    )
+    );
   }
 }

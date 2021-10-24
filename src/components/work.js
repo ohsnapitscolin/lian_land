@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { responsive } from "../utils/style";
-import Img from "gatsby-image";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import Ticker from "react-ticker";
 import renderRichText from "../utils/rich-text";
 
@@ -145,8 +145,8 @@ export default class Work extends React.Component {
                 </WorkTitle>
                 <WorkDoodleImage>
                   {doodle && (
-                    <Img
-                      fixed={doodle.fixed}
+                    <GatsbyImage
+                      image={getImage(doodle)}
                       style={{
                         height: "100%",
                         width: "100%"
@@ -169,14 +169,12 @@ export default class Work extends React.Component {
         <WorkCarousel entries={entries} />
         {description && (
           <WorkDescription>
-            <div className="description">
-              {renderRichText(description.json)}
-            </div>
+            <div className="description">{renderRichText(description.raw)}</div>
           </WorkDescription>
         )}
         {credits && (
           <WorkCredits>
-            <div className="credits">{renderRichText(credits.json)}</div>
+            <div className="credits">{renderRichText(credits.raw)}</div>
           </WorkCredits>
         )}
       </WorkWrapper>

@@ -1,8 +1,7 @@
-import React from "react"
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 import { responsive } from "../utils/style";
-import Img from "gatsby-image";
-import arrow from "../images/ic_arrow.png";
+import { StaticImage, GatsbyImage, getImage } from "gatsby-plugin-image";
 
 const CreditsWrapper = styled.div`
   position: relative;
@@ -36,7 +35,7 @@ const CreditsContentWrapper = styled.div`
     padding-left: 45px;
     padding-right: 45px;
   `}
-`
+`;
 
 const CreditsImageWrapper = styled.div`
   position: absolute;
@@ -44,7 +43,7 @@ const CreditsImageWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-`
+`;
 
 const CreditsCTA = styled.div`
   display: flex;
@@ -88,7 +87,7 @@ export default class Credits extends React.Component {
     window.scroll({
       top: 0,
       left: 0,
-      behavior: 'smooth'
+      behavior: "smooth"
     });
   }
 
@@ -98,22 +97,25 @@ export default class Credits extends React.Component {
       <CreditsWrapper>
         <CreditsContentWrapper>
           <CreditsImageWrapper>
-          <Img
-            fluid={image.fluid}
-            alt={image.description}
-            loading="eager"
-            style={{
-              width: "100%",
-              height: "100%"
-            }}/>
+            <GatsbyImage
+              image={getImage(image)}
+              alt={image.description}
+              loading="eager"
+              style={{
+                width: "100%",
+                height: "100%"
+              }}
+            />
           </CreditsImageWrapper>
           <CreditsCTA onClick={this.handleClick.bind(this)}>
             <h1>Entrance</h1>
-            <img src={arrow} alt="^"/>
+            <StaticImage src="../images/ic_arrow.png" alt="^" />
           </CreditsCTA>
-          <CreditsText dangerouslySetInnerHTML={{
-            __html: text.childMarkdownRemark.html
-          }}/>
+          <CreditsText
+            dangerouslySetInnerHTML={{
+              __html: text.childMarkdownRemark.html
+            }}
+          />
         </CreditsContentWrapper>
       </CreditsWrapper>
     );

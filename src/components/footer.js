@@ -1,12 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { StaticImage } from "gatsby-plugin-image";
 import AnimateHeight from "react-animate-height";
 import { responsive, breakpoints } from "../utils/style";
-import $ from "jquery";
 import renderRichText from "../utils/rich-text";
 import arrow from "../images/ic_arrow.png";
-import minus from "../images/ic_minus.png";
-import plus from "../images/ic_plus.png";
 
 const FooterDrawers = styled.div`
   position: ${p => (p.fixed ? "fixed" : "relative")};
@@ -162,8 +160,9 @@ export default class Footer extends React.Component {
   }
 
   handleScroll() {
-    const distanceToBottom =
-      $(document).height() - ($(window).scrollTop() + $(window).height());
+    // const distanceToBottom =
+    //   $(document).height() - ($(window).scrollTop() + $(window).height());
+    const distanceToBottom = 0;
 
     this.setState({
       scrolled: window.scrollY >= 56,
@@ -219,9 +218,9 @@ export default class Footer extends React.Component {
               <h2>Contact</h2>
               <FooterIcon>
                 {this.state.contactActive ? (
-                  <img src={minus} alt="-" />
+                  <StaticImage src="../images/ic_minus.png" alt="-" />
                 ) : (
-                  <img src={plus} alt="+" />
+                  <StaticImage src="../images/ic_plus.png" alt="+" />
                 )}
               </FooterIcon>
             </FooterHeader>
@@ -230,7 +229,7 @@ export default class Footer extends React.Component {
               duration={300}
             >
               <FooterContantInfo>
-                {renderRichText(contactText.json)}
+                {renderRichText(contactText.raw)}
               </FooterContantInfo>
             </AnimateHeight>
           </FooterContact>
@@ -239,9 +238,9 @@ export default class Footer extends React.Component {
               <h2>About</h2>
               <FooterIcon>
                 {this.state.aboutActive ? (
-                  <img src={minus} alt="-" />
+                  <StaticImage src="../images/ic_minus.png" alt="-" />
                 ) : (
-                  <img src={plus} alt="+" />
+                  <StaticImage src="../images/ic_plus.png" alt="+" />
                 )}
               </FooterIcon>
             </FooterHeader>
@@ -249,7 +248,7 @@ export default class Footer extends React.Component {
               height={this.state.aboutActive ? "auto" : 0}
               duration={300}
             >
-              <FooterInfo>{renderRichText(aboutText.json)}</FooterInfo>
+              <FooterInfo>{renderRichText(aboutText.raw)}</FooterInfo>
             </AnimateHeight>
           </FooterAbout>
         </FooterWrapper>

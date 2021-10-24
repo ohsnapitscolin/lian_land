@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { responsive } from "../utils/style";
-import Img from "gatsby-image";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import renderRichText from "../utils/rich-text";
 
 const HeroWrapper = styled.div``;
@@ -47,14 +47,14 @@ export default class Hero extends React.Component {
     return (
       <HeroWrapper>
         <HeroImageWrapper>
-          <Img
-            fluid={image.fluid}
+          <GatsbyImage
+            image={getImage(image)}
             alt={image.description}
             loading="eager"
             style={{ height: "100%" }}
           />
           <HeroMainTextWrapper>
-            <HeroMainText>{renderRichText(mainText.json)}</HeroMainText>
+            <HeroMainText>{renderRichText(mainText.raw)}</HeroMainText>
           </HeroMainTextWrapper>
         </HeroImageWrapper>
       </HeroWrapper>

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { breakpoints } from "../utils/style";
 import { mod } from "react-swipeable-views-core";
-import Img from "gatsby-image";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
 import Carousel from "./carousel";
 
@@ -130,8 +130,8 @@ export default class WorkCarousel extends React.Component {
     if (entry.image) {
       const image = entry.image;
       return (
-        <Img
-          fluid={image.fluid}
+        <GatsbyImage
+          image={getImage(image)}
           alt={image.description}
           loading="lazy"
           aspectRatio={1.0}
