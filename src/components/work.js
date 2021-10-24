@@ -124,21 +124,14 @@ const WorkDoodleImage = styled.div`
 
 export default class Work extends React.Component {
   render() {
-    let {
-      title,
-      type,
-      year,
-      entries,
-      doodle,
-      description,
-      credits
-    } = this.props;
+    const { work } = this.props;
+    let { title, type, year, entries, doodle, description, credits } = work;
 
     return (
       <WorkWrapper>
         <WorkHeadlineContainer>
           <Ticker speed={SCROLL_SPEED} mode={"chain"}>
-            {({ index }) => (
+            {() => (
               <WorkHeadline>
                 <WorkTitle>
                   <h1>{title}</h1>
@@ -167,7 +160,7 @@ export default class Work extends React.Component {
             )}
           </Ticker>
         </WorkHeadlineContainer>
-        <WorkCarousel entries={entries} />
+        <WorkCarousel identifier={work.contentful_id} entries={entries} />
         {description && (
           <WorkDescription>
             <div className="description">{renderRichText(description.raw)}</div>

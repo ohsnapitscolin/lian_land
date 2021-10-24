@@ -19,18 +19,7 @@ export default class IndexPage extends React.Component {
           image={hero.image}
         />
         {workPages.map(work => {
-          return (
-            <Work
-              key={work.title}
-              title={work.title}
-              type={work.type}
-              doodle={work.doodle}
-              year={work.year}
-              entries={work.entries}
-              description={work.description}
-              credits={work.credits}
-            />
-          );
+          return <Work key={work.contentful_id} work={work} />;
         })}
       </Layout>
     );
@@ -43,6 +32,7 @@ export const query = graphql`
       edges {
         node {
           pages {
+            contentful_id
             title
             type
             doodle {

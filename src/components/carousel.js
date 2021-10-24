@@ -66,13 +66,8 @@ export default class Carousel extends React.Component {
   render() {
     let { rootStyle, renderSlides, size } = this.props;
 
-    let beforeCount = 0;
-    let afterCount = 0;
-
-    if (size > 1) {
-      beforeCount = Math.max(Math.floor(size / 2), 2);
-      afterCount = Math.max(Math.ceil(size / 2), 2);
-    }
+    let beforeCount = size > 1 ? 2 : 0;
+    let afterCount = size > 1 ? 2 : 0;
 
     return (
       <CarouselWrapper>

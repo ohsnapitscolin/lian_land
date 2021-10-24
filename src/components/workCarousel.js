@@ -8,14 +8,12 @@ import Carousel from "./carousel";
 
 const SlideWrapper = styled.div`
   width: 100%;
-  height: ${p => (p.slideWidth ? p.slideWidth * 0.625 : 300)}px;
+  height: 100%;
 
   border: black solid 1px;
   border-top: 0px;
   border-left: solid ${p => (p.size > 1 ? "0px" : "1px")};
   box-sizing: border-box;
-
-  overflow: hidden;
 `;
 
 const VideoWrapper = styled.div`
@@ -34,22 +32,13 @@ export default class WorkCarousel extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      breakpoint: null,
-      slideWidth: 0
-    };
-
     this.slideWrapper = React.createRef();
     this.handleWindowResize = this.handleWindowResize.bind(this);
   }
 
   componentDidMount() {
     window.addEventListener("resize", this.handleWindowResize);
-    this.updateBreakpoint().then(() => {
-      this.setState({
-        slideWidth: this.slideWrapper.current.clientWidth
-      });
-    });
+    this.updateBreakpoint();
   }
 
   componentWillUnmount() {
@@ -57,11 +46,7 @@ export default class WorkCarousel extends React.Component {
   }
 
   handleWindowResize() {
-    this.updateBreakpoint().then(() => {
-      this.setState({
-        slideWidth: this.slideWrapper.current.clientWidth
-      });
-    });
+    this.updateBreakpoint();
   }
 
   updateBreakpoint() {
@@ -108,28 +93,18 @@ export default class WorkCarousel extends React.Component {
     }
   }
 
-  renderSlides(index, key, entries) {
-    const { slideWidth } = this.state;
+  renderSlide(index, key, entries) {
+    const { identifier } = this.props;
     const size = entries.length;
     const entryIndex = mod(index, size);
+    const entry = entries[entryIndex];
 
-    return (
-      <SlideWrapper
-        key={key}
-        ref={this.slideWrapper}
-        slideWidth={slideWidth}
-        size={size}
-      >
-        {this.renderSlide(entries[entryIndex])}
-      </SlideWrapper>
-    );
-  }
+    let Slide;
 
-  renderSlide(entry) {
     // Render Image Entry
     if (entry.image) {
       const image = entry.image;
-      return (
+      Slide = (
         <GatsbyImage
           image={getImage(image) || ""}
           alt={image.description}
@@ -139,15 +114,26 @@ export default class WorkCarousel extends React.Component {
     }
     // Render Video Entry
     else if (entry.video) {
+      const play = index === 0;
       const file = entry.video.source.file;
-      return (
+      Slide = (
         <VideoWrapper>
-          <Video loop={true} muted autoPlay playsInline>
+          <Video loop={true} muted autoPlay={play} playsInline={play}>
             <source src={file.url} type={file.contentType} />
           </Video>
         </VideoWrapper>
       );
     }
+
+    return (
+      <SlideWrapper
+        key={`${identifier}_${key}`}
+        ref={this.slideWrapper}
+        size={size}
+      >
+        {Slide}
+      </SlideWrapper>
+    );
   }
 
   render() {
@@ -156,7 +142,7 @@ export default class WorkCarousel extends React.Component {
       <Carousel
         rootStyle={rootStyle}
         renderSlides={(index, key) => {
-          return this.renderSlides(index, key, this.props.entries);
+          return this.renderSlide(index, key, this.props.entries);
         }}
         size={this.props.entries.length}
       />
