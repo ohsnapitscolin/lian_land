@@ -45,7 +45,12 @@ const CreditsImageWrapper = styled.div`
   height: 100%;
 `;
 
-const CreditsCTA = styled.div`
+const CreditsCTA = styled.button`
+  background: none;
+  appearance: none;
+  border: 0;
+  padding: 0;
+
   display: flex;
   align-items: center;
 
@@ -54,18 +59,20 @@ const CreditsCTA = styled.div`
 
   padding-top: 34px;
 
+  h1 {
+    margin-right: 15px;
+  }
+
   ${responsive.sm`
     padding-top: 0;
   `}
 
   img {
     height: 20px;
-    padding-top: 15px;
 
     ${responsive.sm`
       height: 30px;
     `}
-    transform: rotate(270deg);
   }
 `;
 
@@ -109,7 +116,14 @@ export default function Credits(props) {
         </CreditsImageWrapper>
         <CreditsCTA onClick={handleClick}>
           <h1>Entrance</h1>
-          <StaticImage src="../images/ic_arrow.png" alt="^" />
+          <StaticImage
+            src="../images/ic_arrow.png"
+            placeholder="none"
+            alt="Return to entrance"
+            imgStyle={{
+              transform: "rotate(270deg)"
+            }}
+          />
         </CreditsCTA>
         <CreditsText
           dangerouslySetInnerHTML={{

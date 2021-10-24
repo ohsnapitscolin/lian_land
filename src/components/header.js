@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
 import styled, { keyframes } from "styled-components";
+import { StaticImage } from "gatsby-plugin-image";
 
 // Context
 import LayoutContext from "../context/layout";
 
 // Utils
 import { responsive } from "../utils/style";
-
-import est from "../images/ic_est.png";
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -68,18 +67,19 @@ const spin = keyframes`
   }
 `;
 
-const Established = styled.img`
-  margin-right: 6px;
-  height: 25px;
-
+const Established = styled.div`
   display: block;
-
-  ${responsive.sm`
-    margin-right: 10px;
-    height: 36px;
-  `};
-
+  margin-right: 6px;
+  margin-right: 10px;
   animation: ${spin} 6s linear infinite;
+
+  img {
+    height: 25px;
+
+    ${responsive.sm`
+      height: 36px;
+    `};
+  }
 `;
 
 export default function Header() {
@@ -98,7 +98,13 @@ export default function Header() {
       <HeaderContainer scrolled={scrolled}>
         <h1>Lian</h1>
         <PopulationContainer scrolled={scrolled}>
-          <Established src={est} alt="Established" />
+          <Established>
+            <StaticImage
+              src="../images/ic_est.png"
+              placeholder="blurry"
+              alt="Established"
+            />
+          </Established>
           <h2>1992 Pop. 1</h2>
         </PopulationContainer>
         <h1>Land</h1>

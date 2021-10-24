@@ -12,7 +12,10 @@ module.exports = {
         path: `${__dirname}/src/images`
       }
     },
-    `gatsby-plugin-image`,
+    {
+      resolve: `gatsby-plugin-image`,
+      options: {}
+    },
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     {

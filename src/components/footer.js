@@ -7,7 +7,7 @@ import AnimateHeight from "react-animate-height";
 import LayoutContext, { Breakpoints } from "../context/layout";
 
 // Utils
-import { responsive, breakpoints } from "../utils/style";
+import { responsive } from "../utils/style";
 import renderRichText from "../utils/rich-text";
 
 import arrow from "../images/ic_arrow.png";
@@ -17,6 +17,8 @@ const FooterDrawers = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
+
+  padding: env(safe-area-inset-right);
 `;
 
 const FooterWrapper = styled.div`
@@ -94,11 +96,20 @@ const FooterAbout = styled.div`
   flex-direction: column;
 `;
 
-const FooterIcon = styled.h1`
+const FooterIcon = styled.button`
+  border: 0;
+  padding: 0;
+  appearance: none;
+  background: none;
   margin: 0;
+
   ${responsive.sm`
     display: none
   `}
+
+  display: flex;
+  align-items: center;
+
   img {
     width: 15px;
   }
@@ -171,9 +182,8 @@ export default function Footer(props) {
   }, []);
 
   function handleScroll() {
-    // const distanceToBottom =
-    //   $(document).height() - ($(window).scrollTop() + $(window).height());
-    const distanceToBottom = 0;
+    const distanceToBottom =
+      document.body.scrollHeight - (window.scrollY + window.innerHeight);
     setFixed(distanceToBottom > 250);
   }
 
@@ -209,9 +219,17 @@ export default function Footer(props) {
             <h2>Contact</h2>
             <FooterIcon>
               {contactActive ? (
-                <StaticImage src="../images/ic_minus.png" alt="-" />
+                <StaticImage
+                  src="../images/ic_minus.png"
+                  placeholder="none"
+                  alt="Collapse"
+                />
               ) : (
-                <StaticImage src="../images/ic_plus.png" alt="+" />
+                <StaticImage
+                  src="../images/ic_plus.png"
+                  placeholder="none"
+                  alt="Expand"
+                />
               )}
             </FooterIcon>
           </FooterHeader>
@@ -226,9 +244,17 @@ export default function Footer(props) {
             <h2>About</h2>
             <FooterIcon>
               {aboutActive ? (
-                <StaticImage src="../images/ic_minus.png" alt="-" />
+                <StaticImage
+                  src="../images/ic_minus.png"
+                  placeholder="none"
+                  alt="Collapse"
+                />
               ) : (
-                <StaticImage src="../images/ic_plus.png" alt="+" />
+                <StaticImage
+                  src="../images/ic_plus.png"
+                  placeholder="none"
+                  alt="Expand"
+                />
               )}
             </FooterIcon>
           </FooterHeader>

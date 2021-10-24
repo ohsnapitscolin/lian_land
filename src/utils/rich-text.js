@@ -14,6 +14,6 @@ const options = {
   }
 };
 
-export default raw => {
+export default function renderRichText(raw) {
   return documentToReactComponents(JSON.parse(raw), options);
-};
+}
