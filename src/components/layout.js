@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import throttle from "lodash/throttle";
 
 // Styles
 import "../style/layout.scss";
@@ -30,8 +31,8 @@ export default function Layout(props) {
   const [scrolled, setScrolled] = useState(false);
   const [breakpoint, setBreakpoint] = useState(Breakpoints.XS);
 
-  useScroll(handleScroll);
-  useResize(handleResize);
+  useScroll(throttle(handleScroll, 250));
+  useResize(throttle(handleResize, 500));
 
   function handleResize() {
     if (window.innerWidth < breakpoints.sm) {

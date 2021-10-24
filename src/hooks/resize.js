@@ -8,5 +8,5 @@ export default function useResize(handleResize) {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [handleResize]);
 }

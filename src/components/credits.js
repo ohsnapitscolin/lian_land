@@ -16,6 +16,8 @@ const CreditsWrapper = styled.div`
   ${responsive.sm`
     height: 200px;
   `}
+
+  padding: env(safe-area-inset-bottom);
 `;
 
 const CreditsContentWrapper = styled.div`
@@ -53,6 +55,7 @@ const CreditsCTA = styled.button`
 
   display: flex;
   align-items: center;
+  color: black;
 
   z-index: 1;
   cursor: pointer;

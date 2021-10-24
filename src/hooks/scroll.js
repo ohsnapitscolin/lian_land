@@ -8,5 +8,5 @@ export default function useScroll(handleScroll) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [handleScroll]);
 }

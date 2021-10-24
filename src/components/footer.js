@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
+import throttle from "lodash/throttle";
 import { StaticImage } from "gatsby-plugin-image";
 import AnimateHeight from "react-animate-height";
 
@@ -20,8 +21,6 @@ const FooterDrawers = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-
-  padding: env(safe-area-inset-right);
 `;
 
 const FooterWrapper = styled.div`
@@ -176,7 +175,7 @@ export default function Footer(props) {
 
   const { contactText, aboutText } = props;
 
-  useScroll(handleScroll);
+  useScroll(throttle(handleScroll, 250));
 
   function handleScroll() {
     const distanceToBottom =
