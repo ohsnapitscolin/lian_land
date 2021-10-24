@@ -108,15 +108,14 @@ function ImageSlide({ image }) {
 function VideoSlide({ video, active }) {
   const videoRef = useRef(null);
 
-  // if (videoRef.current) {
-  //   if (active) {
-  //     videoRef.current.play();
-  //   } else {
-  //     videoRef.current.pause();
-  //   }
-  // }
+  if (videoRef.current) {
+    if (active) {
+      videoRef.current.play();
+    } else {
+      videoRef.current.pause();
+    }
+  }
 
-  active = true;
   const file = video.source.file;
 
   return (
