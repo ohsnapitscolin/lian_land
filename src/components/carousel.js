@@ -17,6 +17,7 @@ import { responsive } from "../utils/style";
 const CarouselWrapper = styled.div`
   position: relative;
   width: 100%;
+  border-bottom: solid 1px black;
 `;
 
 const EnhancedSwipeableViews = virtualize(SwipeableViews);
@@ -57,9 +58,8 @@ const AspectRatioBox = styled.div`
   padding-top: calc(0.62 * 100%);
   position: relative;
 
-  border: black solid 1px;
-  border-top: 0px;
-  border-left: solid ${p => (p.size > 1 ? "0px" : "1px")};
+  border-left: solid ${p => (p.size > 1 ? "0px" : "1px")} black;
+  border-right: solid 1px black;
 `;
 
 const SlideWrapper = styled.div`
