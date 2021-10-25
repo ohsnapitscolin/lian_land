@@ -7,7 +7,8 @@ import Ticker from "react-ticker";
 import { responsive } from "../utils/style";
 import renderRichText from "../utils/rich-text";
 
-import WorkCarousel from "./workCarousel";
+// Components
+import Carousel from "./carousel";
 
 const SCROLL_SPEED = 5;
 
@@ -160,7 +161,7 @@ export default function Work({ work }) {
           )}
         </Ticker>
       </WorkHeadlineContainer>
-      <WorkCarousel identifier={work.contentful_id} entries={entries} />
+      <Carousel identifier={work.contentful_id} entries={entries} />
       {description && (
         <WorkDescription>
           <div className="description">{renderRichText(description.raw)}</div>
