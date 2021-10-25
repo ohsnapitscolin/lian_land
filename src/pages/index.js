@@ -34,7 +34,7 @@ export const query = graphql`
             title
             type
             doodle {
-              gatsbyImageData(width: 80, placeholder: NONE)
+              gatsbyImageData(width: 200, placeholder: NONE)
             }
             year
             entries {
