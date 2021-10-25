@@ -1,7 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import SwipeableViews from "react-swipeable-views";
 import { virtualize } from "react-swipeable-views-utils";
+import { mod } from "react-swipeable-views-core";
+
+// Components
+import ImageSlide from "./slides/image";
+import VideoSlide from "./slides/video";
+
+// Context
+import LayoutContext, { Breakpoints } from "../context/layout";
+
+// Utils
 import { responsive } from "../utils/style";
 
 const CarouselWrapper = styled.div`
@@ -11,25 +21,22 @@ const CarouselWrapper = styled.div`
 
 const EnhancedSwipeableViews = virtualize(SwipeableViews);
 
-const UpdateButton = styled.div`
+const UpdateButton = styled.button`
   position: absolute;
   height: 100%;
   cursor: pointer;
+
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
 
   display: none;
 
   ${responsive.sm`
     display: block;
-    width: 100px;
+    width: ${p => `${p.width}px`};
   `}
-  
-  ${responsive.md`
-    width: 150px;
-  `}
-  
-  ${responsive.lg`
-    width: 200px;
-  `};
 `;
 
 const LeftButton = styled(UpdateButton)`
@@ -42,12 +49,51 @@ const RightButton = styled(UpdateButton)`
   right: 0;
 `;
 
-export default function Carousel(props) {
-  const [index, setIndex] = useState(0);
-  const { rootStyle, size } = props;
+const AspectRatioBox = styled.div`
+  height: 0;
+  overflow: hidden;
+  padding-top: calc(0.62 * 100%);
+  position: relative;
 
-  function renderSlides(params) {
-    return props.renderSlides(params, index);
+  border: black solid 1px;
+  border-top: 0px;
+  border-left: solid ${p => (p.size > 1 ? "0px" : "1px")};
+`;
+
+const SlideWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+
+export default function WorkCarousel(props) {
+  const { entries, identifier } = props;
+  const [index, setIndex] = useState(0);
+  const { breakpoint } = useContext(LayoutContext);
+
+  const size = entries.length;
+
+  function getFormattedPadding() {
+    const { left, right } = getPadding();
+    return {
+      paddingLeft: `${left}px`,
+      paddingRight: `${right}px`
+    };
+  }
+
+  function getPadding() {
+    switch (breakpoint) {
+      case Breakpoints.Small:
+        return { left: 100, right: 100 };
+      case Breakpoints.Medium:
+        return { left: 150, right: 150 };
+      case Breakpoints.Large:
+        return { left: 200, right: 200 };
+      default:
+        return { left: 0, right: 20 };
+    }
   }
 
   function incrementIndex() {
@@ -62,8 +108,33 @@ export default function Carousel(props) {
     setIndex(i);
   }
 
+  function renderSlides(params) {
+    const entryIndex = mod(params.index, size);
+
+    const entry = entries[entryIndex];
+    const key = `${identifier}_${params.key}`;
+
+    return (
+      <AspectRatioBox key={key} size={size}>
+        <SlideWrapper>
+          {entry.image && <ImageSlide image={entry.image} />}
+          {entry.video && <VideoSlide video={entry.video} />}
+        </SlideWrapper>
+      </AspectRatioBox>
+    );
+  }
+
   const beforeCount = size > 1 ? 2 : 0;
   const afterCount = size > 1 ? 2 : 0;
+
+  const { left, right } = getPadding();
+  const { paddingLeft, paddingRight } = getFormattedPadding();
+
+  const rootStyle = {
+    overflowX: "auto !important",
+    paddingLeft,
+    paddingRight
+  };
 
   return (
     <CarouselWrapper>
@@ -76,8 +147,12 @@ export default function Carousel(props) {
         enableMouseEvents={true}
         slideRenderer={renderSlides}
       />
-      {!!beforeCount && <LeftButton onClick={decrementIndex} />}
-      {!!afterCount && <RightButton onClick={incrementIndex} />}
+      {!!beforeCount && (
+        <LeftButton onClick={decrementIndex} alt="Previous" width={left} />
+      )}
+      {!!afterCount && (
+        <RightButton onClick={incrementIndex} alt="Next" width={right} />
+      )}
     </CarouselWrapper>
   );
 }

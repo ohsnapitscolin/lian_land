@@ -1,13 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import { useInView } from "react-intersection-observer";
 import Ticker from "react-ticker";
 
 // Utils
 import { responsive } from "../utils/style";
 import renderRichText from "../utils/rich-text";
 
-import WorkCarousel from "./workCarousel";
+// Components
+import Carousel from "./carousel";
 
 const SCROLL_SPEED = 5;
 
@@ -126,11 +128,14 @@ const WorkDoodleImage = styled.div`
 
 export default function Work({ work }) {
   const { title, type, year, entries, doodle, description, credits } = work;
+  const { ref, inView } = useInView({
+    threshold: 0
+  });
 
   return (
-    <WorkWrapper>
+    <WorkWrapper ref={ref}>
       <WorkHeadlineContainer>
-        <Ticker speed={SCROLL_SPEED} mode={"chain"}>
+        <Ticker speed={inView ? SCROLL_SPEED : 0} mode={"chain"}>
           {() => (
             <WorkHeadline>
               <WorkTitle>
@@ -160,7 +165,7 @@ export default function Work({ work }) {
           )}
         </Ticker>
       </WorkHeadlineContainer>
-      <WorkCarousel identifier={work.contentful_id} entries={entries} />
+      <Carousel identifier={work.contentful_id} entries={entries} />
       {description && (
         <WorkDescription>
           <div className="description">{renderRichText(description.raw)}</div>
