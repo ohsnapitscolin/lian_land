@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import { useInView } from "react-intersection-observer";
 import Ticker from "react-ticker";
 
 // Utils
@@ -127,11 +128,14 @@ const WorkDoodleImage = styled.div`
 
 export default function Work({ work }) {
   const { title, type, year, entries, doodle, description, credits } = work;
+  const { ref, inView } = useInView({
+    threshold: 0
+  });
 
   return (
-    <WorkWrapper>
+    <WorkWrapper ref={ref}>
       <WorkHeadlineContainer>
-        <Ticker speed={SCROLL_SPEED} mode={"chain"}>
+        <Ticker speed={inView ? SCROLL_SPEED : 0} mode={"chain"}>
           {() => (
             <WorkHeadline>
               <WorkTitle>
