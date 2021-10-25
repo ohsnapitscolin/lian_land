@@ -130,20 +130,13 @@ export default function WorkCarousel(props) {
   const afterCount = size > 1 ? 2 : 0;
 
   const { left, right } = getPadding();
-  const { paddingLeft, paddingRight } = getFormattedPadding();
-
-  const rootStyle = {
-    overflowX: "auto !important",
-    paddingLeft,
-    paddingRight
-  };
 
   return (
     <CarouselWrapper>
       <EnhancedSwipeableViews
         index={index}
         onChangeIndex={onChangeIndex}
-        style={rootStyle}
+        style={getFormattedPadding()}
         overscanSlideBefore={beforeCount}
         overscanSlideAfter={afterCount}
         enableMouseEvents={true}
