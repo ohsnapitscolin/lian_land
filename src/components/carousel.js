@@ -26,6 +26,8 @@ const UpdateButton = styled.button`
   height: 100%;
   cursor: pointer;
 
+  font-size: 0;
+
   appearance: none;
   background: none;
   border: 0;
@@ -148,10 +150,14 @@ export default function WorkCarousel(props) {
         slideRenderer={renderSlides}
       />
       {!!beforeCount && (
-        <LeftButton onClick={decrementIndex} alt="Previous" width={left} />
+        <LeftButton onClick={decrementIndex} width={left}>
+          Previous
+        </LeftButton>
       )}
       {!!afterCount && (
-        <RightButton onClick={incrementIndex} alt="Next" width={right} />
+        <RightButton onClick={incrementIndex} width={right}>
+          Next
+        </RightButton>
       )}
     </CarouselWrapper>
   );
