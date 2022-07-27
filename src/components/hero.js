@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import CustomHero from "./custom-hero";
 
 // Utils
 import { responsive } from "../utils/style";
@@ -41,19 +42,27 @@ const HeroImageWrapper = styled.div`
   position: relative;
   height: 100vh;
   border-bottom: black 1px solid;
+  overflow: hidden;
 `;
+
+const TideMachine = true;
 
 export default function Hero(props) {
   const { mainText, image } = props;
   return (
     <HeroWrapper>
       <HeroImageWrapper>
-        <GatsbyImage
-          image={getImage(image)}
-          alt={image.description || ""}
-          loading="eager"
-          style={{ height: "100%" }}
-        />
+        {TideMachine ? (
+          <CustomHero />
+        ) : (
+          <GatsbyImage
+            image={getImage(image)}
+            alt={image.description || ""}
+            loading="eager"
+            style={{ height: "100%" }}
+          />
+        )}
+
         <HeroMainTextWrapper>
           <HeroMainText>{renderRichText(mainText.raw)}</HeroMainText>
         </HeroMainTextWrapper>
