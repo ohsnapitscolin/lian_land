@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled, { keyframes } from "styled-components";
 
 const Background = styled.div`
@@ -14,15 +14,6 @@ const wobble = keyframes`
   }
   100% {
     transform: translate(-50%, -52%);
-  }
-`;
-
-const rise = keyframes`
-  0% {
-    height: 25%;
-  }
-  100% {
-    height: 175%;
   }
 `;
 
