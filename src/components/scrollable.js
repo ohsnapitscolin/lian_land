@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 
 const Outer = styled.div`
@@ -48,26 +48,35 @@ export default function Scrollable({
 
   const size = React.Children.count(children);
 
-  useEffect(() => {
-    scrollTo(0, "instant");
-    setInternalIndex(0);
-  }, []);
+  const getPostionByIndex = useCallback(
+    (index) => {
+      let element = refs.current[index];
 
-  useEffect(() => {
-    if (internalIndex !== null && index !== internalIndex) {
-      scrollTo(index);
+      if (index < 0) {
+        element = underRefs.current[size + index];
+      } else if (index >= size) {
+        element = overRefs.current[index - size];
+      }
+
+      return outerRef.current.scrollLeft + element.getBoundingClientRect().left;
+    },
+    [size]
+  );
+
+  const scrollTo = useCallback(
+    (index, behavior = "smooth") => {
+      const left = getPostionByIndex(index);
+      outerRef.current.scrollTo({ left: left, top: 0, behavior });
+    },
+    [getPostionByIndex]
+  );
+
+  const updateActiveIndex = useCallback(() => {
+    if (internalIndex === null) {
+      setInternalIndex(index);
+      return;
     }
-  }, [internalIndex, index]);
 
-  useEffect(() => {
-    let ref = outerRef.current;
-    ref.addEventListener("scroll", handleScroll);
-    return () => {
-      ref.removeEventListener("scroll", handleScroll);
-    };
-  }, [outerRef]);
-
-  function updateActiveIndex() {
     const innerRect = innerRef.current.getBoundingClientRect();
     const outerRect = outerRef.current.getBoundingClientRect();
 
@@ -78,20 +87,21 @@ export default function Scrollable({
         : outerRect.left;
 
     const elements = document.elementsFromPoint(x, y);
+
     if (!elements.length) return;
 
+    let mainIndex;
     let overIndex;
     let underIndex;
-    let index;
 
     elements.find((element) => {
       overIndex = overRefs.current.indexOf(element);
       underIndex = underRefs.current.indexOf(element);
-      index = refs.current.indexOf(element);
-      return overIndex + underIndex + index > -3;
+      mainIndex = refs.current.indexOf(element);
+      return overIndex + underIndex + mainIndex > -3;
     });
 
-    let activeIndex = index;
+    let activeIndex = mainIndex;
 
     if (overIndex >= 0) {
       activeIndex = overIndex;
@@ -105,21 +115,9 @@ export default function Scrollable({
       setInternalIndex(activeIndex);
       onChangeIndex(activeIndex);
     }
-  }
+  }, [inline, index, internalIndex, onChangeIndex, scrollTo]);
 
-  function getPostionByIndex(index) {
-    let element = refs.current[index];
-
-    if (index < 0) {
-      element = underRefs.current[size + index];
-    } else if (index >= size) {
-      element = overRefs.current[index - size];
-    }
-
-    return outerRef.current.scrollLeft + element.getBoundingClientRect().left;
-  }
-
-  function handleScroll() {
+  const handleScroll = useCallback(() => {
     if (waitForScroll.current) return;
 
     waitForScroll.current = new Promise((resolve) => {
@@ -151,12 +149,26 @@ export default function Scrollable({
       waitForScroll.current = null;
       updateActiveIndex();
     });
-  }
+  }, [innerRef, waitForScroll, updateActiveIndex]);
 
-  function scrollTo(index, behavior = "smooth") {
-    const left = getPostionByIndex(index);
-    outerRef.current.scrollTo({ left: left, top: 0, behavior });
-  }
+  useEffect(() => {
+    scrollTo(0, "instant");
+    setInternalIndex(0);
+  }, [scrollTo]);
+
+  useEffect(() => {
+    if (internalIndex !== null && index !== internalIndex) {
+      scrollTo(index);
+    }
+  }, [internalIndex, index, scrollTo]);
+
+  useEffect(() => {
+    let ref = outerRef.current;
+    ref.addEventListener("scroll", handleScroll);
+    return () => {
+      ref.removeEventListener("scroll", handleScroll);
+    };
+  }, [outerRef, handleScroll]);
 
   const underChildren = React.Children.map(children, (child, i) => {
     if (React.isValidElement(child)) {

@@ -32,25 +32,16 @@ const UpdateButton = styled.button`
   padding: 0;
 
   display: none;
-  width: 0;
-
-  ${responsive.sm`
-    display: block;
-    width: 100px;
-  `}
-
-  ${responsive.md`
-    width: 150px;
-  `}
-
-  ${responsive.lg`
-    width: 200px;
-  `}
 `;
 
 const LeftButton = styled(UpdateButton)`
   top: 0;
   left: 0;
+
+  ${responsive.sm`
+    display: block;
+    width: ${(p) => `${p.width}px`};
+  `}
 `;
 
 const RightButton = styled(UpdateButton)`
@@ -58,7 +49,7 @@ const RightButton = styled(UpdateButton)`
   right: 0;
 
   display: block;
-  width: 30px;
+  width: ${(p) => `${p.width}px`};
 `;
 
 const AspectRatioBox = styled.div`
@@ -113,6 +104,19 @@ export default function WorkCarousel(props) {
     }
   }
 
+  function getPadding() {
+    switch (breakpoint) {
+      case Breakpoints.Small:
+        return { left: 100, right: 100 };
+      case Breakpoints.Medium:
+        return { left: 150, right: 150 };
+      case Breakpoints.Large:
+        return { left: 200, right: 200 };
+      default:
+        return { left: 0, right: 20 };
+    }
+  }
+
   function incrementIndex() {
     setIndex(index + 1);
   }
@@ -145,6 +149,7 @@ export default function WorkCarousel(props) {
 
   const beforeCount = Math.floor(size / 2);
   const afterCount = Math.floor(size / 2);
+  const { left, right } = getPadding();
 
   return (
     <CarouselWrapper ref={ref}>
@@ -158,9 +163,15 @@ export default function WorkCarousel(props) {
         })}
       </Scrollable>
       {!!beforeCount && (
-        <LeftButton onClick={decrementIndex}>Previous</LeftButton>
+        <LeftButton onClick={decrementIndex} width={left}>
+          Previous
+        </LeftButton>
       )}
-      {!!afterCount && <RightButton onClick={incrementIndex}>Next</RightButton>}
+      {!!afterCount && (
+        <RightButton onClick={incrementIndex} width={right}>
+          Next
+        </RightButton>
+      )}
     </CarouselWrapper>
   );
 }
