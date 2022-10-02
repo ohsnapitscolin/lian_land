@@ -6,7 +6,7 @@ export default function ImageSlide({ image }) {
     <GatsbyImage
       image={getImage(image) || ""}
       alt={image.description}
-      loading="lazy"
+      loading="eager"
     />
   );
 }

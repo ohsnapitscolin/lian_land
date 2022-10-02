@@ -1,8 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-import SwipeableViews from "react-swipeable-views";
-import { virtualize } from "react-swipeable-views-utils";
-import { mod } from "react-swipeable-views-core";
+import { useInView } from "react-intersection-observer";
+import Scrollable from "./scrollable";
 
 // Components
 import ImageSlide from "./slides/image";
@@ -20,8 +19,6 @@ const CarouselWrapper = styled.div`
   border-bottom: solid 1px black;
 `;
 
-const EnhancedSwipeableViews = virtualize(SwipeableViews);
-
 const UpdateButton = styled.button`
   position: absolute;
   height: 100%;
@@ -38,7 +35,7 @@ const UpdateButton = styled.button`
 
   ${responsive.sm`
     display: block;
-    width: ${p => `${p.width}px`};
+    width: ${(p) => `${p.width}px`};
   `}
 `;
 
@@ -53,12 +50,12 @@ const RightButton = styled(UpdateButton)`
 `;
 
 const AspectRatioBox = styled.div`
-  height: 0;
   overflow: hidden;
-  padding-top: calc(0.62 * 100%);
+  height: calc(0.625 * 80vw);
+  width: 80vw;
   position: relative;
 
-  border-left: solid ${p => (p.size > 1 ? "0px" : "1px")} black;
+  border-left: solid ${(p) => (p.size > 1 ? "0px" : "1px")} black;
   border-right: solid 1px black;
 `;
 
@@ -72,18 +69,20 @@ const SlideWrapper = styled.div`
 
 export default function WorkCarousel(props) {
   const { entries, identifier } = props;
+
   const [index, setIndex] = useState(0);
+  const [seen, setSeen] = useState(false);
+
   const { breakpoint } = useContext(LayoutContext);
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    if (!seen && inView) setSeen(true);
+  }, [inView, seen]);
 
   const size = entries.length;
-
-  function getFormattedPadding() {
-    const { left, right } = getPadding();
-    return {
-      paddingLeft: `${left}px`,
-      paddingRight: `${right}px`
-    };
-  }
 
   function getPadding() {
     switch (breakpoint) {
@@ -111,37 +110,33 @@ export default function WorkCarousel(props) {
   }
 
   function renderSlides(params) {
-    const entryIndex = mod(params.index, size);
+    const entryIndex = params.index % size;
 
     const entry = entries[entryIndex];
     const key = `${identifier}_${params.key}`;
 
     return (
-      <AspectRatioBox key={key} size={size}>
+      <AspectRatioBox id={key} key={key} size={size}>
         <SlideWrapper>
-          {entry.image && <ImageSlide image={entry.image} />}
-          {entry.video && <VideoSlide video={entry.video} />}
+          {seen && entry.image && <ImageSlide image={entry.image} />}
+          {seen && entry.video && <VideoSlide video={entry.video} />}
         </SlideWrapper>
       </AspectRatioBox>
     );
   }
 
-  const beforeCount = size > 1 ? 2 : 0;
-  const afterCount = size > 1 ? 2 : 0;
+  const beforeCount = Math.floor(size / 2);
+  const afterCount = Math.floor(size / 2);
 
   const { left, right } = getPadding();
 
   return (
-    <CarouselWrapper>
-      <EnhancedSwipeableViews
-        index={index}
-        onChangeIndex={onChangeIndex}
-        style={getFormattedPadding()}
-        overscanSlideBefore={beforeCount}
-        overscanSlideAfter={afterCount}
-        enableMouseEvents={true}
-        slideRenderer={renderSlides}
-      />
+    <CarouselWrapper ref={ref}>
+      <Scrollable index={index} onChangeIndex={onChangeIndex}>
+        {entries.map((entry, i) => {
+          return renderSlides({ index: i, key: i });
+        })}
+      </Scrollable>
       {!!beforeCount && (
         <LeftButton onClick={decrementIndex} width={left}>
           Previous
