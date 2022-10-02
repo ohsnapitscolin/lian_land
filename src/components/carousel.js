@@ -32,10 +32,19 @@ const UpdateButton = styled.button`
   padding: 0;
 
   display: none;
+  width: 0;
 
   ${responsive.sm`
     display: block;
-    width: ${(p) => `${p.width}px`};
+    width: 100px;
+  `}
+
+  ${responsive.md`
+    width: 150px;
+  `}
+
+  ${responsive.lg`
+    width: 200px;
   `}
 `;
 
@@ -47,16 +56,25 @@ const LeftButton = styled(UpdateButton)`
 const RightButton = styled(UpdateButton)`
   top: 0;
   right: 0;
+
+  display: block;
+  width: 30px;
 `;
 
 const AspectRatioBox = styled.div`
   overflow: hidden;
-  height: calc(0.625 * 80vw);
-  width: 80vw;
   position: relative;
 
   border-left: solid ${(p) => (p.size > 1 ? "0px" : "1px")} black;
   border-right: solid 1px black;
+
+  width: 90vw;
+  height: calc(0.625 * 90vw);
+
+  ${responsive.sm`
+    width: 75vw;
+    height: calc(0.625 * 75vw);
+  `}
 `;
 
 const SlideWrapper = styled.div`
@@ -84,16 +102,14 @@ export default function WorkCarousel(props) {
 
   const size = entries.length;
 
-  function getPadding() {
+  function getInline() {
     switch (breakpoint) {
       case Breakpoints.Small:
-        return { left: 100, right: 100 };
       case Breakpoints.Medium:
-        return { left: 150, right: 150 };
       case Breakpoints.Large:
-        return { left: 200, right: 200 };
+        return "center";
       default:
-        return { left: 0, right: 20 };
+        return "start";
     }
   }
 
@@ -115,11 +131,13 @@ export default function WorkCarousel(props) {
     const entry = entries[entryIndex];
     const key = `${identifier}_${params.key}`;
 
+    const showContent = seen || entryIndex === 0;
+
     return (
       <AspectRatioBox id={key} key={key} size={size}>
         <SlideWrapper>
-          {seen && entry.image && <ImageSlide image={entry.image} />}
-          {seen && entry.video && <VideoSlide video={entry.video} />}
+          {showContent && entry.image && <ImageSlide image={entry.image} />}
+          {showContent && entry.video && <VideoSlide video={entry.video} />}
         </SlideWrapper>
       </AspectRatioBox>
     );
@@ -128,25 +146,21 @@ export default function WorkCarousel(props) {
   const beforeCount = Math.floor(size / 2);
   const afterCount = Math.floor(size / 2);
 
-  const { left, right } = getPadding();
-
   return (
     <CarouselWrapper ref={ref}>
-      <Scrollable index={index} onChangeIndex={onChangeIndex}>
+      <Scrollable
+        inline={getInline()}
+        index={index}
+        onChangeIndex={onChangeIndex}
+      >
         {entries.map((entry, i) => {
           return renderSlides({ index: i, key: i });
         })}
       </Scrollable>
       {!!beforeCount && (
-        <LeftButton onClick={decrementIndex} width={left}>
-          Previous
-        </LeftButton>
+        <LeftButton onClick={decrementIndex}>Previous</LeftButton>
       )}
-      {!!afterCount && (
-        <RightButton onClick={incrementIndex} width={right}>
-          Next
-        </RightButton>
-      )}
+      {!!afterCount && <RightButton onClick={incrementIndex}>Next</RightButton>}
     </CarouselWrapper>
   );
 }
