@@ -17,6 +17,11 @@ const Wrapper = styled.div`
   height: auto;
   min-height: 100%;
   width: 100%;
+
+  a,
+  button {
+    text-underline-offset: 3px;
+  }
 `;
 
 const Background = styled.div`
@@ -174,11 +179,9 @@ const MoreInfoButton = styled(Span)`
     padding: 0;
     border: 0;
     background: none;
-    cursor: pointer;
 
-    &:hover {
-      text-decoration: underline;
-    }
+    cursor: pointer;
+    text-decoration: underline;
   }
 `;
 
@@ -219,10 +222,7 @@ const CloseButton = styled(Span)`
     background: none;
 
     cursor: pointer;
-
-    &:hover {
-      text-decoration: underline;
-    }
+    text-decoration: underline;
   }
 `;
 
@@ -256,7 +256,7 @@ export default function TideMachine(props) {
           <MoreInfoText>{renderRichText(moreInfo.raw)}</MoreInfoText>
         </MoreInfo>
         <CloseButton>
-          <button onClick={toggleMoreInfo}>Close</button>
+          <button onClick={toggleMoreInfo}>Close X</button>
         </CloseButton>
       </Wrapper>
     );
@@ -281,7 +281,13 @@ export default function TideMachine(props) {
           <Title>
             Tide Machine Screensaver* <br /> (for mac OS v10.9+)
           </Title>
-          <Info>Tide Machine currently has {locationsCount} stations.</Info>
+          <Info>
+            Tide Machine currently has{" "}
+            <a href="https://www.worldtides.info/tidestations" target="_blank">
+              {locationsCount} stations
+            </a>
+            .
+          </Info>
         </TopBanner>
         <Content>
           <GridContainer>
@@ -298,7 +304,11 @@ export default function TideMachine(props) {
         <BottomBanner>
           <Download>
             *To obtain a download password or create a custom tide station,
-            kindly order here.
+            kindly{" "}
+            <a href="https://forms.gle/LBxRGYBajJa9Md9z9" target="_blank">
+              order here
+            </a>
+            .
           </Download>
           <MoreInfoButton>
             <button onClick={toggleMoreInfo}>More info ?</button>
