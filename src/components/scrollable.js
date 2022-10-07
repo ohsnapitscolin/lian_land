@@ -185,6 +185,7 @@ export default function Scrollable({
       return React.cloneElement(child, {
         key: i,
         ref: (el) => (refs.current[i] = el),
+        isActive: internalIndex === i,
       });
     }
     return child;
