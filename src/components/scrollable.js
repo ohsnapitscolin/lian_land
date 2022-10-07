@@ -175,11 +175,10 @@ export default function Scrollable({
       return React.cloneElement(child, {
         key: `under-${i}`,
         ref: (el) => (underRefs.current[i] = el),
-        inline,
       });
     }
     return child;
-  }).slice(size - (1 + overflow), size);
+  }).slice(size - overflow, size);
 
   const mainChildren = React.Children.map(children, (child, i) => {
     if (React.isValidElement(child)) {
