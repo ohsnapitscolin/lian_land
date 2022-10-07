@@ -129,7 +129,7 @@ const WorkDoodleImage = styled.div`
 export default function Work({ work }) {
   const { title, type, year, entries, doodle, description, credits } = work;
   const { ref, inView } = useInView({
-    threshold: 0
+    threshold: 0,
   });
 
   return (
@@ -148,7 +148,7 @@ export default function Work({ work }) {
                     alt=""
                     style={{
                       height: "100%",
-                      width: "100%"
+                      width: "100%",
                     }}
                     imgStyle={{ objectFit: "contain" }}
                   />

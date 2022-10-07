@@ -5,17 +5,12 @@ import { useInView } from "react-intersection-observer";
 const VideoWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
 `;
 
 const Video = styled.video`
   width: calc(100% + 2px);
   margin-left: -1px;
   object-fit: cover;
-`;
-
-const Placeholder = styled.div`
-  background-color: green;
 `;
 
 export default function VideoSlide({ video }) {
@@ -36,13 +31,9 @@ export default function VideoSlide({ video }) {
 
   return (
     <VideoWrapper ref={ref}>
-      {inView ? (
-        <Video loop={true} muted ref={videoRef} playsInline autoPlay>
-          <source src={file.url} type={file.contentType} />
-        </Video>
-      ) : (
-        <Placeholder />
-      )}
+      <Video loop={true} muted ref={videoRef} playsInline autoPlay>
+        <source src={file.url} type={file.contentType} />
+      </Video>
     </VideoWrapper>
   );
 }

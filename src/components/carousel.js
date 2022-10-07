@@ -1,8 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-import SwipeableViews from "react-swipeable-views";
-import { virtualize } from "react-swipeable-views-utils";
-import { mod } from "react-swipeable-views-core";
+import { useInView } from "react-intersection-observer";
+import Scrollable from "./scrollable";
 
 // Components
 import ImageSlide from "./slides/image";
@@ -20,8 +19,6 @@ const CarouselWrapper = styled.div`
   border-bottom: solid 1px black;
 `;
 
-const EnhancedSwipeableViews = virtualize(SwipeableViews);
-
 const UpdateButton = styled.button`
   position: absolute;
   height: 100%;
@@ -35,31 +32,40 @@ const UpdateButton = styled.button`
   padding: 0;
 
   display: none;
-
-  ${responsive.sm`
-    display: block;
-    width: ${p => `${p.width}px`};
-  `}
 `;
 
 const LeftButton = styled(UpdateButton)`
   top: 0;
   left: 0;
+
+  ${responsive.sm`
+    display: block;
+    width: ${(p) => `${p.width}px`};
+  `}
 `;
 
 const RightButton = styled(UpdateButton)`
   top: 0;
   right: 0;
+
+  display: block;
+  width: ${(p) => `${p.width}px`};
 `;
 
 const AspectRatioBox = styled.div`
-  height: 0;
   overflow: hidden;
-  padding-top: calc(0.62 * 100%);
   position: relative;
 
-  border-left: solid ${p => (p.size > 1 ? "0px" : "1px")} black;
+  border-left: solid ${(p) => (p.size > 1 ? "0px" : "1px")} black;
   border-right: solid 1px black;
+
+  width: 90vw;
+  height: calc(0.625 * 90vw);
+
+  ${responsive.sm`
+    width: 75vw;
+    height: calc(0.625 * 75vw);
+  `}
 `;
 
 const SlideWrapper = styled.div`
@@ -72,17 +78,30 @@ const SlideWrapper = styled.div`
 
 export default function WorkCarousel(props) {
   const { entries, identifier } = props;
+
   const [index, setIndex] = useState(0);
+  const [seen, setSeen] = useState(false);
+
   const { breakpoint } = useContext(LayoutContext);
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    if (!seen && inView) setSeen(true);
+  }, [inView, seen]);
 
   const size = entries.length;
 
-  function getFormattedPadding() {
-    const { left, right } = getPadding();
-    return {
-      paddingLeft: `${left}px`,
-      paddingRight: `${right}px`
-    };
+  function getInline() {
+    switch (breakpoint) {
+      case Breakpoints.Small:
+      case Breakpoints.Medium:
+      case Breakpoints.Large:
+        return "center";
+      default:
+        return "start";
+    }
   }
 
   function getPadding() {
@@ -111,37 +130,38 @@ export default function WorkCarousel(props) {
   }
 
   function renderSlides(params) {
-    const entryIndex = mod(params.index, size);
+    const entryIndex = params.index % size;
 
     const entry = entries[entryIndex];
     const key = `${identifier}_${params.key}`;
 
+    const showContent = seen || entryIndex === 0;
+
     return (
-      <AspectRatioBox key={key} size={size}>
+      <AspectRatioBox id={key} key={key} size={size}>
         <SlideWrapper>
-          {entry.image && <ImageSlide image={entry.image} />}
-          {entry.video && <VideoSlide video={entry.video} />}
+          {showContent && entry.image && <ImageSlide image={entry.image} />}
+          {showContent && entry.video && <VideoSlide video={entry.video} />}
         </SlideWrapper>
       </AspectRatioBox>
     );
   }
 
-  const beforeCount = size > 1 ? 2 : 0;
-  const afterCount = size > 1 ? 2 : 0;
-
+  const beforeCount = Math.floor(size / 2);
+  const afterCount = Math.floor(size / 2);
   const { left, right } = getPadding();
 
   return (
-    <CarouselWrapper>
-      <EnhancedSwipeableViews
+    <CarouselWrapper ref={ref}>
+      <Scrollable
+        inline={getInline()}
         index={index}
         onChangeIndex={onChangeIndex}
-        style={getFormattedPadding()}
-        overscanSlideBefore={beforeCount}
-        overscanSlideAfter={afterCount}
-        enableMouseEvents={true}
-        slideRenderer={renderSlides}
-      />
+      >
+        {entries.map((entry, i) => {
+          return renderSlides({ index: i, key: i });
+        })}
+      </Scrollable>
       {!!beforeCount && (
         <LeftButton onClick={decrementIndex} width={left}>
           Previous
