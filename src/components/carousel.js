@@ -141,13 +141,7 @@ export default function WorkCarousel(props) {
         onChangeIndex={onChangeIndex}
       >
         {entries.map((entry, i) => (
-          <Slide
-            key={i}
-            entry={entry}
-            size={size}
-            inView={inView}
-            seen={seen}
-          />
+          <Slide key={i} entry={entry} size={size} inView={inView} />
         ))}
       </Scrollable>
       {!!beforeCount && (
@@ -164,14 +158,12 @@ export default function WorkCarousel(props) {
   );
 }
 
-const Slide = forwardRef(({ entry, size, inView, seen, isActive }, ref) => {
-  const showImage = seen || inView || !!isActive;
-  const showVideo = inView || !!isActive;
+const Slide = forwardRef(({ entry, size, inView }, ref) => {
   return (
     <AspectRatioBox ref={ref} size={size}>
       <SlideWrapper>
-        {showImage && entry.image && <ImageSlide image={entry.image} />}
-        {showVideo && entry.video && <VideoSlide video={entry.video} />}
+        {entry.image && <ImageSlide image={entry.image} />}
+        {inView && entry.video && <VideoSlide video={entry.video} />}
       </SlideWrapper>
     </AspectRatioBox>
   );

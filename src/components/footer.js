@@ -17,10 +17,12 @@ import renderRichText from "../utils/rich-text";
 import arrow from "../images/ic_arrow.png";
 
 const FooterDrawers = styled.div`
-  position: ${(p) => (p.fixed ? "fixed" : "relative")};
-  bottom: ${(p) => (p.fixed ? "env(safe-area-inset-bottom)" : "0")};
+  position: ${p => (p.fixed ? "fixed" : "relative")};
+  bottom: 0;
   left: 0;
   width: 100%;
+
+  padding-bottom: ${p => (p.fixed ? "env(safe-area-inset-bottom)" : "0")};
 `;
 
 const FooterWrapper = styled.div`
@@ -32,7 +34,7 @@ const FooterWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: ${(p) => (p.scrolled || p.active ? "#f1f1f1" : "")};
+  background-color: ${p => (p.scrolled || p.active ? "#f1f1f1" : "")};
 
   transition: background-color 0.5s ease;
 
