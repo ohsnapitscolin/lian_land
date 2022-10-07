@@ -153,15 +153,14 @@ export default function WorkCarousel(props) {
 
   return (
     <CarouselWrapper ref={ref}>
-      <Scrollable
+      {/* <Scrollable
         inline={getInline()}
         index={index}
         onChangeIndex={onChangeIndex}
-      >
-        {entries.map((entry, i) => {
-          return renderSlides({ index: i, key: i });
-        })}
-      </Scrollable>
+      > */}
+      {/* {entries.map((entry, i) => { */}
+      {renderSlides({ index: 0, key: 0 })}
+      {/* </Scrollable>
       {!!beforeCount && (
         <LeftButton onClick={decrementIndex} width={left}>
           Previous
@@ -171,7 +170,7 @@ export default function WorkCarousel(props) {
         <RightButton onClick={incrementIndex} width={right}>
           Next
         </RightButton>
-      )}
+      )} */}
     </CarouselWrapper>
   );
 }
