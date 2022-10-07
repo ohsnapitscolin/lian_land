@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { TimeOfDay, Season } from "../constants/tides";
 
 // Component
+import Layout from "../components/layout";
+import Seo from "../components/seo";
 import Machine from "../components/tides/machine";
 
 // Utils
@@ -211,47 +213,50 @@ export default function TideMachine(props) {
   }
 
   return (
-    <Wrapper>
-      <Background>
-        <Machine
-          timeOfDay={TimeOfDay.Evening}
-          season={Season.Spring}
-          height={35}
-          fixed={true}
-        />
-      </Background>
-      <TopBanner>
-        <Title>
-          Tide Machine Screensaver* <br /> (for mac OS v10.9+)
-        </Title>
-        <Info>Tide Machine currently has {locationsCount} stations.</Info>
-      </TopBanner>
-      <Content>
-        <LocationGrid>
-          {locations.map((location) => (
-            <React.Fragment key={location.title}>
-              <Location>
-                <LocationTitle>{location.title}</LocationTitle>
-                {location.locations.map((l) => (
-                  <LocationLink key={l.title} href={l.link}>
-                    {l.title}
-                  </LocationLink>
-                ))}
-              </Location>
-            </React.Fragment>
-          ))}
-        </LocationGrid>
-      </Content>
-      <BottomBanner>
-        <Download>
-          *To obtain a download password or create a custom tide station, kindly
-          order here.
-        </Download>
-        <MoreInfoButton>
-          <button onClick={toggleMoreInfo}>More info ?</button>
-        </MoreInfoButton>
-      </BottomBanner>
-    </Wrapper>
+    <Layout>
+      <Seo />
+      <Wrapper>
+        <Background>
+          <Machine
+            timeOfDay={TimeOfDay.Evening}
+            season={Season.Spring}
+            height={35}
+            fixed={true}
+          />
+        </Background>
+        <TopBanner>
+          <Title>
+            Tide Machine Screensaver* <br /> (for mac OS v10.9+)
+          </Title>
+          <Info>Tide Machine currently has {locationsCount} stations.</Info>
+        </TopBanner>
+        <Content>
+          <LocationGrid>
+            {locations.map((location) => (
+              <React.Fragment key={location.title}>
+                <Location>
+                  <LocationTitle>{location.title}</LocationTitle>
+                  {location.locations.map((l) => (
+                    <LocationLink key={l.title} href={l.link}>
+                      {l.title}
+                    </LocationLink>
+                  ))}
+                </Location>
+              </React.Fragment>
+            ))}
+          </LocationGrid>
+        </Content>
+        <BottomBanner>
+          <Download>
+            *To obtain a download password or create a custom tide station,
+            kindly order here.
+          </Download>
+          <MoreInfoButton>
+            <button onClick={toggleMoreInfo}>More info ?</button>
+          </MoreInfoButton>
+        </BottomBanner>
+      </Wrapper>
+    </Layout>
   );
 }
 export const query = graphql`
