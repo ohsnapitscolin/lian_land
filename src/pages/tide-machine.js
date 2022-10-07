@@ -232,7 +232,7 @@ const Circle = styled.span`
   justify-content: center;
 `;
 
-const Underline = styled.span`
+const Underline = styled(Span)`
   text-decoration: underline;
 `;
 
