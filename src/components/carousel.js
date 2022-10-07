@@ -162,7 +162,7 @@ const Slide = forwardRef(({ entry, size, inView }, ref) => {
   return (
     <AspectRatioBox ref={ref} size={size}>
       <SlideWrapper>
-        {inView && entry.image && <ImageSlide image={entry.image} />}
+        {entry.image && <ImageSlide image={entry.image} />}
         {inView && entry.video && <VideoSlide video={entry.video} />}
       </SlideWrapper>
     </AspectRatioBox>
