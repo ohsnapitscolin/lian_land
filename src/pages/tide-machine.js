@@ -34,20 +34,48 @@ const Content = styled.div`
   padding: 15px;
 `;
 
-const LocationGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 60px;
+const GridContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   margin-top: 145px;
-  padding-bottom: 300px;
+  padding-bottom: 240px;
 
   ${responsive.sm`
-    grid-template-columns: 1fr 1fr 1fr;
+    flex-direction: row;
+    padding-bottom: 80px;
+  `}
+`;
+
+const LocationGrid = styled.div`
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  gap: 60px;
+  margin: 0 0 60px 0;
+
+  ${responsive.sm`
+    width: calc(100% * 2 / 3);
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin: 0 40px 0 0;
+  `}
+`;
+
+const USGrid = styled.div`
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  gap: 60px;
+  align-items: start;
+
+  ${responsive.sm`
+    width: calc(100% / 3);
+    grid-template-columns: 1f;
     gap: 40px;
   `}
 `;
 
-const Location = styled.div`
+const LocationContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-self: start;
@@ -67,6 +95,10 @@ const LocationLink = styled.a`
   font-size: 14px;
   line-height: 17px;
   font-weight: 400;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const Span = styled.span`
@@ -94,13 +126,20 @@ const TopBanner = styled(Banner)`
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1;
 `;
 
 const BottomBanner = styled(Banner)`
   position: absolute;
   bottom: env(safe-area-inset-bottom);
   left: 0;
+  z-index: 1;
+
   color: white;
+
+  ${responsive.sm`
+    position: fixed;
+  `}
 `;
 
 const Title = styled(Span)`
@@ -135,6 +174,11 @@ const MoreInfoButton = styled(Span)`
     padding: 0;
     border: 0;
     background: none;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 
@@ -173,6 +217,12 @@ const CloseButton = styled(Span)`
     padding: 0;
     border: 0;
     background: none;
+
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 
@@ -212,6 +262,9 @@ export default function TideMachine(props) {
     );
   }
 
+  const nonUsLocations = locations.slice(0, locations.length - 1);
+  const usLocation = locations[locations.length - 1];
+
   return (
     <Layout>
       <Seo />
@@ -231,20 +284,16 @@ export default function TideMachine(props) {
           <Info>Tide Machine currently has {locationsCount} stations.</Info>
         </TopBanner>
         <Content>
-          <LocationGrid>
-            {locations.map((location) => (
-              <React.Fragment key={location.title}>
-                <Location>
-                  <LocationTitle>{location.title}</LocationTitle>
-                  {location.locations.map((l) => (
-                    <LocationLink key={l.title} href={l.link}>
-                      {l.title}
-                    </LocationLink>
-                  ))}
-                </Location>
-              </React.Fragment>
-            ))}
-          </LocationGrid>
+          <GridContainer>
+            <LocationGrid>
+              {nonUsLocations.map((location) => (
+                <Location key={location.title} location={location} />
+              ))}
+            </LocationGrid>
+            <USGrid>
+              <Location location={usLocation} />
+            </USGrid>
+          </GridContainer>
         </Content>
         <BottomBanner>
           <Download>
@@ -259,6 +308,20 @@ export default function TideMachine(props) {
     </Layout>
   );
 }
+
+const Location = ({ location }) => {
+  return (
+    <LocationContainer>
+      <LocationTitle>{location.title}</LocationTitle>
+      {location.locations.map((l) => (
+        <LocationLink key={l.title} href={l.link} target="_blank">
+          {l.title}
+        </LocationLink>
+      ))}
+    </LocationContainer>
+  );
+};
+
 export const query = graphql`
   query TideMachineQuery {
     allContentfulTideMachinePage {
