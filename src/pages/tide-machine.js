@@ -23,7 +23,7 @@ const Background = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  bottom: 0;
+  bottom: env;
   width: 100%;
   height: 100%;
   z-index: -1;
@@ -98,7 +98,7 @@ const TopBanner = styled(Banner)`
 
 const BottomBanner = styled(Banner)`
   position: absolute;
-  bottom: 0;
+  bottom: env(safe-area-inset-bottom);
   left: 0;
   color: white;
 `;
