@@ -165,6 +165,17 @@ const Download = styled(Span)`
   `}
 `;
 
+const Button = styled.button`
+  color: white;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+`;
+
 const MoreInfoButton = styled(Span)`
   order: 0;
   margin-bottom: 17px;
@@ -173,16 +184,6 @@ const MoreInfoButton = styled(Span)`
     order: 1;
     margin-bottom: 0;
   `}
-
-  button {
-    color: white;
-    padding: 0;
-    border: 0;
-    background: none;
-
-    cursor: pointer;
-    text-decoration: underline;
-  }
 `;
 
 const MoreInfo = styled.div`
@@ -214,16 +215,25 @@ const CloseButton = styled(Span)`
   position: fixed;
   top: 15px;
   right: 15px;
+`;
 
-  button {
-    color: white;
-    padding: 0;
-    border: 0;
-    background: none;
+const Circle = styled.span`
+  border solid 1px white;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: 4px;
 
-    cursor: pointer;
-    text-decoration: underline;
-  }
+  font-size: 8px;
+  line-height: 8px;
+ 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Underline = styled.span`
+  text-decoration: underline;
 `;
 
 export default function TideMachine(props) {
@@ -256,7 +266,9 @@ export default function TideMachine(props) {
           <MoreInfoText>{renderRichText(moreInfo.raw)}</MoreInfoText>
         </MoreInfo>
         <CloseButton>
-          <button onClick={toggleMoreInfo}>Close X</button>
+          <Button onClick={toggleMoreInfo}>
+            <Underline>Close</Underline> <Circle>x</Circle>
+          </Button>
         </CloseButton>
       </Wrapper>
     );
@@ -311,7 +323,9 @@ export default function TideMachine(props) {
             .
           </Download>
           <MoreInfoButton>
-            <button onClick={toggleMoreInfo}>More info ?</button>
+            <Button onClick={toggleMoreInfo}>
+              <Underline>More info</Underline> <Circle>?</Circle>
+            </Button>
           </MoreInfoButton>
         </BottomBanner>
       </Wrapper>
