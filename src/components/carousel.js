@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { forwardRef, useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
 import Scrollable from "./scrollable";
@@ -129,39 +129,20 @@ export default function WorkCarousel(props) {
     setIndex(i);
   }
 
-  function renderSlides(params) {
-    const entryIndex = params.index % size;
-
-    const entry = entries[entryIndex];
-    const key = `${identifier}_${params.key}`;
-
-    const showContent = seen || entryIndex === 0;
-
-    return (
-      <AspectRatioBox id={key} key={key} size={size}>
-        <SlideWrapper>
-          {showContent && entry.image && <ImageSlide image={entry.image} />}
-          {showContent && entry.video && <VideoSlide video={entry.video} />}
-        </SlideWrapper>
-      </AspectRatioBox>
-    );
-  }
-
   const beforeCount = Math.floor(size / 2);
   const afterCount = Math.floor(size / 2);
   const { left, right } = getPadding();
 
   return (
-    // Testing
     <CarouselWrapper ref={ref}>
       <Scrollable
         inline={getInline()}
         index={index}
         onChangeIndex={onChangeIndex}
       >
-        {entries.map((entry, i) => {
-          return renderSlides({ index: i, key: i });
-        })}
+        {entries.map((entry, i) => (
+          <Slide key={i} entry={entry} size={size} inView={inView} />
+        ))}
       </Scrollable>
       {!!beforeCount && (
         <LeftButton onClick={decrementIndex} width={left}>
@@ -176,3 +157,14 @@ export default function WorkCarousel(props) {
     </CarouselWrapper>
   );
 }
+
+const Slide = forwardRef(({ entry, size, inView }, ref) => {
+  return (
+    <AspectRatioBox ref={ref} size={size}>
+      <SlideWrapper>
+        {inView && entry.image && <ImageSlide image={entry.image} />}
+        {inView && entry.video && <VideoSlide video={entry.video} />}
+      </SlideWrapper>
+    </AspectRatioBox>
+  );
+});
