@@ -14,10 +14,10 @@ const Video = styled.video`
 `;
 
 export default function VideoSlide({ video }) {
-  const videoRef = useRef(null);
-  const { ref, inView } = useInView({
-    threshold: 0,
-  });
+  // const videoRef = useRef(null);
+  // const { ref, inView } = useInView({
+  //   threshold: 0,
+  // });
 
   const file = video.source.file;
 
@@ -30,8 +30,8 @@ export default function VideoSlide({ video }) {
   // }
 
   return (
-    <VideoWrapper ref={ref}>
-      <Video loop={true} muted ref={videoRef} playsInline autoPlay>
+    <VideoWrapper>
+      <Video loop={true} muted playsInline autoPlay>
         <source src={file.url} type={file.contentType} />
       </Video>
     </VideoWrapper>
