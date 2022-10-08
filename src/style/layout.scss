@@ -5,7 +5,15 @@ $breakpoints: (
 );
 
 @function responsive($pixel-value) {
-  @return '@media (min-width: ' + ($pixel-value) + 'px)';
+  @return "@media( min-width: " + ($pixel-value) + "px)";
+}
+
+html,
+body,
+#___gatsby,
+#gatsby-focus-wrapper {
+  height: 100%;
+  width: 100%;
 }
 
 body {
@@ -23,8 +31,7 @@ h1 {
   font-weight: 300;
   letter-spacing: -0.2px;
 
-
-  @media (min-width:  map-get($breakpoints, sm)) {
+  @media (min-width: map-get($breakpoints, sm)) {
     font-size: 45px;
     letter-spacing: -0.8px;
   }
@@ -36,7 +43,7 @@ h2 {
   font-weight: 300;
   letter-spacing: 0px;
 
-  @media (min-width:  map-get($breakpoints, sm)) {
+  @media (min-width: map-get($breakpoints, sm)) {
     font-size: 30px;
     letter-spacing: -0.5px;
   }
@@ -49,7 +56,7 @@ h3 {
   line-height: 1.5;
   letter-spacing: -0.2px;
 
-  @media (min-width:  map-get($breakpoints, sm)) {
+  @media (min-width: map-get($breakpoints, sm)) {
     font-size: 24px;
     letter-spacing: -0.5px;
   }
@@ -60,6 +67,9 @@ i {
   font-style: italic;
 }
 
-a, a:visited, a:hover, a:active {
+a,
+a:visited,
+a:hover,
+a:active {
   color: inherit;
 }
