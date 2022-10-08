@@ -56,13 +56,13 @@ const LocationGrid = styled.div`
   width: 100%;
   grid-template-columns: 1fr;
   gap: 60px;
-  margin: 0 0 60px 0;
+  margin: 60px 0 0 0;
 
   ${responsive.sm`
     width: calc(100% * 2 / 3);
     grid-template-columns: 1fr 1fr;
     gap: 40px;
-    margin: 0 40px 0 0;
+    margin: 0 0 0 40px;
   `}
 `;
 
@@ -91,7 +91,7 @@ const LocationTitle = styled.h3`
   font-size: 14px;
   line-height: 17px;
   font-weight: 510;
-  margin-bottom: 17px;
+  margin-bottom: 15px;
 `;
 
 const LocationLink = styled.a`
@@ -100,6 +100,7 @@ const LocationLink = styled.a`
   font-size: 14px;
   line-height: 17px;
   font-weight: 400;
+  margin-bottom: 2px;
 
   &:hover {
     text-decoration: underline;
@@ -199,7 +200,7 @@ const MoreInfo = styled.div`
 `;
 
 const MoreInfoText = styled.div`
-  max-width: 450px;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
   padding: 30px;
@@ -303,14 +304,14 @@ export default function TideMachine(props) {
         </TopBanner>
         <Content>
           <GridContainer>
+            <USGrid>
+              <Location location={usLocation} />
+            </USGrid>
             <LocationGrid>
               {nonUsLocations.map((location) => (
                 <Location key={location.title} location={location} />
               ))}
             </LocationGrid>
-            <USGrid>
-              <Location location={usLocation} />
-            </USGrid>
           </GridContainer>
         </Content>
         <BottomBanner>
