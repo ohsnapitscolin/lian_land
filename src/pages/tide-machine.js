@@ -100,7 +100,7 @@ const LocationLink = styled.a`
   font-size: 14px;
   line-height: 17px;
   font-weight: 400;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 
   &:hover {
     text-decoration: underline;
@@ -140,12 +140,7 @@ const BottomBanner = styled(Banner)`
   bottom: env(safe-area-inset-bottom);
   left: 0;
   z-index: 1;
-
   color: white;
-
-  ${responsive.sm`
-    position: fixed;
-  `}
 `;
 
 const Title = styled(Span)`
