@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled, { keyframes } from "styled-components";
-import { StaticImage } from "gatsby-plugin-image";
+import FlowerIcon from "../svg/flower.svg";
 
 // Context
 import LayoutContext from "../context/layout";
@@ -26,32 +26,37 @@ const HeaderContainer = styled.header`
   box-sizing: border-box;
   border-bottom: 1px solid black;
 
-  background-color: ${p => (p.scrolled ? "#f1f1f1" : "")};
+  color: ${(p) => (p.scrolled ? "black" : "white")};
+  background-color: ${(p) => (p.scrolled ? "#f1f1f1" : "")};
+  border-color: ${(p) => (p.scrolled ? "black" : "white")};
 
-  ${p => (p.scrolled ? "cursor: pointer" : "")};
+  ${(p) => (p.scrolled ? "cursor: pointer" : "")};
 
-  transition: all 0.5s ease;
+  transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out;
 
-  height: ${p => (p.scrolled ? "64px" : "80px")};
+  height: ${(p) => (p.scrolled ? "50px" : "70px")};
   padding: 0 20px;
 
   ${responsive.sm`
-    height: ${p => (p.scrolled ? "60px" : "96px")};
-    padding: 0 45px;
-
-    h1 {
-      font-size: ${p => (p.scrolled ? "30px" : "45px")};
-      transition: all 1s ease;
-    }
+    height: ${(p) => (p.scrolled ? "60px" : "90px")};
+    padding: 0 50px;
   `};
+
+  h1 {
+    transition: all 0.3s ease-in-out;
+  }
 `;
 
 const PopulationContainer = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
 
-  opacity: ${p => (p.scrolled ? "0.0" : "1.0")};
-  transition: opacity 0.75s ease;
+  ${responsive.sm`
+    display: flex;
+  `}
+
+  opacity: ${(p) => (p.scrolled ? 0 : 1)};
+  transition: opacity 0.3s ease;
 
   h2 {
     white-space: nowrap;
@@ -69,18 +74,13 @@ const spin = keyframes`
 
 const Established = styled.div`
   display: block;
-  margin-right: 6px;
-  margin-right: 10px;
-  animation: ${spin} 6s linear infinite;
+  margin-right: 5px;
 
-  img {
+  svg {
+    display: block;
     width: 25px;
     height: 25px;
-
-    ${responsive.sm`
-      width: 36px;
-      height: 36px;
-    `};
+    animation: ${spin} 6s linear infinite;
   }
 `;
 
@@ -91,25 +91,21 @@ export default function Header() {
     window.scroll({
       top: 0,
       left: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   }
 
   return (
     <HeaderWrapper onClick={handleClick}>
       <HeaderContainer scrolled={scrolled}>
-        <h1>Lian</h1>
+        <h1 className={scrolled ? "text" : "text-big"}>Lian</h1>
         <PopulationContainer scrolled={scrolled}>
           <Established>
-            <StaticImage
-              src="../images/ic_est.png"
-              placeholder="blurry"
-              alt="Established"
-            />
+            <FlowerIcon />
           </Established>
-          <h2>1992 Pop. 1</h2>
+          <h2 className="text">est. 1992 Pop. 1</h2>
         </PopulationContainer>
-        <h1>Land</h1>
+        <h1 className={scrolled ? "text" : "text-big"}>Land</h1>
       </HeaderContainer>
     </HeaderWrapper>
   );

@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import throttle from "lodash/throttle";
-import { StaticImage } from "gatsby-plugin-image";
 import AnimateHeight from "react-animate-height";
 
 // Context
@@ -14,29 +13,33 @@ import useScroll from "../hooks/scroll";
 import { responsive } from "../utils/style";
 import renderRichText from "../utils/rich-text";
 
-import arrow from "../images/ic_arrow.png";
-
 const FooterDrawers = styled.div`
-  position: ${p => (p.fixed ? "fixed" : "relative")};
+  position: ${(p) => (p.fixed ? "fixed" : "relative")};
   bottom: 0;
   left: 0;
   width: 100%;
 
-  padding-bottom: ${p => (p.fixed ? "env(safe-area-inset-bottom)" : "0")};
+  background-color: #f1f1f1;
+  padding-bottom: ${(p) => (p.fixed ? "env(safe-area-inset-bottom)" : "0")};
 `;
 
 const FooterWrapper = styled.div`
   width: 100%;
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;
 
-  background-color: ${p => (p.scrolled || p.active ? "#f1f1f1" : "")};
+  &.scrolled {
+    top: unset;
+    transform: translateY(-100%);
+  }
 
-  transition: background-color 0.5s ease;
+  background-color: #f1f1f1;
+  transition: transform 0.5s;
 
   ${responsive.sm`
     flex-direction: row;
@@ -82,15 +85,10 @@ const FooterContact = styled.div`
 `;
 
 const FooterInfo = styled.div`
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 30px;
+  padding: 10px 20px 30px;
 
   ${responsive.sm`
-    padding-left: 45px;
-    padding-right: 55px;
-    padding-top: 30px;
-    padding-bottom: 40px;
+    padding: 27px 50px 50px;  
   `}
 `;
 
@@ -100,26 +98,23 @@ const FooterAbout = styled.div`
   flex-direction: column;
 `;
 
-const FooterIcon = styled.button`
-  border: 0;
-  padding: 0;
-  appearance: none;
-  background: none;
-  margin: 0;
+const FooterAboutInfo = styled(FooterInfo)`
+  padding-bottom: 40px;
 
   ${responsive.sm`
-    display: none
+    padding-bottom: 50px;
   `}
 
-  display: flex;
-  align-items: center;
+  p {
+    margin-bottom: 15px;
 
-  img {
-    width: 15px;
+    ${responsive.sm`
+      margin-bottom: 0;
+    `}
   }
 `;
 
-const FooterContantInfo = styled(FooterInfo)`
+const FooterContactInfo = styled(FooterInfo)`
   h2 {
     padding-right: 60px;
   }
@@ -138,29 +133,30 @@ const FooterContantInfo = styled(FooterInfo)`
   }
 
   li {
-    background-image: url(${arrow});
-    background-repeat: no-repeat;
-    background-position: left center;
+    position: relative;
 
-    margin-bottom: 8px;
+    &:before {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      content: "→";
+    }
+
+    margin-bottom: 15px;
+    padding-left: 17px;
+
     ${responsive.sm`
-      margin-bottom: 0
-    `};
-
-    padding-left: 30px;
-    background-size: 20px;
-
-    ${responsive.sm`
-      background-size: 30px;
-      padding-left: 45px;
+      padding-left: 32px;
     `}
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
 
   a {
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
+    text-decoration: underline;
   }
 
   ${responsive.sm`
@@ -177,7 +173,7 @@ export default function Footer(props) {
 
   const { contactText, aboutText } = props;
 
-  useScroll(throttle(handleScroll, 250));
+  useScroll(throttle(handleScroll, 100));
 
   function handleScroll() {
     const distanceToBottom =
@@ -211,53 +207,31 @@ export default function Footer(props) {
 
   return (
     <FooterDrawers fixed={fixed}>
-      <FooterWrapper active={active} scrolled={scrolled}>
+      <FooterWrapper
+        className={scrolled ? "scrolled" : ""}
+        active={active}
+        scrolled={scrolled}
+      >
         <FooterContact>
           <FooterHeader onClick={() => toggle("contact")}>
-            <h2>Contact</h2>
-            <FooterIcon>
-              {contactActive ? (
-                <StaticImage
-                  src="../images/ic_minus.png"
-                  placeholder="none"
-                  alt="Collapse"
-                />
-              ) : (
-                <StaticImage
-                  src="../images/ic_plus.png"
-                  placeholder="none"
-                  alt="Expand"
-                />
-              )}
-            </FooterIcon>
+            <h2 className="text">Contact</h2>
+            <span className="text">{contactActive ? "—" : "+"}</span>
           </FooterHeader>
           <AnimateHeight height={contactActive ? "auto" : 0} duration={300}>
-            <FooterContantInfo>
+            <FooterContactInfo className="text-m">
               {renderRichText(contactText.raw)}
-            </FooterContantInfo>
+            </FooterContactInfo>
           </AnimateHeight>
         </FooterContact>
         <FooterAbout>
           <FooterHeader onClick={() => toggle("about")}>
-            <h2>About</h2>
-            <FooterIcon>
-              {aboutActive ? (
-                <StaticImage
-                  src="../images/ic_minus.png"
-                  placeholder="none"
-                  alt="Collapse"
-                />
-              ) : (
-                <StaticImage
-                  src="../images/ic_plus.png"
-                  placeholder="none"
-                  alt="Expand"
-                />
-              )}
-            </FooterIcon>
+            <h2 className="text">About</h2>
+            <span className="text">{aboutActive ? "—" : "+"}</span>
           </FooterHeader>
           <AnimateHeight height={aboutActive ? "auto" : 0} duration={300}>
-            <FooterInfo>{renderRichText(aboutText.raw)}</FooterInfo>
+            <FooterAboutInfo className="text-m">
+              {renderRichText(aboutText.raw)}
+            </FooterAboutInfo>
           </AnimateHeight>
         </FooterAbout>
       </FooterWrapper>

@@ -77,7 +77,7 @@ const SlideWrapper = styled.div`
 `;
 
 export default function WorkCarousel(props) {
-  const { entries, identifier } = props;
+  const { entries } = props;
 
   const [index, setIndex] = useState(0);
   const [seen, setSeen] = useState(false);
@@ -163,7 +163,7 @@ const Slide = forwardRef(({ entry, size, inView }, ref) => {
     <AspectRatioBox ref={ref} size={size}>
       <SlideWrapper>
         {entry.image && <ImageSlide image={entry.image} />}
-        {inView && entry.video && <VideoSlide video={entry.video} />}
+        {entry.video && <VideoSlide video={entry.video} />}
       </SlideWrapper>
     </AspectRatioBox>
   );

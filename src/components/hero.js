@@ -10,33 +10,63 @@ import renderRichText from "../utils/rich-text";
 const HeroWrapper = styled.div``;
 
 const HeroTextWrapper = styled.div`
+  color: white;
+  position: absolute;
+  top: 70px;
+  bottom: 0;
+  left: 0;
+  padding: 40px 20px;
+
+  width: 100%;
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
-
-  padding-left: 20px;
-  padding-right: 20px;
+  justify-content: space-between;
 
   ${responsive.sm`
-    padding-left: 45px;
-    padding-right: 45px;
+    top: unset;
+    flex-direction: row;
+    padding: 50px 50px 80px;
+    justify-content: flex-start;
   `}
 `;
 
-const HeroMainTextWrapper = styled(HeroTextWrapper)`
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translate(0, -50%);
-  width: 100%;
-  box-sizing: border-box;
-  max-width: 900px;
+const HeroMainText = styled.div`
+  ${responsive.sm`
+    flex: 0 0 50%;
+  `}
 `;
 
-const HeroText = styled.div`
-  width: 100%;
+const HeroSubText = styled.div`
+  padding-bottom: 80px;
+
+  ${responsive.sm`
+    flex: 0 0 50%;
+    padding-left: 9%;
+    padding-right: 9%;
+    padding-bottom: 0;
+  `}
+
+  p {
+    margin-bottom: 17px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
 `;
 
-const HeroMainText = styled(HeroText)``;
+const DownArrow = styled.div`
+  margin-top: 10px;
+  font-family: "Plaid";
+  font-size: 26px;
+  line-height: 31px;
+
+  ${responsive.sm`
+    display: none;
+  `}
+`;
 
 const HeroImageWrapper = styled.div`
   position: relative;
@@ -45,10 +75,10 @@ const HeroImageWrapper = styled.div`
   overflow: hidden;
 `;
 
-const TideMachine = true;
+const TideMachine = false;
 
 export default function Hero(props) {
-  const { mainText, image } = props;
+  const { mainText, subText, image } = props;
   return (
     <HeroWrapper>
       <HeroImageWrapper>
@@ -63,9 +93,15 @@ export default function Hero(props) {
           />
         )}
 
-        <HeroMainTextWrapper>
-          <HeroMainText>{renderRichText(mainText.raw)}</HeroMainText>
-        </HeroMainTextWrapper>
+        <HeroTextWrapper>
+          <HeroMainText className="text">
+            {renderRichText(mainText.raw)}
+          </HeroMainText>
+          <HeroSubText className="text-small">
+            {renderRichText(subText.raw)}
+            <DownArrow>↓</DownArrow>
+          </HeroSubText>
+        </HeroTextWrapper>
       </HeroImageWrapper>
     </HeroWrapper>
   );

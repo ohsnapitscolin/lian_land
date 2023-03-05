@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { graphql } from "gatsby";
 
 // Components
@@ -9,6 +10,15 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import Credits from "../components/credits";
 import Seo from "../components/seo";
+import { responsive } from "../utils/style";
+
+const WorkContainer = styled.div`
+  margin-bottom: 90px;
+
+  ${responsive.sm`
+    margin-bottom: 45px;
+  `}
+`;
 
 export default function Index(props) {
   const workPages = props.data.allContentfulWorkPages.edges[0].node.pages;
@@ -25,9 +35,11 @@ export default function Index(props) {
         subText={hero.subText}
         image={hero.image}
       />
-      {workPages.map((work) => {
-        return <Work key={work.contentful_id} work={work} />;
-      })}
+      <WorkContainer>
+        {workPages.map((work) => {
+          return <Work key={work.contentful_id} work={work} />;
+        })}
+      </WorkContainer>
       <Footer contactText={footer.contactText} aboutText={footer.aboutText} />
       <Credits image={credits.image} text={credits.text} />
     </Layout>
