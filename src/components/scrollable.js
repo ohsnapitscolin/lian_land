@@ -77,8 +77,10 @@ export default function Scrollable({
       return;
     }
 
-    const innerRect = innerRef.current.getBoundingClientRect();
-    const outerRect = outerRef.current.getBoundingClientRect();
+    const innerRect = innerRef.current?.getBoundingClientRect();
+    const outerRect = outerRef.current?.getBoundingClientRect();
+
+    if (!innerRect || !outerRect) return;
 
     const y = innerRect.top + innerRect.height / 2;
     const x =
@@ -130,7 +132,7 @@ export default function Scrollable({
       // for the duration of the smooth scroll operation
       function check() {
         // check our current position
-        const newPos = innerRef.current.getBoundingClientRect().left;
+        const newPos = innerRef.current?.getBoundingClientRect().left;
 
         if (newPos === lastPos) {
           // same as previous
@@ -138,7 +140,7 @@ export default function Scrollable({
             // if it's more than two frames
             return resolve(); // we've come to an halt
           }
-        } else {
+        } else if (newPos) {
           same = 0; // reset our counter
           lastPos = newPos; // remember our current position
         }

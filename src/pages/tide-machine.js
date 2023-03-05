@@ -291,7 +291,11 @@ export default function TideMachine(props) {
           </Title>
           <Info>
             Tide Machine currently has{" "}
-            <a href="https://www.worldtides.info/tidestations" target="_blank">
+            <a
+              href="https://www.worldtides.info/tidestations"
+              target="_blank"
+              rel="noreferrer"
+            >
               {locationsCount} stations
             </a>
             .
@@ -313,7 +317,11 @@ export default function TideMachine(props) {
           <Download>
             *To obtain a download password or create a custom tide station,
             kindly{" "}
-            <a href="https://forms.gle/LBxRGYBajJa9Md9z9" target="_blank">
+            <a
+              href="https://forms.gle/LBxRGYBajJa9Md9z9"
+              target="_blank"
+              rel="noreferrer"
+            >
               order here
             </a>
             .
@@ -334,7 +342,12 @@ const Location = ({ location }) => {
     <LocationContainer>
       <LocationTitle>{location.title}</LocationTitle>
       {location.locations.map((l) => (
-        <LocationLink key={l.title} href={l.link} target="_blank">
+        <LocationLink
+          key={l.title}
+          href={l.link}
+          target="_blank"
+          rel="noreferrer"
+        >
           {l.title}
         </LocationLink>
       ))}

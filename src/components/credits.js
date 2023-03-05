@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { responsive } from "../utils/style";
-import { StaticImage, GatsbyImage, getImage } from "gatsby-plugin-image";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
 const CreditsWrapper = styled.div`
   position: relative;
@@ -12,7 +12,8 @@ const CreditsWrapper = styled.div`
   box-sizing: border-box;
   border-top: solid 1px black;
 
-  height: 270px;
+  height: 250px;
+
   ${responsive.sm`
     height: 200px;
   `}
@@ -27,16 +28,18 @@ const CreditsContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  padding-left: 20px;
-  padding-right: 20px;
+  align-items: flex-start;
+  padding: 16px 20px 40px;
 
   ${responsive.sm`
     flex-direction: row;
     align-items: center;
-    padding-left: 45px;
-    padding-right: 45px;
-  `}
+    padding: 0 50px;
+  `};
+
+  button {
+    color: inherit;
+  }
 `;
 
 const CreditsImageWrapper = styled.div`
@@ -45,52 +48,16 @@ const CreditsImageWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-`;
-
-const CreditsCTA = styled.button`
-  background: none;
-  appearance: none;
-  border: 0;
-  padding: 0;
-
-  display: flex;
-  align-items: center;
-  color: black;
-
-  z-index: 1;
-  cursor: pointer;
-
-  padding-top: 34px;
-
-  h1 {
-    margin-right: 15px;
-  }
-
-  ${responsive.sm`
-    padding-top: 0;
-  `}
-
-  img {
-    width: 20px;
-    height: 20px;
-
-    ${responsive.sm`
-      width: 30px;
-      height: 30px;
-    `}
-  }
+  z-index: -1;
 `;
 
 const CreditsText = styled.div`
-  padding-top: 20px;
-  padding-bottom: 20px;
   text-align: left;
-  z-index: 1;
-
-  max-width: 450px;
+  padding-right: 30px;
 
   ${responsive.sm`
     text-align: right;
+    padding-right: 0;
   `}
 `;
 
@@ -101,7 +68,7 @@ export default function Credits(props) {
     window.scroll({
       top: 0,
       left: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   }
 
@@ -115,24 +82,17 @@ export default function Credits(props) {
             loading="eager"
             style={{
               width: "100%",
-              height: "100%"
+              height: "100%",
             }}
           />
         </CreditsImageWrapper>
-        <CreditsCTA onClick={handleClick}>
-          <h1>Entrance</h1>
-          <StaticImage
-            src="../images/ic_arrow.png"
-            placeholder="none"
-            alt="Return to entrance"
-            imgStyle={{
-              transform: "rotate(270deg)"
-            }}
-          />
-        </CreditsCTA>
+        <button onClick={handleClick}>
+          <span className="text-big">Entrance ↑</span>
+        </button>
         <CreditsText
+          className="text-m"
           dangerouslySetInnerHTML={{
-            __html: text.childMarkdownRemark.html
+            __html: text.childMarkdownRemark.html,
           }}
         />
       </CreditsContentWrapper>

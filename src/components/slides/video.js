@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
 
@@ -14,24 +14,33 @@ const Video = styled.video`
 `;
 
 export default function VideoSlide({ video }) {
-  // const videoRef = useRef(null);
-  // const { ref, inView } = useInView({
-  //   threshold: 0,
-  // });
+  const videoRef = useRef(null);
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
 
   const file = video.source.file;
 
-  // if (videoRef.current) {
-  //   if (inView && videoRef.current) {
-  //     videoRef.current.play();
-  //   } else {
-  //     videoRef.current.pause();
-  //   }
-  // }
+  useEffect(() => {
+    const playPause = async () => {
+      if (videoRef.current) {
+        if (inView && videoRef.current) {
+          try {
+            await videoRef.current.play();
+          } catch {}
+        } else {
+          try {
+            await videoRef.current.pause();
+          } catch {}
+        }
+      }
+    };
+    playPause();
+  }, [inView]);
 
   return (
-    <VideoWrapper>
-      <Video loop={true} muted playsInline autoPlay>
+    <VideoWrapper ref={ref}>
+      <Video ref={videoRef} loop={true} muted playsInline>
         <source src={file.url} type={file.contentType} />
       </Video>
     </VideoWrapper>

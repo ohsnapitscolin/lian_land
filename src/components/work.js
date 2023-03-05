@@ -14,16 +14,12 @@ import Carousel from "./carousel";
 const SCROLL_SPEED = 5;
 
 const WorkHeadlineContainer = styled.div`
-  height: 40px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  border-bottom: black solid 1px;
+  height: 50px;
 
   ${responsive.sm`
-    height: 80px;
-    padding-top: 16px;
+    height: 60px;
   `}
-
-  border-bottom: black solid 1px;
 `;
 
 const WorkHeadline = styled.div`
@@ -33,96 +29,83 @@ const WorkHeadline = styled.div`
   justify-content: center;
   align-items: center;
 
-  padding-left: 24px;
-  padding-right: 200px;
+  padding-right: 30px;
 
   ${responsive.sm`
-    padding-right: 256px;
+    padding-right: 62px;
   `}
 `;
 
 const WorkWrapper = styled.div`
   width: 100%;
-  padding-bottom: 100px;
-  ${responsive.sm`
-    padding-bottom: 150px;
-  `};
-  ${responsive.md`
-    padding-bottom: 160px;
-  `};
   border-bottom: black solid 1px;
 `;
 
 const WorkTitle = styled.div`
   display: inline-block;
   white-space: nowrap;
+
+  padding-right: 30px;
+
+  ${responsive.sm`
+    padding-right: 62px;
+  `}
 `;
 
-const WorkType = styled.div`
-  display: inline-block;
-  white-space: nowrap;
+const WorkContent = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 17px 20px 70px 20px;
 
-  h1 {
-    padding-top: 5px;
-  }
+  ${responsive.sm`
+    flex-direction: row;
+    padding: 26px 50px 100px 50px;
+  `}
 `;
 
 const WorkDescription = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-
-  padding-top: 28px;
+  margin-bottom: 17px;
 
   ${responsive.sm`
-    padding-top: 56px;
+    flex: 0 0 50%;
+    margin-bottom: 0;
   `}
-
-  .description {
-    padding-left: 20px;
-    padding-right: 20px;
-
-    ${responsive.sm`
-      padding-left: 50px;
-      padding-right: 50px;
-    `};
-
-    ${responsive.md`
-      padding-left: 200px;
-      padding-right: 200px;
-    `};
-
-    text-align: center;
-  }
 `;
 
 const WorkCredits = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-
-  padding-top: 8px;
-  padding-right: 20px;
-  padding-left: 20px;
-
-  box-sizing: border-box;
-
   ${responsive.sm`
-    padding-top: 12px;
+    flex: 0 0 50%;
+    padding-left: 9%;
+    padding-right: 9%;
   `}
 
-  .credits {
-    text-align: center;
+  p {
+    margin-bottom: 7px;
   }
 `;
 
-const WorkDoodleImage = styled.div`
-  width: 40px;
-  height: 40px;
+const WorkDoodleContainer = styled.div`
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   ${responsive.sm`
-    height: 80px;
-    width: 80px;
+    height: 60px;
+    width: 60px;
+  `}
+`;
+
+const WorkDoodleImage = styled.div`
+  width: 25px;
+  height: 25px;
+
+  ${responsive.sm`
+    height: 25px;
+    width: 25px;
   `}
 `;
 
@@ -139,43 +122,42 @@ export default function Work({ work }) {
           {() => (
             <WorkHeadline>
               <WorkTitle>
-                <h1>{title}</h1>
-              </WorkTitle>
-              <WorkDoodleImage>
-                {doodle && (
-                  <GatsbyImage
-                    image={getImage(doodle)}
-                    alt=""
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                    }}
-                    imgStyle={{ objectFit: "contain" }}
-                  />
-                )}
-              </WorkDoodleImage>
-              <WorkType>
-                <h1>
-                  <i>
-                    {type}, {year}
-                  </i>
+                <h1 className="text">
+                  {title} — {type} — {year}
                 </h1>
-              </WorkType>
+              </WorkTitle>
+              <WorkDoodleContainer>
+                <WorkDoodleImage>
+                  {doodle && (
+                    <GatsbyImage
+                      image={getImage(doodle)}
+                      alt=""
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                      }}
+                      imgStyle={{ objectFit: "contain" }}
+                    />
+                  )}
+                </WorkDoodleImage>
+              </WorkDoodleContainer>
             </WorkHeadline>
           )}
         </Ticker>
       </WorkHeadlineContainer>
       <Carousel identifier={work.contentful_id} entries={entries} />
-      {description && (
+      <WorkContent>
         <WorkDescription>
-          <div className="description">{renderRichText(description.raw)}</div>
+          {description && (
+            <div className="text-m">{renderRichText(description.raw)}</div>
+          )}
         </WorkDescription>
-      )}
-      {credits && (
         <WorkCredits>
-          <div className="credits">{renderRichText(credits.raw)}</div>
+          {credits && (
+            <div className="text-small">{renderRichText(credits.raw)}</div>
+          )}
         </WorkCredits>
-      )}
+      </WorkContent>
     </WorkWrapper>
   );
 }
