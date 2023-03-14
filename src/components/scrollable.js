@@ -11,6 +11,9 @@ const Outer = styled.div`
   }
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+
+  // Custom
+  overflow-y: hidden;
 `;
 
 const Inner = styled.div`
@@ -21,6 +24,9 @@ const Inner = styled.div`
     flex-shrink: 0;
     scroll-snap-align: ${(p) => p.inline};
   }
+
+  // Custom
+  margin-bottom: -5px;
 `;
 
 const Inline = {
