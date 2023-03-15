@@ -31,7 +31,7 @@ export default function Seo() {
 
   const title = data.title;
   const description = data.description;
-  const imageUrl = data.image.file.url;
+  const imageUrl = `https:${data.image.file.url}`;
   const imgWidth = data.image.file.details.image.width;
   const imgHeight = data.image.file.details.image.height;
   const pageUrl = "https://lian.land";
@@ -59,7 +59,7 @@ export default function Seo() {
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
         { name: "twitter:image", content: imageUrl },
-        { name: "twitter:card", content: "summary_large_image" }
+        { name: "twitter:card", content: "summary_large_image" },
       ]}
     />
   );
