@@ -19,7 +19,7 @@
     "gatsby-plugin-styled-components": "^5.22.0",
     "gatsby-source-contentful": "^7.20.0",
     "gatsby-source-filesystem": "^4.22.0",
-    "gatsby-transformer-remark": "^5.22.0",
+    "gatsby-transformer-remark": "^5.25.1",
     "gatsby-transformer-sharp": "^4.22.0",
     "lodash": "^4.17.21",
     "node-sass": "^7.0.3",
