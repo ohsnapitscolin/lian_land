@@ -110,7 +110,7 @@ const WorkDoodleImage = styled.div`
 `;
 
 export default function Work({ work }) {
-  const { title, type, year, entries, doodle, description, credits } = work;
+  const { title, type, entries, doodle, description, credits } = work;
   const { ref, inView } = useInView({
     threshold: 0,
   });
@@ -123,7 +123,7 @@ export default function Work({ work }) {
             <WorkHeadline>
               <WorkTitle>
                 <h1 className="text">
-                  {title} — {type} — {year}
+                  {title} — {type}
                 </h1>
               </WorkTitle>
               <WorkDoodleContainer>
